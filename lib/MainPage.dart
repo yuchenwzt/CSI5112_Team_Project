@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ItemPage.dart';
+import 'view/item/ItemPage.dart';
 import 'CartPage.dart';
 import 'UserPage.dart';
 

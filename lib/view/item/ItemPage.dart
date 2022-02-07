@@ -1,0 +1,85 @@
+import 'package:flutter/material.dart';
+import '../../data/item_data.dart';
+import '../../module/item_presenter.dart';
+import 'ItemEdit.dart';
+import '../../components/searchBar.dart';
+
+class ItemPage extends StatelessWidget {
+  const ItemPage({Key? key}) : super(key: key);
+  
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: ItemList(),
+    );
+  }
+}
+
+class ItemList extends StatefulWidget {
+  const ItemList({Key? key}) : super(key: key);
+  
+  @override
+  ItemListState createState() => ItemListState();
+}
+
+class ItemListState extends State<ItemList> implements ItemsListViewContract {
+  late ItemsListPresenter _presenter;
+  List<Item> itemsReceived = [];
+  List<Item> itemsFiltered = [];
+  bool isSearching = false;
+
+  ItemListState() {
+    _presenter = ItemsListPresenter(this);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    isSearching = true;
+    _presenter.loadItems();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    late Widget widget;
+    if (isSearching) {
+      widget = const Center(
+        child: Padding(
+          padding: EdgeInsets.only(left: 16.0, right: 16.0),
+          child: CircularProgressIndicator(),
+        ),
+      );
+    } else {
+      widget = Scaffold(
+        appBar: AppBar(
+          flexibleSpace: SearchBar(searchItems: itemsReceived, onSearchFinish: (value) => updateSearch(value)),
+        ),
+        body: Center(
+          child: ItemEdit(items: itemsFiltered),
+        ),
+      );
+    }
+
+    return widget;
+  }
+
+  @override
+  void onLoadItemsComplete(List<Item> items) {
+    setState(() {
+      itemsReceived = items;
+      itemsFiltered = items;
+      isSearching = false;
+    });
+  }
+
+  void updateSearch(List<Item> items) {
+    setState(() {
+      itemsFiltered = items;
+    });
+  }
+
+  @override
+  void onLoadItemsError() {
+
+  }
+}
