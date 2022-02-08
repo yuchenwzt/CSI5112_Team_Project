@@ -55,7 +55,7 @@ class ItemListState extends State<ItemList> implements ItemsListViewContract {
           flexibleSpace: SearchBar(searchItems: itemsReceived, onSearchFinish: (value) => updateItemList(value)),
         ),
         body: Center(
-          child: ItemFilterPanel(items: itemsFiltered, onSortFinish: (value) => updateItemList(value), onEditFinish: (value) => updateEditItem(value)),
+          child: ItemFilterPanel(items: itemsFiltered, originItems: itemsReceived, onSelectFinish: (value) => updateItemList(value), onEditFinish: (value) => updateEditItem(value)),
         ),
       );
     }

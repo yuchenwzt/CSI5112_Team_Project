@@ -142,6 +142,16 @@ class ItemEdit extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(4.0),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Location',
+                        ),
+                        initialValue: item.location,
+                        onSaved: (newValue) => newItem.location = newValue as String,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
                       child: ElevatedButton(
                         child: const Text("Submit"),
                         onPressed: () {

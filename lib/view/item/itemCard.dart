@@ -1,8 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import '../../data/item_data.dart';
 import 'ItemEdit.dart';
+import '../itemDetail/itemDetail.dart';
 
 class ItemCard extends StatefulWidget {
   const ItemCard({ Key? key, required this.item, this.onEditFinish }) : super(key: key);
@@ -25,7 +24,17 @@ class _ItemCardState extends State<ItemCard> {
       key: Key(widget.item.id),
       child: InkWell(
         onTap: () {
-          print("Tap Card");
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (context) => ItemDetailPage(item: widget.item)
+          //   )
+          // );
+          Navigator.push(
+            context, 
+            MaterialPageRoute(builder: (context) {
+              return ItemDetailPage(item: widget.item);
+            }),
+          );
         },
         child: Column(
           mainAxisSize: MainAxisSize.max,

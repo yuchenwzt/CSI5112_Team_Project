@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import '../../data/item_data.dart';
 import 'itemCard.dart';
 import 'ItemEdit.dart';
+import '../../components/invisibleDropdown.dart';
 
 class ItemFilterPanel extends StatefulWidget {
-  const ItemFilterPanel({ Key? key, required this.items, this.onSortFinish, this.onEditFinish }) : super(key: key);
+  const ItemFilterPanel({ Key? key, required this.originItems, required this.items, this.onSelectFinish, this.onEditFinish }) : super(key: key);
 
   final List<Item> items;
-  final onSortFinish;
+  final List<Item> originItems;
   final onEditFinish;
+  final onSelectFinish;
   
   @override
   _ItemFilterPanelState createState() => _ItemFilterPanelState();
@@ -40,12 +42,12 @@ class _ItemFilterPanelState extends State<ItemFilterPanel> {
                 priceAscending ? 
                   sortList.sort((a, b) => int.parse(a.price).compareTo(int.parse(b.price)))
                   : sortList.sort((a, b) => int.parse(b.price).compareTo(int.parse(a.price))),
-                widget.onSortFinish(sortList)
+                widget.onSelectFinish(sortList)
               },
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  const Text("Prices", style: TextStyle(color: Colors.black),),
+                  const Text("Prices", style: TextStyle(color: Colors.black)),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -57,8 +59,38 @@ class _ItemFilterPanelState extends State<ItemFilterPanel> {
               ),
             ),
           )),
-          const Expanded(child: Center(child: Text('Location'))),
-          const Expanded(child: Center(child: Text('Filter'))),
+          Expanded(child: 
+            Stack(
+              children: [
+                Center(child: 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const <Widget>[
+                      Icon(Icons.location_on),
+                      Text("Location")
+                    ],
+                  )
+                ),
+                InvisibleDropdown(type: "location", items: widget.originItems, onFilterFinish: (value) => widget.onSelectFinish(value)),
+              ],
+            ),
+          ),
+          Expanded(child: 
+            Stack(
+              children: [
+                Center(child: 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const <Widget>[
+                      Text("Filter"),
+                      Icon(Icons.filter_alt)
+                    ],
+                  )
+                ),
+                InvisibleDropdown(type: "type", items: widget.originItems, onFilterFinish: (value) => widget.onSelectFinish(value)),
+              ],
+            ),
+          ),
         ]),
       ),
       floatingActionButton: Visibility(

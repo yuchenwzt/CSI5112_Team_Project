@@ -48,7 +48,15 @@ class MainPageState extends State<MainPage> {
         title: SizedBox(child: Center(child: titleOptions.elementAt(selectedIndex))),
         backgroundColor: Colors.red,
       ),
-      body: pages[selectedIndex],
+      // Use Tab Navigator to make sure all the route changes are inside the BottomBar Component. 
+      body: IndexedStack(
+        index: selectedIndex,
+        children: const <Widget>[
+          TabNavigator(index: 0, pages: pages),
+          TabNavigator(index: 1, pages: pages),
+          TabNavigator(index: 2, pages: pages),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
         backgroundColor: Colors.white,
@@ -72,6 +80,29 @@ class MainPageState extends State<MainPage> {
         currentIndex: selectedIndex,
         onTap: onItemTapped,
       ),
+    );
+  }
+}
+
+class TabNavigator extends StatelessWidget {
+  const TabNavigator({ Key? key, required this.index, required this.pages }) : super(key: key);
+
+  final int index;
+  final List pages;
+
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      initialRoute: '/',
+      onGenerateRoute: (RouteSettings settins) {
+        late WidgetBuilder builder;
+        switch (settins.name) {
+          case '/':
+            builder = (context) => pages[index];
+            break;
+        }
+        return MaterialPageRoute(builder: builder);
+      },
     );
   }
 }
