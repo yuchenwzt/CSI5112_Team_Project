@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/item_data.dart';
 import '../../module/item_presenter.dart';
-import 'ItemEdit.dart';
+import 'ItemFilterPanel.dart';
 import '../../components/searchBar.dart';
 
 class ItemPage extends StatelessWidget {
@@ -52,10 +52,10 @@ class ItemListState extends State<ItemList> implements ItemsListViewContract {
     } else {
       widget = Scaffold(
         appBar: AppBar(
-          flexibleSpace: SearchBar(searchItems: itemsReceived, onSearchFinish: (value) => updateSearch(value)),
+          flexibleSpace: SearchBar(searchItems: itemsReceived, onSearchFinish: (value) => updateItemList(value)),
         ),
         body: Center(
-          child: ItemEdit(items: itemsFiltered),
+          child: ItemFilterPanel(items: itemsFiltered, onSortFinish: (value) => updateItemList(value), onEditFinish: (value) => updateEditItem(value)),
         ),
       );
     }
@@ -72,9 +72,24 @@ class ItemListState extends State<ItemList> implements ItemsListViewContract {
     });
   }
 
-  void updateSearch(List<Item> items) {
+  void updateItemList(List<Item> items) {
     setState(() {
       itemsFiltered = items;
+    });
+  }
+
+  
+  // mock update func, deleted when build up backend
+  void updateEditItem(Item item) {
+    var newItem = itemsFiltered;
+    if (newItem.contains(item)) {
+      newItem[newItem.indexOf(item)] = item;
+    } else {
+      newItem.add(item);
+    }
+    
+    setState(() {
+      itemsFiltered = newItem;
     });
   }
 

@@ -2,16 +2,17 @@ import 'dart:async';
 
 class Item {
   final String id;
-  final String name;
-  final String type;
-  final String price;
-  final String orderId;
-  final String date;
-  final String image;
-  final String description;
-  final List chat;
+  String name;
+  String type;
+  String price;
+  String orderId;
+  String date;
+  String image;
+  String description;
+  String location;
+  List chat;
 
-  const Item(
+  Item(
     {
       this.id = "",
       this.name = "",
@@ -21,6 +22,7 @@ class Item {
       this.date = "",
       this.description = "",
       this.image = "",
+      this.location = "",
       this.chat = const [],
     }
   );
@@ -33,6 +35,7 @@ class Item {
       orderId = map['orderId'],
       date = map['date'],
       image = map['image'],
+      location = map['location'],
       description = map['description'],
       chat = map['chat'];
 }

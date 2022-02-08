@@ -6,16 +6,17 @@ class MockItemRepository implements ItemRepository {
   Future<List<Item>> fetch() => Future.value(kContacts);
 }
 
-const kContacts = <Item>[
+var kContacts = <Item>[
   Item(
     id: '1234',
     name: 'Alienware',
     type: 'Computer',
     price: "1000",
     orderId: "0",
-    date: "0",
-    image: '',
+    date: "2022.01.01",
+    image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Dell Computer",
+    location: 'LA',
     chat: [],
   ),
   Item(
@@ -24,9 +25,10 @@ const kContacts = <Item>[
     type: 'Computer',
     price: "2000",
     orderId: "0",
-    date: "0",
-    image: '',
+    date: "2022.01.01",
+    image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Apple Computer",
+    location: 'NYU',
     chat: [],
   ),
   Item(
@@ -35,9 +37,10 @@ const kContacts = <Item>[
     type: 'Phone',
     price: "300",
     orderId: "0",
-    date: "0",
-    image: '',
+    date: "2022.01.01",
+    image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Apple Phone",
+    location: 'LA',
     chat: [],
   ),
   Item(
@@ -46,9 +49,10 @@ const kContacts = <Item>[
     type: 'Phone',
     price: "400",
     orderId: "0",
-    date: "0",
-    image: '',
+    date: "2022.01.01",
+    image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Samsung Computer",
+    location: 'WU',
     chat: [],
   ),
   Item(
@@ -57,9 +61,10 @@ const kContacts = <Item>[
     type: 'Camera',
     price: "4000",
     orderId: "0",
-    date: "0",
-    image: '',
+    date: "2022.01.01",
+    image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Camera",
+    location: 'FL',
     chat: [],
   ),
   Item(
@@ -68,9 +73,10 @@ const kContacts = <Item>[
     type: 'Camera',
     price: "4500",
     orderId: "0",
-    date: "0",
-    image: '',
+    date: "2022.01.01",
+    image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Camera",
+    location: 'NYU',
     chat: [],
   ),
 ];
