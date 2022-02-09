@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../CartPage.dart';
+import 'payment_success_page.dart';
 import 'product_description.dart';
 import 'product_img.dart';
 import '../../data/item_data.dart';
@@ -38,7 +39,14 @@ class DetailPage extends StatelessWidget {
                     'place the order',
                     style: TextStyle(color: Colors.white),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return const PaymentPage();
+                      }),
+                    );
+                  },
                 ),
               ),
             )

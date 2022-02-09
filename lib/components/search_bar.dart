@@ -77,7 +77,7 @@ class _SearchBarState extends State<SearchBar> {
         res.add(o);
       }
     }
-    return res as List<dynamic>;
+    return res;
   }
 
   bool filterCase(List<dynamic> o, String filterString) {
