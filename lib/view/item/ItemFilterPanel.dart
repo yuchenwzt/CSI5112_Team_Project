@@ -18,6 +18,7 @@ class ItemFilterPanel extends StatefulWidget {
 
 class _ItemFilterPanelState extends State<ItemFilterPanel> {
   bool priceAscending = true;
+  bool isMarchant = true; // user_role
   
   @override
   void initState() {
@@ -94,7 +95,7 @@ class _ItemFilterPanelState extends State<ItemFilterPanel> {
         ]),
       ),
       floatingActionButton: Visibility(
-        visible: true, // user_role
+        visible: isMarchant, 
         maintainState: false,
         child: ItemEdit(item: Item(), onEditFinish: widget.onEditFinish, editRole: "add"),
       ),
@@ -110,6 +111,6 @@ class _ItemFilterPanelState extends State<ItemFilterPanel> {
   }
 
   List<ItemCard> buildItemList() {
-    return widget.items.map((itemsState) => ItemCard(item: itemsState, onEditFinish: widget.onEditFinish)).toList();
+    return widget.items.map((itemsState) => ItemCard(item: itemsState, isMarchant: isMarchant, onEditFinish: widget.onEditFinish)).toList();
   }
 }

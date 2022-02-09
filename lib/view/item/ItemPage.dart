@@ -78,7 +78,6 @@ class ItemListState extends State<ItemList> implements ItemsListViewContract {
     });
   }
 
-  
   // mock update func, deleted when build up backend
   void updateEditItem(Item item) {
     var newItem = itemsFiltered;
@@ -95,6 +94,6 @@ class ItemListState extends State<ItemList> implements ItemsListViewContract {
 
   @override
   void onLoadItemsError() {
-
+    // TODO when backend set up
   }
 }

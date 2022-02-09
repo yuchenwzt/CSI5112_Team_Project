@@ -4,10 +4,11 @@ import 'ItemEdit.dart';
 import '../itemDetail/itemDetail.dart';
 
 class ItemCard extends StatefulWidget {
-  const ItemCard({ Key? key, required this.item, this.onEditFinish }) : super(key: key);
+  ItemCard({ Key? key, required this.item, this.onEditFinish, required this.isMarchant }) : super(key: key);
 
   final Item item;
   final onEditFinish;
+  bool isMarchant;
 
   @override
   _ItemCardState createState() => _ItemCardState();
@@ -19,16 +20,10 @@ class _ItemCardState extends State<ItemCard> {
   @override
   Widget build(BuildContext context) {
     String itemDescription = widget.item.type + ' | ' + widget.item.id + ' | ' + widget.item.date;
-    bool isMarchant = true; // user_role
     return Card(
       key: Key(widget.item.id),
       child: InkWell(
         onTap: () {
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) => ItemDetailPage(item: widget.item)
-          //   )
-          // );
           Navigator.push(
             context, 
             MaterialPageRoute(builder: (context) {
@@ -65,7 +60,7 @@ class _ItemCardState extends State<ItemCard> {
                 Expanded(child: Text("Stored in " + widget.item.location, textAlign: TextAlign.center, style: const TextStyle(fontSize: 14, color: Colors.grey))),
                 
                 Visibility(
-                  visible: isMarchant,
+                  visible: widget.isMarchant,
                   maintainState: false,
                   maintainSize: false,
                   maintainSemantics: false,
