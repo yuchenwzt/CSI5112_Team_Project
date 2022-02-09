@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'view/item/Item_page.dart';
-import 'CartPage.dart';
-import 'UserPage.dart';
+import 'item_page/Item_page.dart';
+import '../CartPage.dart';
+import '../UserPage.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({ Key? key }) : super(key: key);
+  const MainPage({ Key? key, required this.isMerchant }) : super(key: key);
+
+  final bool isMerchant;
 
   @override
   MainPageState createState() => MainPageState();
