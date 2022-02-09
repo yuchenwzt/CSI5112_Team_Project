@@ -18,7 +18,7 @@ class ItemFilterPanel extends StatefulWidget {
 
 class _ItemFilterPanelState extends State<ItemFilterPanel> {
   bool priceAscending = true;
-  bool isMarchant = false; // user_role
+  bool isMarchant = true; // user_role
   
   @override
   void initState() {
