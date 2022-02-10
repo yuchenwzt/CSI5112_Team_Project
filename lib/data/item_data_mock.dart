@@ -14,25 +14,23 @@ var kContacts = <Item>[
     price: "1000",
     orderId: "0",
     date: "2022.01.01",
-    image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+    image:
+        'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Dell Computer",
     location: 'LA',
     chat: <Chat>[
       Chat(
-        name: "Jack",
-        date: "01/02/2021",
-        comment: "Is this laptop suitable for students?"
-      ),
+          name: "Jack",
+          date: "01/02/2021",
+          comment: "Is this laptop suitable for students?"),
       Chat(
-        name: "Tom",
-        date: "03/02/2021",
-        comment: "I use it in university, I think it's good"
-      ),
+          name: "Tom",
+          date: "03/02/2021",
+          comment: "I use it in university, I think it's great"),
       Chat(
-        name: "Alice",
-        date: "05/02/2021",
-        comment: "My son is satisfied with it"
-      ),
+          name: "Alice",
+          date: "05/02/2021",
+          comment: "My son is satisfied with it"),
     ],
   ),
   Item(
@@ -42,25 +40,23 @@ var kContacts = <Item>[
     price: "2000",
     orderId: "0",
     date: "2022.01.01",
-    image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+    image:
+        'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Apple Computer",
     location: 'NYU',
     chat: <Chat>[
       Chat(
-        name: "Jack",
-        date: "01/02/2021",
-        comment: "Is this laptop suitable for students?"
-      ),
+          name: "Jack",
+          date: "01/02/2021",
+          comment: "Is this laptop suitable for students?"),
       Chat(
-        name: "Tom",
-        date: "03/02/2021",
-        comment: "I use it in university, I think it's good"
-      ),
+          name: "Tom",
+          date: "03/02/2021",
+          comment: "I use it in university, I think it's good"),
       Chat(
-        name: "Alice",
-        date: "05/02/2021",
-        comment: "My son is satisfied with it"
-      ),
+          name: "Alice",
+          date: "05/02/2021",
+          comment: "My son is satisfied with it"),
     ],
   ),
   Item(
@@ -70,25 +66,23 @@ var kContacts = <Item>[
     price: "300",
     orderId: "0",
     date: "2022.01.01",
-    image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+    image:
+        'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Apple Phone",
     location: 'LA',
     chat: <Chat>[
       Chat(
-        name: "Jack",
-        date: "01/02/2021",
-        comment: "Is this laptop suitable for students?"
-      ),
+          name: "Jack",
+          date: "01/02/2021",
+          comment: "Is this laptop suitable for students?"),
       Chat(
-        name: "Tom",
-        date: "03/02/2021",
-        comment: "I use it in university, I think it's good"
-      ),
+          name: "Tom",
+          date: "03/02/2021",
+          comment: "I use it in university, I think it's good"),
       Chat(
-        name: "Alice",
-        date: "05/02/2021",
-        comment: "My son is satisfied with it"
-      ),
+          name: "Alice",
+          date: "05/02/2021",
+          comment: "My son is satisfied with it"),
     ],
   ),
   Item(
@@ -98,25 +92,23 @@ var kContacts = <Item>[
     price: "400",
     orderId: "0",
     date: "2022.01.01",
-    image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+    image:
+        'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Samsung Computer",
     location: 'WU',
     chat: <Chat>[
       Chat(
-        name: "Jack",
-        date: "01/02/2021",
-        comment: "Is this laptop suitable for students?"
-      ),
+          name: "Jack",
+          date: "01/02/2021",
+          comment: "Is this laptop suitable for students?"),
       Chat(
-        name: "Tom",
-        date: "03/02/2021",
-        comment: "I use it in university, I think it's good"
-      ),
+          name: "Tom",
+          date: "03/02/2021",
+          comment: "I use it in university, I think it's good"),
       Chat(
-        name: "Alice",
-        date: "05/02/2021",
-        comment: "My son is satisfied with it"
-      ),
+          name: "Alice",
+          date: "05/02/2021",
+          comment: "My son is satisfied with it"),
     ],
   ),
   Item(
@@ -126,25 +118,23 @@ var kContacts = <Item>[
     price: "4000",
     orderId: "0",
     date: "2022.01.01",
-    image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+    image:
+        'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Camera",
     location: 'FL',
     chat: <Chat>[
       Chat(
-        name: "Jack",
-        date: "01/02/2021",
-        comment: "Is this laptop suitable for students?"
-      ),
+          name: "Jack",
+          date: "01/02/2021",
+          comment: "Is this laptop suitable for students?"),
       Chat(
-        name: "Tom",
-        date: "03/02/2021",
-        comment: "I use it in university, I think it's good"
-      ),
+          name: "Tom",
+          date: "03/02/2021",
+          comment: "I use it in university, I think it's good"),
       Chat(
-        name: "Alice",
-        date: "05/02/2021",
-        comment: "My son is satisfied with it"
-      ),
+          name: "Alice",
+          date: "05/02/2021",
+          comment: "My son is satisfied with it"),
     ],
   ),
   Item(
@@ -154,25 +144,23 @@ var kContacts = <Item>[
     price: "4500",
     orderId: "0",
     date: "2022.01.01",
-    image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+    image:
+        'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Camera",
     location: 'NYU',
     chat: <Chat>[
       Chat(
-        name: "Jack",
-        date: "01/02/2021",
-        comment: "Is this laptop suitable for students?"
-      ),
+          name: "Jack",
+          date: "01/02/2021",
+          comment: "Is this laptop suitable for students?"),
       Chat(
-        name: "Tom",
-        date: "03/02/2021",
-        comment: "I use it in university, I think it's good"
-      ),
+          name: "Tom",
+          date: "03/02/2021",
+          comment: "I use it in university, I think it's good"),
       Chat(
-        name: "Alice",
-        date: "05/02/2021",
-        comment: "My son is satisfied with it"
-      ),
+          name: "Alice",
+          date: "05/02/2021",
+          comment: "My son is satisfied with it"),
     ],
   ),
 ];
