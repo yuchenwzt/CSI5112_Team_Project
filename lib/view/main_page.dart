@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'item_page/Item_page.dart';
+import 'order_page/order_page.dart';
 import '../CartPage.dart';
 import '../UserPage.dart';
 
@@ -26,15 +27,13 @@ class MainPageState extends State<MainPage> {
       style: optionStyle,
     ),
     Text(
+      'Order',
+      style: optionStyle,
+    ),
+    Text(
       'User',
       style: optionStyle,
     ),
-  ];
-
-  static const List pages = [
-    ItemPage(),
-    CartPage(),
-    UserPage(),
   ];
 
   void onItemTapped(int index) {
@@ -45,6 +44,12 @@ class MainPageState extends State<MainPage> {
   
   @override
   Widget build(BuildContext context) {
+    List pages = [
+      ItemPage(isMerchant: widget.isMerchant),
+      const CartPage(),
+      const OrderPage(),
+      const UserPage(),
+    ];
     return Scaffold(
       appBar: AppBar(
         title: SizedBox(child: Center(child: titleOptions.elementAt(selectedIndex))),
@@ -54,10 +59,11 @@ class MainPageState extends State<MainPage> {
       // Use Tab Navigator to make sure all the route changes are inside the BottomBar Component. 
       body: IndexedStack(
         index: selectedIndex,
-        children: const <Widget>[
+        children: <Widget>[
           TabNavigator(index: 0, pages: pages),
           TabNavigator(index: 1, pages: pages),
           TabNavigator(index: 2, pages: pages),
+          TabNavigator(index: 3, pages: pages),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -74,6 +80,10 @@ class MainPageState extends State<MainPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.reorder),
+            label: 'Order',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.admin_panel_settings),

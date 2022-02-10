@@ -4,25 +4,16 @@ import '../../module/item_presenter.dart';
 import 'Item_filter_panel.dart';
 import '../../components/search_bar.dart';
 
-class ItemPage extends StatelessWidget {
-  const ItemPage({Key? key}) : super(key: key);
+class ItemPage extends StatefulWidget {
+  const ItemPage({Key? key, required this.isMerchant}) : super(key: key);
   
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: ItemList(),
-    );
-  }
-}
+  final bool isMerchant;
 
-class ItemList extends StatefulWidget {
-  const ItemList({Key? key}) : super(key: key);
-  
   @override
   ItemListState createState() => ItemListState();
 }
 
-class ItemListState extends State<ItemList> implements ItemsListViewContract {
+class ItemListState extends State<ItemPage> implements ItemsListViewContract {
   late ItemsListPresenter _presenter;
   List<Item> itemsReceived = [];
   List<Item> itemsFiltered = [];
@@ -41,26 +32,26 @@ class ItemListState extends State<ItemList> implements ItemsListViewContract {
   
   @override
   Widget build(BuildContext context) {
-    late Widget widget;
+    late Widget selectedWidget;
     if (isSearching) {
-      widget = const Center(
+      selectedWidget = const Center(
         child: Padding(
           padding: EdgeInsets.only(left: 16.0, right: 16.0),
           child: CircularProgressIndicator(),
         ),
       );
     } else {
-      widget = Scaffold(
+      selectedWidget = Scaffold(
         appBar: AppBar(
-          flexibleSpace: SearchBar(searchItems: itemsReceived, onSearchFinish: (value) => updateItemList(value)),
+          flexibleSpace: SearchBar(searchItems: itemsReceived, filterType: "item", onSearchFinish: (value) => updateItemList(value)),
         ),
         body: Center(
-          child: ItemFilterPanel(items: itemsFiltered, originItems: itemsReceived, onSelectFinish: (value) => updateItemList(value), onEditFinish: (value) => updateEditItem(value)),
+          child: ItemFilterPanel(items: itemsFiltered, originItems: itemsReceived, isMerchant: widget.isMerchant, onSelectFinish: (value) => updateItemList(value), onEditFinish: (value) => updateEditItem(value)),
         ),
       );
     }
 
-    return widget;
+    return selectedWidget;
   }
 
   @override

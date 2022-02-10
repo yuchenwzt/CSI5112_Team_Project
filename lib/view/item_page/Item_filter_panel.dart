@@ -5,10 +5,11 @@ import 'Item_edit.dart';
 import '../../components/invisible_dropdown.dart';
 
 class ItemFilterPanel extends StatefulWidget {
-  const ItemFilterPanel({ Key? key, required this.originItems, required this.items, this.onSelectFinish, this.onEditFinish }) : super(key: key);
+  const ItemFilterPanel({ Key? key, required this.originItems, required this.items, this.onSelectFinish, this.onEditFinish, required this.isMerchant }) : super(key: key);
 
   final List<Item> items;
   final List<Item> originItems;
+  final bool isMerchant;
   final onEditFinish;
   final onSelectFinish;
   
@@ -18,7 +19,6 @@ class ItemFilterPanel extends StatefulWidget {
 
 class _ItemFilterPanelState extends State<ItemFilterPanel> {
   bool priceAscending = true;
-  bool isMarchant = true; // user_role
   
   @override
   void initState() {
@@ -95,7 +95,7 @@ class _ItemFilterPanelState extends State<ItemFilterPanel> {
         ]),
       ),
       floatingActionButton: Visibility(
-        visible: isMarchant, 
+        visible: widget.isMerchant, 
         maintainState: false,
         child: ItemEdit(item: Item(), onEditFinish: widget.onEditFinish, editRole: "add"),
       ),
@@ -112,6 +112,6 @@ class _ItemFilterPanelState extends State<ItemFilterPanel> {
   }
 
   List<ItemCard> buildItemList() {
-    return widget.items.map((itemsState) => ItemCard(item: itemsState, isMarchant: isMarchant, onEditFinish: widget.onEditFinish)).toList();
+    return widget.items.map((itemsState) => ItemCard(item: itemsState, isMarchant: widget.isMerchant, onEditFinish: widget.onEditFinish)).toList();
   }
 }

@@ -1,10 +1,12 @@
+import 'package:csi5112_project/data/item_data.dart';
+import 'package:csi5112_project/data/order_data.dart';
 import 'package:flutter/material.dart';
-import '../data/item_data.dart';
 
 class SearchBar extends StatefulWidget {
-  const SearchBar({ Key? key, required this.searchItems, this.onSearchFinish}) : super(key: key);
+  const SearchBar({ Key? key, required this.searchItems, this.onSearchFinish, required this.filterType}) : super(key: key);
 
-  final List<Item> searchItems;
+  final List<dynamic> searchItems;
+  final String filterType;
   final onSearchFinish;
 
   @override
@@ -67,12 +69,23 @@ class _SearchBarState extends State<SearchBar> {
     return filterString.substring(start, end + 1);
   }
 
-  List<Item> filter(String filterString) {
-    List<Item> res = [];
+  List<dynamic> filter(String filterString) {
+    List<dynamic> res = [];
+    res = widget.filterType == "item" ? <Item>[] : <Order>[];
     for (var o in widget.searchItems) {
-      if (o.name.toLowerCase().contains(filterString.toLowerCase()) || o.description.toLowerCase().contains(filterString.toLowerCase())) {
+      if (filterCase(o, filterString)) {
         res.add(o);
       }
+    }
+    return res as List<dynamic>;
+  }
+
+  bool filterCase(List<dynamic> o, String filterString) {
+    bool res = false;
+    if (widget.filterType == "order") {
+      res = (o as Order).userId == filterString;
+    } else if (widget.filterType == "item") {
+      res = (o as Item).name.toLowerCase().contains(filterString.toLowerCase()) || (o as Item).description.toLowerCase().contains(filterString.toLowerCase());
     }
     return res;
   }

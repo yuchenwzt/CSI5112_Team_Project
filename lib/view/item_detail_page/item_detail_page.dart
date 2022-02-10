@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../CartPage.dart';
 import 'product_description.dart';
 import 'product_img.dart';
 import '../../data/item_data.dart';
@@ -53,10 +54,17 @@ class DetailPage extends StatelessWidget {
                 elevation: 6,
                 child: MaterialButton(
                   child: const Text(
-                    'Add to chart',
+                    'Add to Cart',
                     style: TextStyle(color: Colors.white),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) {
+                        return const CartPage();
+                      }),
+                    );
+                  },
                 ),
               ),
             )
