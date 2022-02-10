@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/item_data.dart';
 import 'Item_edit.dart';
-import '../item_detail_page/detail_page.dart';
+import '../item_detail_page/item_detail_page.dart';
 
 class ItemCard extends StatefulWidget {
   const ItemCard({ Key? key, required this.item, this.onEditFinish, required this.isMarchant }) : super(key: key);
@@ -27,7 +27,7 @@ class _ItemCardState extends State<ItemCard> {
           Navigator.push(
             context, 
             MaterialPageRoute(builder: (context) {
-              return DetailPage(item: widget.item);
+              return DetailPage(item: widget.item, onEditFinish: widget.onEditFinish);
             }),
           );
         },

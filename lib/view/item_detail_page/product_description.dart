@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import '../../data/item_data.dart';
 import 'package:csi5112_project/data/item_data_mock.dart';

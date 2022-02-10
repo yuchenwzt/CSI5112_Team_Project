@@ -48,6 +48,7 @@ class MainPageState extends State<MainPage> {
     return Scaffold(
       appBar: AppBar(
         title: SizedBox(child: Center(child: titleOptions.elementAt(selectedIndex))),
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.red,
       ),
       // Use Tab Navigator to make sure all the route changes are inside the BottomBar Component. 

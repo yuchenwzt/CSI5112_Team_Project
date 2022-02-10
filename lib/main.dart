@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'view/login_page/login_page.dart';
+import './view/main_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.black,
         ),
       ),
-      home: const Login(),
+      // home: const Login(),
+      home: const MainPage(isMerchant: false),
     );
   }
 }

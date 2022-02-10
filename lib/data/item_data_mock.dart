@@ -17,7 +17,23 @@ var kContacts = <Item>[
     image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Dell Computer",
     location: 'LA',
-    chat: [],
+    chat: <Chat>[
+      Chat(
+        name: "Jack",
+        date: "01/02/2021",
+        comment: "Is this laptop suitable for students?"
+      ),
+      Chat(
+        name: "Tom",
+        date: "03/02/2021",
+        comment: "I use it in university, I think it's good"
+      ),
+      Chat(
+        name: "Alice",
+        date: "05/02/2021",
+        comment: "My son is satisfied with it"
+      ),
+    ],
   ),
   Item(
     id: '2234',
@@ -29,7 +45,23 @@ var kContacts = <Item>[
     image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Apple Computer",
     location: 'NYU',
-    chat: [],
+    chat: <Chat>[
+      Chat(
+        name: "Jack",
+        date: "01/02/2021",
+        comment: "Is this laptop suitable for students?"
+      ),
+      Chat(
+        name: "Tom",
+        date: "03/02/2021",
+        comment: "I use it in university, I think it's good"
+      ),
+      Chat(
+        name: "Alice",
+        date: "05/02/2021",
+        comment: "My son is satisfied with it"
+      ),
+    ],
   ),
   Item(
     id: '3234',
@@ -41,7 +73,23 @@ var kContacts = <Item>[
     image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Apple Phone",
     location: 'LA',
-    chat: [],
+    chat: <Chat>[
+      Chat(
+        name: "Jack",
+        date: "01/02/2021",
+        comment: "Is this laptop suitable for students?"
+      ),
+      Chat(
+        name: "Tom",
+        date: "03/02/2021",
+        comment: "I use it in university, I think it's good"
+      ),
+      Chat(
+        name: "Alice",
+        date: "05/02/2021",
+        comment: "My son is satisfied with it"
+      ),
+    ],
   ),
   Item(
     id: '4234',
@@ -53,7 +101,23 @@ var kContacts = <Item>[
     image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Samsung Computer",
     location: 'WU',
-    chat: [],
+    chat: <Chat>[
+      Chat(
+        name: "Jack",
+        date: "01/02/2021",
+        comment: "Is this laptop suitable for students?"
+      ),
+      Chat(
+        name: "Tom",
+        date: "03/02/2021",
+        comment: "I use it in university, I think it's good"
+      ),
+      Chat(
+        name: "Alice",
+        date: "05/02/2021",
+        comment: "My son is satisfied with it"
+      ),
+    ],
   ),
   Item(
     id: '5234',
@@ -65,7 +129,23 @@ var kContacts = <Item>[
     image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Camera",
     location: 'FL',
-    chat: [],
+    chat: <Chat>[
+      Chat(
+        name: "Jack",
+        date: "01/02/2021",
+        comment: "Is this laptop suitable for students?"
+      ),
+      Chat(
+        name: "Tom",
+        date: "03/02/2021",
+        comment: "I use it in university, I think it's good"
+      ),
+      Chat(
+        name: "Alice",
+        date: "05/02/2021",
+        comment: "My son is satisfied with it"
+      ),
+    ],
   ),
   Item(
     id: '6234',
@@ -77,6 +157,22 @@ var kContacts = <Item>[
     image: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     description: "A Great Camera",
     location: 'NYU',
-    chat: [],
+    chat: <Chat>[
+      Chat(
+        name: "Jack",
+        date: "01/02/2021",
+        comment: "Is this laptop suitable for students?"
+      ),
+      Chat(
+        name: "Tom",
+        date: "03/02/2021",
+        comment: "I use it in university, I think it's good"
+      ),
+      Chat(
+        name: "Alice",
+        date: "05/02/2021",
+        comment: "My son is satisfied with it"
+      ),
+    ],
   ),
 ];

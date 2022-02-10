@@ -1,5 +1,20 @@
 import 'dart:async';
 
+class Chat {
+  String name;
+  String date;
+  String comment;
+
+  Chat(
+    {
+      this.name = "",
+      this.date = "",
+      this.comment = "",
+    }
+  );
+
+}
+
 class Item {
   final String id;
   String name;
@@ -10,7 +25,7 @@ class Item {
   String image;
   String description;
   String location;
-  List chat;
+  List<Chat> chat;
 
   Item(
     {
@@ -29,15 +44,15 @@ class Item {
 
   Item.fromMap(Map<String, dynamic> map)
     : id = map['id'],
-      name = map['name'],
-      type = map['type'],
-      price = map['price'],
-      orderId = map['orderId'],
-      date = map['date'],
-      image = map['image'],
-      location = map['location'],
-      description = map['description'],
-      chat = map['chat'];
+    name = map['name'],
+    type = map['type'],
+    price = map['price'],
+    orderId = map['orderId'],
+    date = map['date'],
+    image = map['image'],
+    location = map['location'],
+    description = map['description'],
+    chat = map['chat'];
 }
 
 abstract class ItemRepository {
