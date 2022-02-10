@@ -1,4 +1,8 @@
+import 'package:csi5112_project/view/user/AddressPage.dart';
+import 'package:csi5112_project/view/user/HistoricalordersPage.dart';
 import 'package:flutter/material.dart';
+import '../../data/user_data.dart';
+import '../../module/user_presenter.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
@@ -7,22 +11,40 @@ class UserPage extends StatefulWidget {
   _UserPageState createState() => _UserPageState();
 }
 
-class _UserPageState extends State<UserPage> {
+class _UserPageState extends State<UserPage> implements UserListViewContract {
+  late UserListPresenter _presenter;
+  User _user = new User();
+  _UserPageState() {
+    _presenter = UserListPresenter(this);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _presenter.loadUsers();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //     title: const Center(
-      //   child: Text("User", textAlign: TextAlign.center),
-      // )),
       body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
             // ignore: prefer_const_literals_to_create_immutables
             children: <Widget>[
-              Image(image: AssetImage("images/user.png"), width: 100.0),
-              Text("Hello, #username#"),
+              Text(
+                " ",
+                style: TextStyle(height: 4),
+              ),
+              Image(image: AssetImage("images/user.png"), width: 200.0),
+              Text(
+                "Hello, " + _user.name,
+                style: TextStyle(fontSize: 20, height: 4),
+              ),
               TextButton(
-                child: Text("Address"),
+                child: Text(
+                  "Address",
+                  style: TextStyle(fontSize: 20),
+                ),
                 // textColor: Colors.blue,
                 onPressed: () {
                   //导航到新路由
@@ -35,57 +57,58 @@ class _UserPageState extends State<UserPage> {
                 },
               ),
               TextButton(
-                child: Text("Orders"),
+                child: Text(
+                  "Orders",
+                  style: TextStyle(fontSize: 20),
+                ),
                 // textColor: Colors.blue,
                 onPressed: () {
                   //导航到新路由
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
-                      return OrdersPage();
+                      return HistoryPage();
                     }),
                   );
                 },
               ),
+              Text(
+                " ",
+                style: TextStyle(height: 4),
+              ),
               ElevatedButton(
-                child: Text("Sign out"),
+                child: Text(
+                  "Sign out",
+                  style: TextStyle(fontSize: 20),
+                ),
                 onPressed: () {},
               ),
             ]),
       ),
     );
   }
-}
 
-class AddressPage extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: const Center(
-        child: Text("Address"),
-      )), //not centered enough in Chrome
-      body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.start,
-            // ignore: prefer_const_literals_to_create_immutables
-            children: <Widget>[
-              Text("#username#", textAlign: TextAlign.start),
-              Text("#phonenumber#", textAlign: TextAlign.start),
-              Text("#address#", textAlign: TextAlign.start)
-            ]),
-      ),
-    );
+  void onLoadUsersComplete(List<User> users) {
+    setState(() {
+      _user = users[0];
+    });
+  }
+
+  @override
+  void onLoadUsersError() {
+    // TODO: implement onLoadUsersError
   }
 }
 
-class OrdersPage extends StatelessWidget {
+class Orders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Center(
-        child: Text("Orders", textAlign: TextAlign.center),
-      )),
+        centerTitle: true,
+        title: Text("Orders"),
+      ),
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.start,
             // ignore: prefer_const_literals_to_create_immutables
@@ -105,28 +128,10 @@ class OrdersPage extends StatelessWidget {
                 child: Text("Invoice  >"),
                 onPressed: () {
                   //导航到新路由
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return InvoicePage();
-                    }),
-                  );
                 },
               ),
             ]),
       ),
-    );
-  }
-}
-
-class InvoicePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: const Center(
-        child: Text("Invoice", textAlign: TextAlign.center),
-      )),
     );
   }
 }
