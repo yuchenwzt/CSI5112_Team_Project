@@ -1,5 +1,16 @@
 # CSI5112_Team_Project
 Flutter + MongoDB Mobile Project  
+# Team members:  
+Jiekun Liu  
+Ruilin Cai  
+Yihao Zheng  
+Xuanyuan Ji  
+Yuchen Wang  
+Xiao Zhu  
+
+# Documentation
+We structure and design this project via Google doc: https://docs.google.com/document/d/10U64-2VNPXuEOHA4m5jPbPVFWhjxv_PPlZBTSq2jW_c/edit  
+And prototype: https://modao.cc/app/yhVJ6UHUr6p60wMnfYjKJq (pw: 1234)  
 
 # Git相关操作
 建议master分支存储稳定版本代码，各自在自己分支中开发并pull request到master中
