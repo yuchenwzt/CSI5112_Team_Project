@@ -1,6 +1,6 @@
 import 'package:csi5112_project/data/merchant_data.dart';
 
-import '../injection/dependency_injection_merchant.dart';
+import '../injection/dependency_injection.dart';
 
 abstract class MerchantListViewContract {
   void onLoadMerchantsComplete(List<Merchant> merchants);

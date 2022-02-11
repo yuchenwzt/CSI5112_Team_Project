@@ -34,14 +34,14 @@ class User {
   });
 
   User.fromMap(Map<String, dynamic> map)
-      : id = map['id'],
-        name = map['name'],
-        password = map['password'],
-        isMerchant = map['isMerchant'],
-        phonenumber = map['phonenumber'],
-        address = map['address'],
-        cart = map['cart'],
-        history = map['history'];
+    : id = map['id'],
+      name = map['name'],
+      password = map['password'],
+      isMerchant = map['isMerchant'],
+      phonenumber = map['phonenumber'],
+      address = map['address'],
+      cart = map['cart'],
+      history = map['history'];
 }
 
 abstract class UserRepository {

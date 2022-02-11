@@ -1,4 +1,4 @@
-import 'package:csi5112_project/injection/dependency_injection_order.dart';
+import 'package:csi5112_project/injection/dependency_injection.dart';
 import '../data/order_data.dart';
 
 abstract class OrdersListViewContract {

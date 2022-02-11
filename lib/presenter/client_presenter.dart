@@ -1,5 +1,5 @@
 import 'package:csi5112_project/data/client_data.dart';
-import 'package:csi5112_project/injection/dependency_injection_client.dart';
+import 'package:csi5112_project/injection/dependency_injection.dart';
 
 abstract class UserListViewContract {
   void onLoadUserComplete(List<User> users);
