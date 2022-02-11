@@ -9,8 +9,12 @@ Yuchen Wang
 Xiao Zhu  
 
 # Documentation
-The report of the user interface: https://docs.google.com/document/d/1VUlc_1GzPz6BdAvtF8bId2pfDTvfxX-A/edit?usp=sharing&ouid=104317504885332416245&rtpof=true&sd=true
-We structure and design this project via Google doc: https://docs.google.com/document/d/10U64-2VNPXuEOHA4m5jPbPVFWhjxv_PPlZBTSq2jW_c/edit  
+We can git clone this project and build up it locally via VS Code. (The Master Branch)  
+
+We explain the details of our project's UI navigations and code strucure/functions in this report doc: https://docs.google.com/document/d/1VUlc_1GzPz6BdAvtF8bId2pfDTvfxX-A/edit?usp=sharing&ouid=104317504885332416245&rtpof=true&sd=true  
+
+We design and teamwork this project via Google doc: https://docs.google.com/document/d/10U64-2VNPXuEOHA4m5jPbPVFWhjxv_PPlZBTSq2jW_c/edit  
+
 And prototype: https://modao.cc/app/yhVJ6UHUr6p60wMnfYjKJq (pw: 1234)  
 
 # Git相关操作
