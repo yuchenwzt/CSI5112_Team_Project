@@ -2,17 +2,17 @@ import 'package:csi5112_project/injection/dependency_injection_item.dart';
 
 import '../data/user_data.dart';
 
-abstract class UserListViewContract {
-  void onLoadUsersComplete(List<User> items);
+abstract class UserViewContract {
+  void onLoadUsersComplete(User user);
 
   void onLoadUsersError();
 }
 
-class UserListPresenter {
-  UserListViewContract view;
+class UserPresenter {
+  UserViewContract view;
   late UserRepository repository;
 
-  UserListPresenter(this.view) {
+  UserPresenter(this.view) {
     repository = Injector().userRepository;
   }
 
@@ -20,8 +20,8 @@ class UserListPresenter {
     assert(view != null);
 
     repository
-        .fetch()
-        .then((users) => view.onLoadUsersComplete(users))
-        .catchError((onError) => view.onLoadUsersError());
+      .fetch()
+      .then((user) => view.onLoadUsersComplete(user))
+      .catchError((onError) => view.onLoadUsersError());
   }
 }

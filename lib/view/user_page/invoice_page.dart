@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'HistoricalordersPage.dart';
 
 class InvoicePage extends StatelessWidget {
   const InvoicePage({
@@ -12,7 +11,7 @@ class InvoicePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Invoice"),
+        title: const Text("Invoice"),
       ),
       body: ListView.separated(
         itemCount: invoice.length,
@@ -38,7 +37,7 @@ class InvoicePage extends StatelessWidget {
           );
         },
         separatorBuilder: (BuildContext context, int index) {
-          return Divider(
+          return const Divider(
             color: Colors.black,
             thickness: .1,
           );

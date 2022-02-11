@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'item_page/item_page.dart';
 import 'order_page/order_page.dart';
 import '../CartPage.dart';
-import '../UserPage.dart';
+import 'user_page/user_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({ Key? key, required this.isMerchant }) : super(key: key);

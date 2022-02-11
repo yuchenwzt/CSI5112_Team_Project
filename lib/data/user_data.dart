@@ -1,22 +1,34 @@
 import 'dart:async';
 
+class Address {
+  String name;
+  String phonenumber;
+  String address;
+
+  Address({
+    this.name = "",
+    this.address = "",
+    this.phonenumber = "",
+  });
+}
+
 class User {
   final String id;
   final String name;
   final String password;
-  final bool is_merchant;
+  final bool isMerchant;
   final String phonenumber;
-  final String address;
+  List<Address> address;
   final List cart;
   final List<List> history;
 
-  const User({
+  User({
     this.id = "",
     this.name = "",
     this.password = "",
-    this.is_merchant = false,
+    this.isMerchant = false,
     this.phonenumber = "",
-    this.address = "",
+    this.address = const [],
     this.cart = const [],
     this.history = const [],
   });
@@ -25,7 +37,7 @@ class User {
       : id = map['id'],
         name = map['name'],
         password = map['password'],
-        is_merchant = map['is_merchant'],
+        isMerchant = map['isMerchant'],
         phonenumber = map['phonenumber'],
         address = map['address'],
         cart = map['cart'],
@@ -33,7 +45,7 @@ class User {
 }
 
 abstract class UserRepository {
-  Future<List<User>> fetch();
+  Future<User> fetch();
 }
 
 class FetchDataException implements Exception {
