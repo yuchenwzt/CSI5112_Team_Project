@@ -23,7 +23,7 @@ class OrderFilterPanel extends StatelessWidget {
         : 
         Text("Current User purchased " + ordersState.itemId + " on " + ordersState.purchaseDate,
         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-      subtitle: Text("Order ID: " + ordersState.orderId + "Order Status: " + ordersState.purchaseStatus,
+      subtitle: Text("Order ID: " + ordersState.orderId + " Order Status: " + ordersState.purchaseStatus,
         style: const TextStyle(fontSize: 14, color: Colors.black)
       )
     )).toList();

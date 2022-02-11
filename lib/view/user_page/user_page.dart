@@ -3,7 +3,6 @@ import './historicalorders_page.dart';
 import 'package:flutter/material.dart';
 import '../../../../data/user_data.dart';
 import '../../../../module/user_presenter.dart';
-import '../login_page/login_page.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
@@ -43,7 +42,7 @@ class _UserPageState extends State<UserPage> implements UserViewContract {
               ),
               TextButton(
                 child: const Text(
-                  "Address",
+                  "Manage My Address",
                   style: TextStyle(fontSize: 20),
                 ),
                 // textColor: Colors.blue,
@@ -58,7 +57,7 @@ class _UserPageState extends State<UserPage> implements UserViewContract {
               ),
               TextButton(
                 child: const Text(
-                  "Orders",
+                  " View Orders Receipts",
                   style: TextStyle(fontSize: 20),
                 ),
                 // textColor: Colors.blue,

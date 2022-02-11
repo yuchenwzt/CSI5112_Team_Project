@@ -19,19 +19,19 @@ class MainPageState extends State<MainPage> {
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
   static const List<Widget> titleOptions = <Widget>[
     Text(
-      'Items',
+      'Items Market',
       style: optionStyle, 
     ),
     Text(
-      'Chart',
+      'Shopping Cart',
       style: optionStyle,
     ),
     Text(
-      'Order',
+      'Track Orders',
       style: optionStyle,
     ),
     Text(
-      'User',
+      'User Home',
       style: optionStyle,
     ),
   ];
