@@ -6,8 +6,10 @@ import '../../components/search_bar.dart';
 import './order_filter_panel.dart';
 
 class OrderPage extends StatefulWidget {
-  const OrderPage({ Key? key }) : super(key: key);
+  const OrderPage({ Key? key, required this.isMerchant }) : super(key: key);
 
+  final bool isMerchant;
+  
   @override
   OrderPageState createState() => OrderPageState();
 }
@@ -36,7 +38,7 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
         flexibleSpace: SearchBar(searchItems: ordersReceived, onSearchFinish: (value) => updateItemList(value), filterType: "order"),
       ),
       body: Center(
-        child: OrderFilterPanel(orders: ordersFiltered),
+        child: OrderFilterPanel(orders: ordersFiltered, isMerchant: widget.isMerchant),
       ),
     );
   }

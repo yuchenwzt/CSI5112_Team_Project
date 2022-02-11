@@ -47,8 +47,6 @@ class _SearchBarState extends State<SearchBar> {
     );
   }
 
-  
-
   void onFilter() {
     var filterRes = filter(moveBlank(searchController.text));
     widget.onSearchFinish(filterRes);
@@ -69,23 +67,23 @@ class _SearchBarState extends State<SearchBar> {
     return filterString.substring(start, end + 1);
   }
 
-  List<dynamic> filter(String filterString) {
-    List<dynamic> res = [];
-    res = widget.filterType == "item" ? <Item>[] : <Order>[];
+  List filter(String filterString) {
+    List<Item> listRes = [];
+    List<Order> orderRes = [];
     for (var o in widget.searchItems) {
       if (filterCase(o, filterString)) {
-        res.add(o);
+        widget.filterType == "item" ? listRes.add(o) : orderRes.add(o);
       }
     }
-    return res;
+    return widget.filterType == "item" ? listRes : orderRes;
   }
 
-  bool filterCase(List<dynamic> o, String filterString) {
+  bool filterCase(dynamic o, String filterString) {
     bool res = false;
     if (widget.filterType == "order") {
       res = (o as Order).userId == filterString;
     } else if (widget.filterType == "item") {
-      res = (o as Item).name.toLowerCase().contains(filterString.toLowerCase()) || (o as Item).description.toLowerCase().contains(filterString.toLowerCase());
+      res = (o as Item).name.toLowerCase().contains(filterString.toLowerCase()) || o.description.toLowerCase().contains(filterString.toLowerCase());
     }
     return res;
   }

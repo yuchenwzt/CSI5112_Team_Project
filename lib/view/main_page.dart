@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'item_page/Item_page.dart';
+import 'item_page/item_page.dart';
 import 'order_page/order_page.dart';
 import '../CartPage.dart';
 import '../UserPage.dart';
@@ -47,7 +47,7 @@ class MainPageState extends State<MainPage> {
     List pages = [
       ItemPage(isMerchant: widget.isMerchant),
       const CartPage(),
-      const OrderPage(),
+      OrderPage(isMerchant: widget.isMerchant),
       const UserPage(),
     ];
     return Scaffold(

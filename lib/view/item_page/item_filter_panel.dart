@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/item_data.dart';
 import 'item_card.dart';
-import 'Item_edit.dart';
+import 'item_edit.dart';
 import '../../components/invisible_dropdown.dart';
 
 class ItemFilterPanel extends StatefulWidget {

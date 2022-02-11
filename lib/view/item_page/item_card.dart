@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/item_data.dart';
-import 'Item_edit.dart';
+import 'item_edit.dart';
 import '../item_detail_page/item_detail_page.dart';
 
 class ItemCard extends StatefulWidget {

@@ -18,6 +18,10 @@ class CartPageState extends State<CartPage> implements ItemsListViewContract {
     _presenter.loadItems();
   }
   
+  CartPageState() {
+    _presenter = ItemsListPresenter(this);
+  }
+
   @override
   Widget build(BuildContext context) {
     return const Text("Cart");
