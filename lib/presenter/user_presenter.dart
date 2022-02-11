@@ -1,4 +1,4 @@
-import 'package:csi5112_project/injection/dependency_injection_item.dart';
+import 'package:csi5112_project/injection/dependency_injection.dart';
 
 import '../data/user_data.dart';
 

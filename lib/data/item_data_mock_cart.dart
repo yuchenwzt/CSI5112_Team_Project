@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'item_data.dart';
 
-class MockItemRepositoryCart implements ItemRepository {
+class MockItemCartRepositoryCart implements ItemRepository {
   @override
   Future<List<Item>> fetch() => Future.value(kContacts);
 }

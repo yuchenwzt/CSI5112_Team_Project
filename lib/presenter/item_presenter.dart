@@ -1,5 +1,5 @@
 import '../data/item_data.dart';
-import '../Injection/dependency_injection_item.dart';
+import '../Injection/dependency_injection.dart';
 
 abstract class ItemsListViewContract {
   void onLoadItemsComplete(List<Item> items);
