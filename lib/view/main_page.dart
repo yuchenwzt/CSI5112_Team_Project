@@ -1,7 +1,7 @@
+import 'package:csi5112_project/view/shopping_cart_page/item_cart_page.dart';
 import 'package:flutter/material.dart';
 import 'item_page/item_page.dart';
 import 'order_page/order_page.dart';
-import '../view/item_cart_page/item_cart_page.dart';
 import 'user_page/user_page.dart';
 
 class MainPage extends StatefulWidget {

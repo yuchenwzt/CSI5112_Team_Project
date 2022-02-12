@@ -46,7 +46,12 @@ class ItemListState extends State<ItemPage> implements ItemsListViewContract {
           flexibleSpace: SearchBar(searchItems: itemsReceived, filterType: "item", onSearchFinish: (value) => updateItemList(value)),
         ),
         body: Center(
-          child: ItemFilterPanel(items: itemsFiltered, originItems: itemsReceived, isMerchant: widget.isMerchant, onSelectFinish: (value) => updateItemList(value), onEditFinish: (value) => updateEditItem(value)),
+          child: ItemFilterPanel(items: itemsFiltered, 
+            originItems: itemsReceived, 
+            isMerchant: widget.isMerchant, 
+            onSelectFinish: (value) => updateItemList(value), 
+            onEditFinish: (value) => updateEditItem(value)
+          ),
         ),
       );
     }
