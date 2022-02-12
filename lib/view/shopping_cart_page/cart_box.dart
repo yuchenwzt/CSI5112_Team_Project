@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 
 class CardBox extends StatefulWidget {
-  const CardBox({Key? key, required this.selectedValue, this.updateNum})
+  const CardBox(
+      {Key? key,
+      required this.selectedValue,
+      this.updateNum,
+      required this.isClicked,
+      this.updatePrice,
+      required this.itemPrice})
       : super(key: key);
 
   final int selectedValue;
   final updateNum;
+  final bool isClicked;
+  final updatePrice;
+  final String itemPrice;
   @override
   _CartCardBoxState createState() => _CartCardBoxState();
 }
@@ -42,7 +51,7 @@ class _CartCardBoxState extends State<CardBox> {
             )
           ],
           hint: const Text("num"),
-          style: const TextStyle(fontSize: 15, color: Colors.green), 
+          style: const TextStyle(fontSize: 15, color: Colors.green),
           underline: const Divider(
             height: 1,
             color: Colors.blue,
@@ -50,10 +59,15 @@ class _CartCardBoxState extends State<CardBox> {
           value: value, 
           onChanged: (int? newValue) {
             setState(() {
+              if (widget.isClicked) {
+                widget.updatePrice(
+                    (newValue! - value) * int.parse(widget.itemPrice));
+              }
               value = newValue!;
               widget.updateNum(value);
             });
           },
+          onTap: () {},
         ),
       ],
     );
