@@ -4,6 +4,7 @@ import '../../data/order_data.dart';
 import '../../presenter/order_presenter.dart';
 import '../../components/search_bar.dart';
 import './order_filter_panel.dart';
+import '../../components/suspend_page.dart';
 
 class OrderPage extends StatefulWidget {
   const OrderPage({ Key? key, required this.isMerchant }) : super(key: key);
@@ -18,7 +19,9 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
   late OrdersListPresenter _presenter;
   List<Order> ordersReceived = [];
   List<Order> ordersFiltered = [];
+  String loadError = "";
   bool isSearching = false;
+  bool isLoadError = false;
   
   OrderPageState() {
     _presenter = OrdersListPresenter(this);
@@ -30,16 +33,28 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
     isSearching = true;
     _presenter.loadOrder();
   }
+
+  void retry() {
+    isSearching = true;
+    _presenter.loadOrder();
+  }
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: SearchBar(searchItems: ordersReceived, onSearchFinish: (value) => updateItemList(value), filterType: "order"),
-      ),
-      body: Center(
-        child: OrderFilterPanel(orders: ordersFiltered, isMerchant: widget.isMerchant),
-      ),
+    return SuspendCard(
+      child: Scaffold(
+        appBar: AppBar(
+          flexibleSpace: SearchBar(searchItems: ordersReceived, onSearchFinish: (value) => updateItemList(value), filterType: "order"),
+        ),
+        body: Center(
+          child: OrderFilterPanel(orders: ordersFiltered, isMerchant: widget.isMerchant),
+        ),
+      ), 
+      isLoadError: isLoadError, 
+      isSearching: isSearching, 
+      loadError: loadError, 
+      data: ordersReceived,
+      retry: () => retry(),
     );
   }
 
@@ -59,7 +74,11 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
   }
 
   @override
-  void onLoadOrdersError() {
-    // TODO when backend set up
+  void onLoadOrdersError(e) {
+    setState(() {
+      isSearching = false;
+      isLoadError = true;
+      loadError = e.toString();
+    });
   }
 }

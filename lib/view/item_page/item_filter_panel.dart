@@ -90,16 +90,16 @@ class _ItemFilterPanelState extends State<ItemFilterPanel> {
               children: [
                 Center(
                     child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: const <Widget>[
-                    Text("Filter"),
-                    Icon(Icons.filter_alt)
-                  ],
-                )),
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const <Widget>[
+                        Text("Filter"),
+                        Icon(Icons.filter_alt)
+                      ],
+                    )),
                 InvisibleDropdown(
                     type: "type",
                     items: widget.originItems,
-                    onFilterFinish: (value) => widget.onSelectFinish(value)),
+                  onFilterFinish: (value) => widget.onSelectFinish(value)),
               ],
             ),
           ),

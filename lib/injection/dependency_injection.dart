@@ -1,3 +1,4 @@
+import 'package:csi5112_project/data/item_data_http.dart';
 import 'package:csi5112_project/data/user_data.dart';
 import 'package:csi5112_project/data/user_data_mock.dart';
 
@@ -17,7 +18,7 @@ enum Flavor { mock, real }
 class Injector {
   Injector._internal();
   static final _singleton = Injector._internal();
-  static const Flavor _flavor = Flavor.mock;
+  static const Flavor _flavor = Flavor.real;
 
   factory Injector() {
     return _singleton;
@@ -27,8 +28,8 @@ class Injector {
     switch (_flavor) {
       case Flavor.mock:
         return MockItemRepository();
-      // case Flavor.real:
-      //   return new RandomUserRepository();
+      case Flavor.real:
+        return RealItemRepository();
       default:
         return MockItemRepository();
     }

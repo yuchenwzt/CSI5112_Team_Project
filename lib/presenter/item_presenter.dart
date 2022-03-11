@@ -4,7 +4,7 @@ import '../Injection/dependency_injection.dart';
 abstract class ItemsListViewContract {
   void onLoadItemsComplete(List<Item> items);
 
-  void onLoadItemsError();
+  void onLoadItemsError(onError);
 }
 
 class ItemsListPresenter {
@@ -21,6 +21,6 @@ class ItemsListPresenter {
     repository
       .fetch()
       .then((items) => view.onLoadItemsComplete(items))
-      .catchError((onError) => view.onLoadItemsError());
+      .catchError((onError) => view.onLoadItemsError(onError));
   }
 }

@@ -48,7 +48,7 @@ class MainPageState extends State<MainPage> {
       ItemPage(isMerchant: widget.isMerchant),
       const CartPage(),
       OrderPage(isMerchant: widget.isMerchant),
-      const UserPage(),
+      const UserPage()
     ];
     return Scaffold(
       appBar: AppBar(

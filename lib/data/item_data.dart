@@ -17,6 +17,7 @@ class Chat {
 
 class Item {
   final String id;
+  final String product_id;
   String name;
   String type;
   String price;
@@ -25,11 +26,14 @@ class Item {
   String image;
   String description;
   String location;
+  String owner;
   List<Chat> chat;
 
   Item(
     {
       this.id = "",
+      this.product_id = "",
+      this.owner = "",
       this.name = "",
       this.type = "",
       this.price = "",
@@ -44,6 +48,8 @@ class Item {
 
   Item.fromMap(Map<String, dynamic> map)
     : id = map['id'],
+    product_id = map['product_id'],
+    owner = map['owner'],
     name = map['name'],
     type = map['type'],
     price = map['price'],

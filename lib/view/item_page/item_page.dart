@@ -3,6 +3,7 @@ import '../../data/item_data.dart';
 import '../../presenter/item_presenter.dart';
 import 'item_filter_panel.dart';
 import '../../components/search_bar.dart';
+import '../../components/suspend_page.dart';
 
 class ItemPage extends StatefulWidget {
   const ItemPage({Key? key, required this.isMerchant}) : super(key: key);
@@ -17,7 +18,9 @@ class ItemListState extends State<ItemPage> implements ItemsListViewContract {
   late ItemsListPresenter _presenter;
   List<Item> itemsReceived = [];
   List<Item> itemsFiltered = [];
+  String loadError = "";
   bool isSearching = false;
+  bool isLoadError = false;
 
   ItemListState() {
     _presenter = ItemsListPresenter(this);
@@ -29,19 +32,16 @@ class ItemListState extends State<ItemPage> implements ItemsListViewContract {
     isSearching = true;
     _presenter.loadItems();
   }
+
+  void retry() {
+    isSearching = true;
+    _presenter.loadItems();
+  }
   
   @override
   Widget build(BuildContext context) {
-    late Widget selectedWidget;
-    if (isSearching) {
-      selectedWidget = const Center(
-        child: Padding(
-          padding: EdgeInsets.only(left: 16.0, right: 16.0),
-          child: CircularProgressIndicator(),
-        ),
-      );
-    } else {
-      selectedWidget = Scaffold(
+    return SuspendCard(
+      child: Scaffold(
         appBar: AppBar(
           flexibleSpace: SearchBar(searchItems: itemsReceived, filterType: "item", onSearchFinish: (value) => updateItemList(value)),
         ),
@@ -53,10 +53,13 @@ class ItemListState extends State<ItemPage> implements ItemsListViewContract {
             onEditFinish: (value) => updateEditItem(value)
           ),
         ),
-      );
-    }
-
-    return selectedWidget;
+      ), 
+      isLoadError: isLoadError, 
+      isSearching: isSearching, 
+      loadError: loadError, 
+      data: itemsReceived,
+      retry: () => retry()
+    );
   }
 
   @override
@@ -65,6 +68,7 @@ class ItemListState extends State<ItemPage> implements ItemsListViewContract {
       itemsReceived = items;
       itemsFiltered = items;
       isSearching = false;
+      isLoadError = false;
     });
   }
 
@@ -89,7 +93,11 @@ class ItemListState extends State<ItemPage> implements ItemsListViewContract {
   }
 
   @override
-  void onLoadItemsError() {
-    // TODO when backend set up
+  void onLoadItemsError(e) {
+    setState(() {
+      isSearching = false;
+      isLoadError = true;
+      loadError = e.toString();
+    });
   }
 }
