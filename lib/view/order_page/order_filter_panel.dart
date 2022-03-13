@@ -18,12 +18,12 @@ class OrderFilterPanel extends StatelessWidget {
   List<ListTile> buildOrderList() {
     return orders.map((ordersState) => ListTile(
       leading: const Icon(Icons.person),
-      title: isMerchant ? Text("Client " + ordersState.userId + " purchased " + ordersState.itemId + " on " + ordersState.purchaseDate,
+      title: isMerchant ? Text("Client " + ordersState.customer_id + " purchased " + ordersState.product_id + " on " + ordersState.date.toString(),
         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)) 
         : 
-        Text("Current User purchased " + ordersState.itemId + " on " + ordersState.purchaseDate,
+        Text("Current User purchased " + ordersState.product_id + " on " + ordersState.date.toString(),
         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-      subtitle: Text("Order ID: " + ordersState.orderId + " Order Status: " + ordersState.purchaseStatus,
+      subtitle: Text("Order ID: " + ordersState.order_id + " Order Status: " + ordersState.status,
         style: const TextStyle(fontSize: 14, color: Colors.black)
       )
     )).toList();

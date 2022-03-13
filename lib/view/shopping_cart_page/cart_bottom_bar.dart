@@ -1,4 +1,4 @@
-import 'package:csi5112_project/view/item_detail_page/payment_success_page.dart';
+import 'package:csi5112_project/view/product_detail_page/payment_success_page.dart';
 import 'package:flutter/material.dart';
 
 class CartBottomBar extends StatefulWidget {

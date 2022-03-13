@@ -1,109 +1,74 @@
-import './address_page.dart';
-import './historicalorders_page.dart';
+import '../../data/http_data.dart';
 import 'package:flutter/material.dart';
-import '../../../../data/user_data.dart';
-import '../../../../presenter/user_presenter.dart';
+import '../../data/merchant_data.dart';
+import '../../data/customer_data.dart';
+import '../../presenter/customer_presenter.dart';
+import '../../presenter/merchant_presenter.dart';
+import 'user_role_page.dart';
 
 class UserPage extends StatefulWidget {
-  const UserPage({Key? key}) : super(key: key);
+  const UserPage({Key? key, required this.isMerchant, required this.current_id}) : super(key: key);
+  final bool isMerchant;
+  final String current_id;
 
   @override
   _UserPageState createState() => _UserPageState();
 }
 
-class _UserPageState extends State<UserPage> implements UserViewContract {
-  late UserPresenter _presenter;
-  User user = User();
+class _UserPageState extends State<UserPage> implements MerchantListViewContract, CustomerListViewContract {
+  late MerchantListPresenter _merchantPresenter;
+  late CustomerListPresenter _customerPresenter;
+
+  late Customer customer;
+  late Merchant merchant;
+  String loadError = "";
+  bool isLoadError = false;
+
   _UserPageState() {
-    _presenter = UserPresenter(this);
+    _merchantPresenter = MerchantListPresenter(this);
+    _customerPresenter = CustomerListPresenter(this);
   }
 
   @override
   void initState() {
     super.initState();
-    _presenter.loadUsers();
+    widget.isMerchant ? _merchantPresenter.loadMerchant(HttpRequest('Get', 'Merchants?id=${widget.current_id}', {})) : _customerPresenter.loadCustomer(HttpRequest('Get', 'Customers?id=${widget.current_id}', {}));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-            // ignore: prefer_const_literals_to_create_immutables
-            children: <Widget>[
-              const Text(
-                " ",
-                style: TextStyle(height: 4),
-              ),
-              const Image(image: AssetImage("images/user.png"), width: 200.0),
-              Text(
-                "Hello, " + user.name,
-                style: const TextStyle(fontSize: 20, height: 4),
-              ),
-              TextButton(
-                child: const Text(
-                  "Manage My Address",
-                  style: TextStyle(fontSize: 20),
-                ),
-                // textColor: Colors.blue,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return AddressPage(user: user, onEditFinish: (value) => updateUserAddress(value),);
-                    }),
-                  );
-                },
-              ),
-              TextButton(
-                child: const Text(
-                  " View Orders Receipts",
-                  style: TextStyle(fontSize: 20),
-                ),
-                // textColor: Colors.blue,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return HistoryPage(user: user);
-                    }),
-                  );
-                },
-              ),
-              const Text(
-                " ",
-                style: TextStyle(height: 4),
-              ),
-              ElevatedButton(
-                child: const Text(
-                  "Sign out",
-                  style: TextStyle(fontSize: 20),
-                ),
-                onPressed: () {},
-              ),
-            ]),
-      ),
+      body: UserRolePage(user: widget.isMerchant ? merchant : customer)
     );
   }
 
-  // mock update func, deleted when build up backend
-  void updateUserAddress(Address newAddress) {
-    var newUser = user;
-    user.address[0] = newAddress;
+  @override
+  void onLoadCustomerComplete(List<Customer> customer) {
     setState(() {
-      user = newUser;
+      customer = customer;
     });
   }
 
   @override
-  void onLoadUsersComplete(User userReceived) {
+  void onLoadCustomerError(e) {
     setState(() {
-      user = userReceived;
+      isLoadError = true;
+      loadError = e.toString();
+    });
+  }
+  
+  @override
+  void onLoadMerchantComplete(List<Merchant> merchant) {
+    setState(() {
+      merchant = merchant;
     });
   }
 
   @override
-  void onLoadUsersError() {
-    // TODO: implement onLoadUsersError
+  void onLoadMerchantError(e) {
+    setState(() {
+      isLoadError = true;
+      loadError = e.toString();
+    });
   }
 }

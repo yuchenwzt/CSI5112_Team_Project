@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'http_data.dart';
 
-class User {
+class Customer {
+  final String customer_id;
   final String first_name;
   final String last_name;
   final String email;
@@ -9,8 +10,9 @@ class User {
   final String password;
   final String phone;
 
-  User.fromMap(Map<String, dynamic> map)
-    : first_name = map['first_name'],
+  Customer.fromMap(Map<String, dynamic> map)
+    : customer_id = map['customer_id'],
+      first_name = map['first_name'],
       last_name = map['last_name'],
       email = map['email'],
       username = map['username'],
@@ -18,6 +20,6 @@ class User {
       phone = map['phone'];
 }
 
-abstract class UserRepository {
-  Future<List<User>> fetch(HttpRequest request);
+abstract class CustomerRepository {
+  Future<List<Customer>> fetch(HttpRequest request);
 }

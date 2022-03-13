@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../item_page/item_page.dart';
+import '../product_page/product_page.dart';
 import '../order_page/order_page.dart';
 
 class PaymentPage extends StatelessWidget {
@@ -40,7 +40,7 @@ class PaymentPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
-                        builder: (context) => const ItemPage(isMerchant: true)),
+                        builder: (context) => const ProductPage(isMerchant: true)),
                       (route) => route == null);
                   },
                 ),

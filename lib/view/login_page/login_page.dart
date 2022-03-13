@@ -120,9 +120,9 @@ class _LoginState extends State<Login> {
                         warningNoIdentity();
                       } else if (authenticateIdentity(_unameController.text, _passwController.text)) {
                         if (_identity == Identity.client) {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(isMerchant: false)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(isMerchant: false, current_id: "62213f1f3945445265a9e1f4")));
                         } else {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(isMerchant: true)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(isMerchant: true, current_id: "62213f963945445265a9e1f9")));
                         }
                       }
                     },

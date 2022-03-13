@@ -1,43 +1,25 @@
 import 'dart:async';
+import 'http_data.dart';
 
 class Merchant {
-  final String id;
-  String username;
-  String password;
-  String phoneNum;
-  String address;
-  List<Map<String, String>>
-      cart; // String is for itemId, int is for num of items
-  static const defaultValue = [
-    {"itemId": "", "itemNum": ""}
-  ];
-  Merchant(
-      {this.id = "",
-      this.username = "",
-      this.password = "",
-      this.phoneNum = "",
-      this.address = "",
-      this.cart = defaultValue});
+  final String merchant_id;
+  final String first_name;
+  final String last_name;
+  final String email;
+  final String password;
+  final String username;
+  final String phone;
+
   Merchant.fromMap(Map<String, dynamic> map)
-      : id = map['id'],
-        username = map['username'],
-        password = map['password'],
-        phoneNum = map['phoneNum'],
-        address = map['address'],
-        cart = map['cart'];
+    : merchant_id = map['merchant_id'],
+      first_name = map['first_name'],
+      last_name = map['last_name'],
+      email = map['email'],
+      password = map['password'],
+      username = map['username'],
+      phone = map['phone'];
 }
 
 abstract class MerchantRepository {
-  Future<List<Merchant>> fetch();
-}
-
-class FetchDataException implements Exception {
-  String message;
-
-  FetchDataException(this.message);
-
-  @override
-  String toString() {
-    return "Exception:$message";
-  }
+  Future<List<Merchant>> fetch(HttpRequest request);
 }

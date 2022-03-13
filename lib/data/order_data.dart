@@ -1,44 +1,27 @@
 import 'dart:async';
+import 'http_data.dart';
 
 class Order {
-  final String itemId;
-  String orderId;
-  String userId;
-  String purchaseDate;
-  String purchaseInfo;
-  String purchaseStatus;
-
-  Order(
-    {
-      this.itemId = "",
-      this.orderId = "",
-      this.userId = "",
-      this.purchaseDate = "",
-      this.purchaseInfo = "",
-      this.purchaseStatus = "",
-    }
-  );
+  final String order_id;
+  String merchant_id;
+  String customer_id;
+  String shipping_address_id;
+  int quantity;
+  String product_id;
+  DateTime date;
+  String status;
 
   Order.fromMap(Map<String, dynamic> map)
-    : itemId = map['itemId'],
-    orderId = map['orderId'],
-    userId = map['userId'],
-    purchaseDate = map['purchaseDate'],
-    purchaseInfo = map['purchaseInfo'],
-    purchaseStatus = map['purchaseStatus'];
+    : order_id = map['order_id'],
+    merchant_id = map['merchant_id'],
+    customer_id = map['customer_id'],
+    shipping_address_id = map['shipping_address_id'],
+    quantity = map['quantity'],
+    product_id = map['product_id'],
+    date = map['date'],
+    status = map['status'];
 }
 
 abstract class OrderRepository {
-  Future<List<Order>> fetch();
-}
-
-class FetchDataException implements Exception {
-  String message;
-
-  FetchDataException(this.message);
-
-  @override
-  String toString() {
-    return "Exception:$message";
-  }
+  Future<List<Order>> fetch(HttpRequest request);
 }

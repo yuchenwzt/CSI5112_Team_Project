@@ -1,14 +1,13 @@
-import 'package:csi5112_project/data/item_data_mock.dart';
 import 'package:flutter/material.dart';
-import '../../data/item_data.dart';
+import '../../data/product_data.dart';
 
 class ProductImg extends StatefulWidget {
   const ProductImg({
     Key? key,
-    required this.item,
+    required this.product,
   }) : super(key: key);
 
-  final Item item;
+  final Product product;
 
   @override
   _ProductImagesState createState() => _ProductImagesState();
@@ -20,7 +19,7 @@ class _ProductImagesState extends State<ProductImg> {
   Widget build(BuildContext context) {
     return Center(
       child: Image(
-        image: NetworkImage(widget.item.image),
+        image: NetworkImage(widget.product.image),
         width: 370,
         height: 370,
         fit: BoxFit.fitHeight,

@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
-import '../shopping_cart_page/item_cart_page.dart';
+import '../shopping_cart_page/cart_item_page.dart';
 import 'payment_success_page.dart';
 import 'product_description.dart';
 import 'product_img.dart';
-import '../../data/item_data.dart';
-import '../item_chat_page/item_chat_page.dart';
+import '../../data/product_data.dart';
+// import '../item_chat_page/item_chat_page.dart';
 
 class DetailPage extends StatelessWidget {
   const DetailPage({
     Key? key,
-    required this.item,
+    required this.product,
     this.onEditFinish,
   }) : super(key: key);
 
-  final Item item;
+  final Product product;
   final onEditFinish;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(item.type + " Store")),
+      appBar: AppBar(title: Text(product.category + " Store")),
       body: ListView(children: [
         const Padding(padding: EdgeInsets.only(top: 10)),
-        ProductImg(item: item),
-        ProductDescription(item: item),
+        ProductImg(product: product),
+        ProductDescription(product: product),
         const Padding(padding: EdgeInsets.only(top: 30)),
         SizedBox(
             width: 30,
@@ -77,7 +77,7 @@ class DetailPage extends StatelessWidget {
               ),
             )),
         const Padding(padding: EdgeInsets.only(top: 30)),
-        ItemChatPage(item: item, onEditFinish: onEditFinish)
+        // ItemChatPage(item: product, onEditFinish: onEditFinish)
       ]),
     );
   }

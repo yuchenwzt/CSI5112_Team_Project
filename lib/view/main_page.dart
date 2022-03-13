@@ -1,13 +1,14 @@
-import 'package:csi5112_project/view/shopping_cart_page/item_cart_page.dart';
+import 'package:csi5112_project/view/shopping_cart_page/cart_item_page.dart';
 import 'package:flutter/material.dart';
-import 'item_page/item_page.dart';
+import 'product_page/product_page.dart';
 import 'order_page/order_page.dart';
 import 'user_page/user_page.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key, required this.isMerchant}) : super(key: key);
+  const MainPage({Key? key, required this.isMerchant, required this.current_id}) : super(key: key);
 
   final bool isMerchant;
+  final String current_id;
 
   @override
   MainPageState createState() => MainPageState();
@@ -45,10 +46,10 @@ class MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     List pages = [
-      ItemPage(isMerchant: widget.isMerchant),
+      ProductPage(isMerchant: widget.isMerchant),
       const CartPage(),
       OrderPage(isMerchant: widget.isMerchant),
-      const UserPage()
+      UserPage(isMerchant: widget.isMerchant, current_id: widget.current_id)
     ];
     return Scaffold(
       appBar: AppBar(

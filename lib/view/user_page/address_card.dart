@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import '../../data/user_data.dart';
+import '../../data/shipping_address_data.dart';
 
 class AddressCard extends StatelessWidget {
   AddressCard({ Key? key, required this.address, this.onEditFinish }) : super(key: key);
 
-  final Address address;
+  final ShippingAddress address;
   final itemFormKey = GlobalKey<FormState>();
   final onEditFinish;
 
   @override
   Widget build(BuildContext context) {
-    Address newAddress = address;
+    ShippingAddress newAddress = address;
     return ListTile(
       leading: TextButton(
         style: ButtonStyle(padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)),
@@ -20,7 +20,7 @@ class AddressCard extends StatelessWidget {
         child: const Text("Edit"),
       ),
       title: Text(
-        address.name,
+        address.address,
         textAlign: TextAlign.center,
         style: const TextStyle(
           // color: Colors.blue,
@@ -30,7 +30,7 @@ class AddressCard extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        address.phonenumber,
+        address.city,
         textAlign: TextAlign.center,
         style: const TextStyle(
           // color: Colors.blue,
@@ -52,7 +52,7 @@ class AddressCard extends StatelessWidget {
     );
   }
 
-  void showFormDialog(BuildContext context, Address newAddress) {
+  void showFormDialog(BuildContext context, ShippingAddress newAddress) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -85,14 +85,14 @@ class AddressCard extends StatelessWidget {
                         decoration: const InputDecoration(
                           labelText: 'User Name',
                         ),
-                        initialValue: newAddress.name,
+                        initialValue: newAddress.address,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "The Name Can't be Empty";
                           }
                           return null;
                         },
-                        onSaved: (newValue) => newAddress.name = newValue as String,
+                        onSaved: (newValue) => newAddress.address = newValue as String,
                       ),
                     ),
                     Padding(
@@ -101,14 +101,14 @@ class AddressCard extends StatelessWidget {
                         decoration: const InputDecoration(
                           labelText: 'User Phone Number',
                         ),
-                        initialValue: newAddress.phonenumber,
+                        initialValue: newAddress.zipcode,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "The Number Can't be Empty";
                           }
                           return null;
                         },
-                        onSaved: (newValue) => newAddress.phonenumber = newValue as String,
+                        onSaved: (newValue) => newAddress.country = newValue as String,
                       ),
                     ),
                     Padding(

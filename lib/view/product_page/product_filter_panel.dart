@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import '../../data/item_data.dart';
-import 'item_card.dart';
-import 'item_edit.dart';
+import '../../data/product_data.dart';
+import 'product_card.dart';
+import 'product_edit.dart';
 import '../../components/invisible_dropdown.dart';
 
-class ItemFilterPanel extends StatefulWidget {
-  const ItemFilterPanel({ Key? key, required this.originItems, required this.items, this.onSelectFinish, this.onEditFinish, required this.isMerchant }) : super(key: key);
+class ProductFilterPanel extends StatefulWidget {
+  const ProductFilterPanel({ Key? key, required this.originProducts, required this.products, this.onSelectFinish, this.onEditFinish, required this.isMerchant }) : super(key: key);
 
-  final List<Item> items;
-  final List<Item> originItems;
+  final List<Product> products;
+  final List<Product> originProducts;
   final bool isMerchant;
   final onEditFinish;
   final onSelectFinish;
 
   @override
-  _ItemFilterPanelState createState() => _ItemFilterPanelState();
+  _ProductFilterPanelState createState() => _ProductFilterPanelState();
 }
 
-class _ItemFilterPanelState extends State<ItemFilterPanel> {
+class _ProductFilterPanelState extends State<ProductFilterPanel> {
   bool priceAscending = true;
   
   @override
@@ -28,7 +28,7 @@ class _ItemFilterPanelState extends State<ItemFilterPanel> {
 
   @override
   Widget build(BuildContext context) {
-    List<Item> sortList = List.from(widget.items);
+    List<Product> sortList = List.from(widget.products);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -42,10 +42,8 @@ class _ItemFilterPanelState extends State<ItemFilterPanel> {
                   priceAscending = !priceAscending;
                 }),
                 priceAscending
-                    ? sortList.sort((a, b) =>
-                        int.parse(a.price).compareTo(int.parse(b.price)))
-                    : sortList.sort((a, b) =>
-                        int.parse(b.price).compareTo(int.parse(a.price))),
+                    ? sortList.sort((a, b) => a.price - b.price)
+                    : sortList.sort((a, b) => b.price - a.price),
                 widget.onSelectFinish(sortList)
               },
               child: Row(
@@ -80,7 +78,7 @@ class _ItemFilterPanelState extends State<ItemFilterPanel> {
                 )),
                 InvisibleDropdown(
                     type: "location",
-                    items: widget.originItems,
+                    products: widget.originProducts,
                     onFilterFinish: (value) => widget.onSelectFinish(value)),
               ],
             ),
@@ -97,8 +95,8 @@ class _ItemFilterPanelState extends State<ItemFilterPanel> {
                       ],
                     )),
                 InvisibleDropdown(
-                    type: "type",
-                    items: widget.originItems,
+                  type: "type",
+                  products: widget.originProducts,
                   onFilterFinish: (value) => widget.onSelectFinish(value)),
               ],
             ),
@@ -108,8 +106,8 @@ class _ItemFilterPanelState extends State<ItemFilterPanel> {
       floatingActionButton: Visibility(
         visible: widget.isMerchant, 
         maintainState: false,
-        child: ItemEdit(
-            item: Item(), onEditFinish: widget.onEditFinish, editRole: "add"),
+        child: ProductEdit(
+            product: Product(), onEditFinish: widget.onEditFinish, editRole: "add"),
       ),
       body: GridView(
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -118,12 +116,12 @@ class _ItemFilterPanelState extends State<ItemFilterPanel> {
           childAspectRatio: 2 / 3.1,
         ),
         shrinkWrap: true,
-        children: buildItemList(),
+        children: buildProductList(),
       ),
     );
   }
 
-  List<ItemCard> buildItemList() {
-    return widget.items.map((itemsState) => ItemCard(item: itemsState, isMarchant: widget.isMerchant, onEditFinish: widget.onEditFinish)).toList();
+  List<ProductCard> buildProductList() {
+    return widget.products.map((productsState) => ProductCard(product: productsState, isMarchant: widget.isMerchant, onEditFinish: widget.onEditFinish)).toList();
   }
 }
