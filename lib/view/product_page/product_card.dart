@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import '../../data/product_data.dart';
 import 'product_edit.dart';
 import '../product_detail_page/product_detail_page.dart';
+import 'package:intl/intl.dart';
+import 'package:csi5112_project/data/user_data.dart';
 
 class ProductCard extends StatefulWidget {
-  const ProductCard({ Key? key, required this.product, this.onEditFinish, required this.isMarchant }) : super(key: key);
+  const ProductCard({ Key? key, required this.product, this.onEditFinish, required this.user }) : super(key: key);
 
   final Product product;
   final onEditFinish;
-  final bool isMarchant;
+  final User user;
 
   @override
   _ProductCardState createState() => _ProductCardState();
@@ -19,7 +21,7 @@ class _ProductCardState extends State<ProductCard> {
   
   @override
   Widget build(BuildContext context) {
-    String productDescription = widget.product.category + ' | ' + widget.product.product_id;
+    String productDescription = widget.product.category + ' | ' + widget.product.owner + ' | ' + DateFormat('yyyy-MM-dd').format(widget.product.date);
     return Card(
       key: Key(widget.product.product_id),
       child: InkWell(
@@ -27,7 +29,7 @@ class _ProductCardState extends State<ProductCard> {
           Navigator.push(
             context, 
             MaterialPageRoute(builder: (context) {
-              return DetailPage(product: widget.product, onEditFinish: widget.onEditFinish);
+              return DetailPage(user: widget.user, product: widget.product, onEditFinish: widget.onEditFinish);
             }),
           );
         },
@@ -61,7 +63,7 @@ class _ProductCardState extends State<ProductCard> {
                 Expanded(child: Text("Stored in " + widget.product.manufacturer, textAlign: TextAlign.center, style: const TextStyle(fontSize: 14, color: Colors.grey))),
                 
                 Visibility(
-                  visible: widget.isMarchant,
+                  visible: widget.user.isMerchant,
                   maintainState: false,
                   maintainSize: false,
                   maintainSemantics: false,

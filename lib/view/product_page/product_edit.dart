@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/product_data.dart';
+import 'package:intl/intl.dart';
 
 class ProductEdit extends StatelessWidget {
   ProductEdit({ Key? key, required this.product, this.onEditFinish, required this.editRole }) : super(key: key);
@@ -12,21 +13,32 @@ class ProductEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Product newProduct = product;
-    return editRole == "edit" ? TextButton(
-      style: ButtonStyle(padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)),
-      onPressed: () {
-        showFormDialog(context, newProduct);
-      },
-      child: const Text("Edit"),
+    return editRole == "edit" ? Row(
+      children: [
+        TextButton(
+          style: ButtonStyle(padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)),
+          onPressed: () {
+            showFormDialog(context, newProduct, 'update');
+          },
+          child: const Text("Edit")
+        ),
+        TextButton(
+          style: ButtonStyle(padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)),
+          onPressed: () {
+            onEditFinish(newProduct, 'delete');
+          },
+          child: const Text("Delete")
+        ),
+      ]
     ) : FloatingActionButton(
       child: const Icon(Icons.add),
       onPressed: (){
-        showFormDialog(context, newProduct);
+        showFormDialog(context, newProduct, 'add');
       },
     );
   }
 
-  void showFormDialog(BuildContext context, Product newProduct) {
+  void showFormDialog(BuildContext context, Product newProduct, String type) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -96,29 +108,23 @@ class ProductEdit extends StatelessWidget {
                         readOnly: true,
                       ),
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.all(4.0),
-                    //   child: TextFormField(
-                    //     decoration: const InputDecoration(
-                    //       labelText: 'Date',
-                    //     ),
-                    //     initialValue: DateTime.now() as String,
-                    //     validator: (value) {
-                    //       if (value!.isEmpty) {
-                    //         return "The Date Can't be Empty";
-                    //       }
-                    //       return null;
-                    //     },
-                    //     onSaved: (newValue) => newProduct. = newValue as String,
-                    //   ),
-                    // ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Date',
+                        ),
+                        initialValue: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                        readOnly: true,
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
                           labelText: 'Price',
                         ),
-                        initialValue: product.price as String,
+                        initialValue: product.price.toString(),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "The Price Can't be Empty";
@@ -157,7 +163,7 @@ class ProductEdit extends StatelessWidget {
                         onPressed: () {
                           if (productFormKey.currentState!.validate()) {
                             productFormKey.currentState!.save();
-                            onEditFinish(newProduct);
+                            onEditFinish(newProduct, type);
                             Navigator.pop(context);
                           }
                         },

@@ -4,9 +4,13 @@ import 'package:csi5112_project/view/shopping_cart_page/cart_bottom_bar.dart';
 import 'package:csi5112_project/view/shopping_cart_page/cart_item_card.dart';
 import 'package:flutter/material.dart';
 import '../../data/http_data.dart';
+import '../../data/user_data.dart';
 
 class CartPage extends StatefulWidget {
-  const CartPage({Key? key}) : super(key: key);
+  const CartPage({Key? key, required this.user}) : super(key: key);
+  
+  final User user;
+  
   @override
   CartPageState createState() => CartPageState();
 }
@@ -66,6 +70,7 @@ class CartPageState extends State<CartPage>
         CartBottomBar(
           amountPrice: amountPrice,
           isClickedAll: isClickedAll,
+          user: widget.user,
           updateIsClickAll: updateIsClickAll),
       ],
     );

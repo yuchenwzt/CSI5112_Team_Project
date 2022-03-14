@@ -6,11 +6,12 @@ import '../../components/search_bar.dart';
 import './order_filter_panel.dart';
 import '../../components/suspend_page.dart';
 import '../../data/http_data.dart';
+import '../../data/user_data.dart';
 
 class OrderPage extends StatefulWidget {
-  const OrderPage({ Key? key, required this.isMerchant }) : super(key: key);
+  const OrderPage({ Key? key, required this.user }) : super(key: key);
 
-  final bool isMerchant;
+  final User user;
   
   @override
   OrderPageState createState() => OrderPageState();
@@ -45,10 +46,10 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
     return SuspendCard(
       child: Scaffold(
         appBar: AppBar(
-          flexibleSpace: SearchBar(searchProducts: ordersReceived, onSearchFinish: (value) => updateItemList(value), filterType: "order"),
+          flexibleSpace: SearchBar(onSearchFinish: (value) => updateItemList(value)),
         ),
         body: Center(
-          child: OrderFilterPanel(orders: ordersFiltered, isMerchant: widget.isMerchant),
+          child: OrderFilterPanel(orders: ordersFiltered, isMerchant: widget.user.isMerchant),
         ),
       ), 
       isLoadError: isLoadError, 

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import '../product_page/product_page.dart';
 import '../order_page/order_page.dart';
+import 'package:csi5112_project/data/user_data.dart';
 
 class PaymentPage extends StatelessWidget {
   const PaymentPage({
+    required this.user,
     Key? key,
   }) : super(key: key);
+
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +44,7 @@ class PaymentPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
-                        builder: (context) => const ProductPage(isMerchant: true)),
+                        builder: (context) => ProductPage(user: user)),
                       (route) => route == null);
                   },
                 ),
@@ -65,7 +69,7 @@ class PaymentPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
-                        builder: (context) => const OrderPage(isMerchant: true,)),
+                        builder: (context) => OrderPage(user: user)),
                       (route) => route == null);
                   },
                 ),

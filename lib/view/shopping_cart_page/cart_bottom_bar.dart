@@ -1,14 +1,17 @@
 import 'package:csi5112_project/view/product_detail_page/payment_success_page.dart';
 import 'package:flutter/material.dart';
+import '../../data/user_data.dart';
 
 class CartBottomBar extends StatefulWidget {
   const CartBottomBar(
       {Key? key,
       required this.amountPrice,
       required this.isClickedAll,
+      required this.user,
       this.updateIsClickAll})
       : super(key: key);
 
+  final User user;
   final int amountPrice;
   final bool isClickedAll;
   final updateIsClickAll;
@@ -50,7 +53,7 @@ class _CartBottomBarState extends State<CartBottomBar> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
-                    return const PaymentPage();
+                    return PaymentPage(user: widget.user);
                   }),
                 );
               },

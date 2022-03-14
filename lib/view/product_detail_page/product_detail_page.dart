@@ -4,15 +4,18 @@ import 'payment_success_page.dart';
 import 'product_description.dart';
 import 'product_img.dart';
 import '../../data/product_data.dart';
+import 'package:csi5112_project/data/user_data.dart';
 // import '../item_chat_page/item_chat_page.dart';
 
 class DetailPage extends StatelessWidget {
   const DetailPage({
     Key? key,
     required this.product,
+    required this.user,
     this.onEditFinish,
   }) : super(key: key);
 
+  final User user;
   final Product product;
   final onEditFinish;
 
@@ -43,7 +46,7 @@ class DetailPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return const PaymentPage();
+                        return PaymentPage(user: user);
                       }),
                     );
                   },
@@ -69,7 +72,7 @@ class DetailPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return const CartPage();
+                        return CartPage(user: user);
                       }),
                     );
                   },

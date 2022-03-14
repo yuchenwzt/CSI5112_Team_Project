@@ -9,7 +9,9 @@ class Product {
   String name;
   int price;
   String owner;
+  String owner_id;
   String image;
+  DateTime date;
 
   Product( {
     this.product_id = "",
@@ -19,17 +21,21 @@ class Product {
     this.manufacturer = "",
     this.name = "",
     this.owner = "",
-    this.price = 0
-  });
+    this.owner_id = "",
+    this.price = 0,
+    DateTime? date
+  }) : date = date ?? DateTime.now();
 
   Product.fromMap(Map<String, dynamic> map)
     : product_id = map['product_id'],
     owner = map['owner'],
+    owner_id = map['owner_id'],
     name = map['name'],
     price = map['price'],
     image = map['image'],
     description = map['description'],
     category = map['category'],
+    date = DateTime.parse(map['date']),
     manufacturer = map['manufacturer'];
 }
 

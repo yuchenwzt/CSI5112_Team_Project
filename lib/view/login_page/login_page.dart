@@ -1,3 +1,8 @@
+import 'package:csi5112_project/presenter/customer_presenter.dart';
+import 'package:csi5112_project/presenter/merchant_presenter.dart';
+import 'package:csi5112_project/data/customer_data.dart';
+import 'package:csi5112_project/data/merchant_data.dart';
+import 'package:csi5112_project/data/user_data.dart';
 import 'package:flutter/material.dart';
 import '../main_page.dart';
 
@@ -10,10 +15,13 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends State<Login> implements CustomerListViewContract, MerchantListViewContract {
   Identity? _identity;
+  late User currentUser;
   final TextEditingController _unameController = TextEditingController();
   final TextEditingController _passwController = TextEditingController();
+  late CustomerListPresenter _presenterCustomer;
+  late MerchantListPresenter _presenterMerchant;
 
   @override
   Widget build(BuildContext context) {
@@ -118,12 +126,9 @@ class _LoginState extends State<Login> {
                         warningEmptyPassword();
                       } else if (_identity == null) {
                         warningNoIdentity();
-                      } else if (authenticateIdentity(_unameController.text, _passwController.text)) {
-                        if (_identity == Identity.client) {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(isMerchant: false, current_id: "62213f1f3945445265a9e1f4")));
-                        } else {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(isMerchant: true, current_id: "62213f963945445265a9e1f9")));
-                        }
+                      } else {
+                        authenticateIdentity(_unameController.text, _passwController.text);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(user: currentUser)));
                       }
                     },
                     child: const Text(
@@ -142,51 +147,98 @@ class _LoginState extends State<Login> {
 
   void warningNoIdentity() {
     showDialog(context: context,
-        builder:(context) => AlertDialog(
-          title: const Text('Login error'),
-          content: const Text('You should choose an identity before entering the system.'),
-          actions: <Widget> [
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'))
-          ]
-        ));
+      builder:(context) => AlertDialog(
+        title: const Text('Login error'),
+        content: const Text('You should choose an identity before entering the system.'),
+        actions: <Widget> [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'))
+        ]
+      ));
   }
 
   void warningEmptyUserName() {
     showDialog(context: context,
-        builder:(context) => AlertDialog(
-            title: const Text('Login error'),
-            content: const Text('Username cannot be empty.'),
-            actions: <Widget> [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'))
-            ]
-        ));
+      builder:(context) => AlertDialog(
+        title: const Text('Login error'),
+        content: const Text('Username cannot be empty.'),
+        actions: <Widget> [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'))
+        ]
+      ));
   }
 
   void warningEmptyPassword() {
     showDialog(context: context,
-        builder:(context) => AlertDialog(
-            title: const Text('Login error'),
-            content: const Text('Password cannot be empty.'),
-            actions: <Widget> [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'))
-            ]
-        ));
+      builder:(context) => AlertDialog(
+        title: const Text('Login error'),
+        content: const Text('Password cannot be empty.'),
+        actions: <Widget> [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'))
+        ]
+      ));
+  }
+
+  void warningWrongAuthentication() {
+    showDialog(context: context,
+      builder:(context) => AlertDialog(
+        title: const Text('Login error'),
+        content: const Text('UserName or Password might be wrong.'),
+        actions: <Widget> [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'))
+        ]
+      ));
   }
 
   // sent to 3rd party verification api
-  bool authenticateIdentity(String uname, String pwd) {
-    return true;
+  void authenticateIdentity(String uname, String pwd) {
+    onLoadMerchantComplete([Merchant(
+      merchant_id: "62213f1f3945445265a9e1f4",
+      first_name: "Vincent",
+      last_name: "Jackson",
+      email: "vincent@uottawa.ca",
+      password: "1",
+      username: "1",
+      phone: "6130001111"
+    )]);
+  }
+
+  @override
+  void onLoadCustomerComplete(List<Customer> customer) {
+    setState(() {
+      currentUser = User.fromList(customer, false);
+    });
+  }
+
+  @override
+  void onLoadMerchantComplete(List<Merchant> merchant) {
+    setState(() {
+      currentUser = User.fromList(merchant, true);
+    });
+  }
+
+  @override
+  void onLoadCustomerError(e) {
+    warningWrongAuthentication();
+  }
+
+  @override
+  void onLoadMerchantError(e) {
+    warningWrongAuthentication();
   }
 }

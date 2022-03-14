@@ -1,3 +1,5 @@
+import 'package:csi5112_project/data/filter_option_data.dart';
+import 'package:csi5112_project/presenter/filter_option_presenter.dart';
 import 'package:flutter/material.dart';
 import '../../data/product_data.dart';
 import '../../presenter/product_presenter.dart';
@@ -5,26 +7,31 @@ import 'product_filter_panel.dart';
 import '../../components/search_bar.dart';
 import '../../components/suspend_page.dart';
 import '../../data/http_data.dart';
+import '../../data/user_data.dart';
 
 class ProductPage extends StatefulWidget {
-  const ProductPage({Key? key, required this.isMerchant}) : super(key: key);
+  const ProductPage({Key? key, required this.user}) : super(key: key);
   
-  final bool isMerchant;
+  final User user;
 
   @override
   ProductListState createState() => ProductListState();
 }
 
-class ProductListState extends State<ProductPage> implements ProductsListViewContract {
+class ProductListState extends State<ProductPage> implements ProductsListViewContract, FilterOptionListViewContract {
   late ProductsListPresenter _presenter;
+  late FilterOptionListPresenter _presenterFilter;
   List<Product> productsReceived = [];
-  List<Product> productsFiltered = [];
+  List<String> filter_index = ["ascending","",""];
   String loadError = "";
   bool isSearching = false;
   bool isLoadError = false;
+  bool isFilterSearching = false;
+  bool isFilterLoadError = false;
 
   ProductListState() {
     _presenter = ProductsListPresenter(this);
+    _presenterFilter = FilterOptionListPresenter(this);
   }
 
   @override
@@ -32,11 +39,13 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
     super.initState();
     isSearching = true;
     _presenter.loadProducts(HttpRequest('Get', 'Products/all', {}));
+    _presenterFilter.loadFilterOption(HttpRequest('Get', 'Products/get_filter_option', {}));
   }
 
   void retry() {
     isSearching = true;
     _presenter.loadProducts(HttpRequest('Get', 'Products/all', {}));
+    _presenterFilter.loadFilterOption(HttpRequest('Get', 'Products/get_filter_option', {}));
   }
   
   @override
@@ -44,15 +53,15 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
     return SuspendCard(
       child: Scaffold(
         appBar: AppBar(
-          flexibleSpace: SearchBar(searchProducts: productsReceived, filterType: "product", onSearchFinish: (value) => updateProductList(value)),
+          flexibleSpace: SearchBar(onSearchFinish: (value) => updateProductList(inputSearch: value)),
         ),
         body: Center(
           child: ProductFilterPanel(
-            products: productsFiltered,
-            originProducts: productsReceived, 
-            isMerchant: widget.isMerchant,
-            onSelectFinish: (value) => updateProductList(value), 
-            onEditFinish: (value) => updateEditProduct(value)
+            products: productsReceived,
+            filters: filter_index, 
+            user: widget.user,
+            onSelectFinish: (value, index) => updateFilterIndex(value, index), 
+            onEditFinish: (value, type) => updateEditProduct(value, type)
           ),
         ),
       ), 
@@ -64,33 +73,54 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
     );
   }
 
+  void updateFilterIndex(String newOption, int index) {
+    setState(() {
+      filter_index[index] = newOption;
+    });
+    updateProductList();
+  }
+
+  void updateProductList({
+    String inputSearch = '#',
+  }) {
+    String filterUrl = "";
+    if (widget.user.isMerchant) {
+      filterUrl = 'Products/filter/owner?owner_id=${widget.user.merchant_id}&input=$inputSearch&priceSort=${filter_index[0]}&location=${filter_index[1]}&category=${filter_index[2]}';
+    } else {
+      filterUrl = 'Products/filter?input=$inputSearch&priceSort=${filter_index[0]}&location=${filter_index[1]}&category=${filter_index[2]}';
+    }
+    _presenter.loadProducts(HttpRequest('Get', filterUrl, {}));
+  }
+
+  void updateEditProduct(Product product, String type) {
+    switch (type) {
+      case 'update':
+        _presenter.loadProducts(HttpRequest('Put', 'Products/update?id=${product.product_id}', product));
+        break; 
+      case 'create':
+        _presenter.loadProducts(HttpRequest('Post', 'Products/create', product));
+        break;
+      case 'delete':
+        _presenter.loadProducts(HttpRequest('Post', 'Products/delete', [product.product_id]));
+        break;
+    }
+  }
+
   @override
   void onLoadProductsComplete(List<Product> products) {
     setState(() {
       productsReceived = products;
-      productsFiltered = products;
       isSearching = false;
       isLoadError = false;
     });
   }
 
-  void updateProductList(List<Product> products) {
+  @override
+  void onLoadFilterOptionComplete(FilterOption filterOption) {
     setState(() {
-      productsFiltered = products;
-    });
-  }
-
-  // mock update func, deleted when build up backend
-  void updateEditProduct(Product product) {
-    var newProduct = productsFiltered;
-    if (newProduct.contains(product)) {
-      newProduct[newProduct.indexOf(product)] = product;
-    } else {
-      newProduct.add(product);
-    }
-    
-    setState(() {
-      productsFiltered = newProduct;
+      filter_index = [filterOption.priceSort, filterOption.categories, filterOption.manufacturers];
+      isFilterSearching = false;
+      isFilterLoadError = false;
     });
   }
 
@@ -99,6 +129,15 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
     setState(() {
       isSearching = false;
       isLoadError = true;
+      loadError = e.toString();
+    });
+  }
+
+  @override
+  void onLoadFilterOptionError(e) {
+    setState(() {
+      isFilterSearching = false;
+      isFilterLoadError = true;
       loadError = e.toString();
     });
   }

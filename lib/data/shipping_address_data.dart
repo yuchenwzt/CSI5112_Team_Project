@@ -10,6 +10,15 @@ class ShippingAddress {
   String country;
   String user_id;
   
+  ShippingAddress( {
+    this.shipping_address_id = "",
+    this.address = "",
+    this.city = "",
+    this.state = "",
+    this.zipcode = "",
+    this.country = "",
+    this.user_id = "",
+  });
 
   ShippingAddress.fromMap(Map<String, dynamic> map)
     : shipping_address_id = map['shipping_address_id'],

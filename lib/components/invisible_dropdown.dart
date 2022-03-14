@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import '../data/product_data.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class InvisibleDropdown extends StatelessWidget {
-  const InvisibleDropdown({ Key? key, required this.type, required this.products, this.onFilterFinish }) : super(key: key);
+  const InvisibleDropdown({ Key? key, required this.options, this.onFilterFinish, required this.index }) : super(key: key);
 
-  final String type;
-  final List<Product> products;
+  final String options;
   final onFilterFinish;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -19,37 +18,39 @@ class InvisibleDropdown extends StatelessWidget {
       maintainInteractivity: true,
       child: 
         MultiSelectBottomSheetField(
-          items: buildSelectList(getInitialList(type, products)),
-          initialValue: getInitialList(type, products),
+          items: buildSelectList(getInitialList(options)),
+          initialValue: getInitialList(options),
           listType: MultiSelectListType.CHIP,
           onConfirm: (values) {
-            onFilterFinish(filterData(values, type));
+            String res = "";
+            values.forEach((value) {
+              res += value as String;
+              res += '_';
+            });
+            onFilterFinish(res.substring(0, res.lastIndexOf('_')), index);
           },
         ),
     );
   }
 
-  List<String> getInitialList(String type, List<Product> products) {
-    if (type == "location") {
-      return products.map((e) => e.manufacturer).toSet().toList();
-    } else {
-      return products.map((e) => e.category).toSet().toList();
-    }
+  List<String> getInitialList(String options) {
+    return options.split('_');
   }
   
   List<MultiSelectItem> buildSelectList(List<String> products) {
     return products.map((location) => MultiSelectItem(location, location)).toList();
   }
 
-  List<Product> filterData(List<Object?> filters, String type) {
-    List<Product> newProducts = [];
-    for (Product product in products) {
-      if (type == "location" && filters.contains(product.manufacturer)) {
-        newProducts.add(product);
-      } else if (type == "type" && filters.contains(product.category)) {
-        newProducts.add(product);
-      }
-    }
-    return newProducts;
-  }
+  // Mock data function, deleted after back-end server set-up
+  // List<Product> filterData(List<Object?> filters, String type) {
+  //   List<Product> newProducts = [];
+  //   for (Product product in products) {
+  //     if (type == "location" && filters.contains(product.manufacturer)) {
+  //       newProducts.add(product);
+  //     } else if (type == "type" && filters.contains(product.category)) {
+  //       newProducts.add(product);
+  //     }
+  //   }
+  //   return newProducts;
+  // }
 }

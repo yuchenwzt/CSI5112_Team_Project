@@ -2,33 +2,20 @@ import 'package:flutter/material.dart';
 import '../../data/product_data.dart';
 import 'product_card.dart';
 import 'product_edit.dart';
+import 'package:csi5112_project/data/user_data.dart';
 import '../../components/invisible_dropdown.dart';
 
-class ProductFilterPanel extends StatefulWidget {
-  const ProductFilterPanel({ Key? key, required this.originProducts, required this.products, this.onSelectFinish, this.onEditFinish, required this.isMerchant }) : super(key: key);
+class ProductFilterPanel extends StatelessWidget {
+  const ProductFilterPanel({ Key? key, required this.filters, required this.products, this.onSelectFinish, this.onEditFinish, required this.user }) : super(key: key);
 
   final List<Product> products;
-  final List<Product> originProducts;
-  final bool isMerchant;
+  final List<String> filters;
+  final User user;
   final onEditFinish;
   final onSelectFinish;
 
   @override
-  _ProductFilterPanelState createState() => _ProductFilterPanelState();
-}
-
-class _ProductFilterPanelState extends State<ProductFilterPanel> {
-  bool priceAscending = true;
-  
-  @override
-  void initState() {
-    super.initState();
-    priceAscending = true;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    List<Product> sortList = List.from(widget.products);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -38,13 +25,7 @@ class _ProductFilterPanelState extends State<ProductFilterPanel> {
               child: Center(
             child: TextButton(
               onPressed: () => {
-                setState(() {
-                  priceAscending = !priceAscending;
-                }),
-                priceAscending
-                    ? sortList.sort((a, b) => a.price - b.price)
-                    : sortList.sort((a, b) => b.price - a.price),
-                widget.onSelectFinish(sortList)
+                onSelectFinish(filters[0] == 'ascending' ? 'descending' : 'ascending', 0)
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -55,10 +36,10 @@ class _ProductFilterPanelState extends State<ProductFilterPanel> {
                     children: <Widget>[
                       Icon(Icons.keyboard_arrow_up,
                           size: 18,
-                          color: priceAscending ? Colors.black : Colors.grey),
+                          color: filters[0] == 'ascending' ? Colors.black : Colors.grey),
                       Icon(Icons.keyboard_arrow_down,
                           size: 18,
-                          color: priceAscending ? Colors.grey : Colors.black)
+                          color: filters[0] == 'ascending' ? Colors.grey : Colors.black)
                     ],
                   )
                 ],
@@ -73,13 +54,13 @@ class _ProductFilterPanelState extends State<ProductFilterPanel> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const <Widget>[
                     Icon(Icons.location_on),
-                    Text("Location")
+                    Text("Manufacture")
                   ],
                 )),
                 InvisibleDropdown(
-                    type: "location",
-                    products: widget.originProducts,
-                    onFilterFinish: (value) => widget.onSelectFinish(value)),
+                  options: filters[1],
+                  index: 1,
+                  onFilterFinish: (value, index) => onSelectFinish(value, index)),
               ],
             ),
           ),
@@ -90,24 +71,24 @@ class _ProductFilterPanelState extends State<ProductFilterPanel> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: const <Widget>[
-                        Text("Filter"),
+                        Text("Category"),
                         Icon(Icons.filter_alt)
                       ],
                     )),
                 InvisibleDropdown(
-                  type: "type",
-                  products: widget.originProducts,
-                  onFilterFinish: (value) => widget.onSelectFinish(value)),
+                  options: filters[2],
+                  index: 2,
+                  onFilterFinish: (value, index) => onSelectFinish(value, index)),
               ],
             ),
           ),
         ]),
       ),
       floatingActionButton: Visibility(
-        visible: widget.isMerchant, 
+        visible: user.isMerchant, 
         maintainState: false,
         child: ProductEdit(
-            product: Product(), onEditFinish: widget.onEditFinish, editRole: "add"),
+            product: Product(), onEditFinish: onEditFinish, editRole: "add"),
       ),
       body: GridView(
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -122,6 +103,6 @@ class _ProductFilterPanelState extends State<ProductFilterPanel> {
   }
 
   List<ProductCard> buildProductList() {
-    return widget.products.map((productsState) => ProductCard(product: productsState, isMarchant: widget.isMerchant, onEditFinish: widget.onEditFinish)).toList();
+    return products.map((productsState) => ProductCard(product: productsState, user: user, onEditFinish: onEditFinish)).toList();
   }
 }

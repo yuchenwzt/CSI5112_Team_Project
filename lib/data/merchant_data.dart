@@ -10,6 +10,16 @@ class Merchant {
   final String username;
   final String phone;
 
+  Merchant( {
+    this.merchant_id = "",
+    this.first_name = "",
+    this.last_name = "",
+    this.email = "",
+    this.password = "",
+    this.username = "",
+    this.phone = "",
+  });
+
   Merchant.fromMap(Map<String, dynamic> map)
     : merchant_id = map['merchant_id'],
       first_name = map['first_name'],

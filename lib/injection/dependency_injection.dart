@@ -6,8 +6,10 @@ import 'package:csi5112_project/data/order_data.dart';
 import 'package:csi5112_project/data/product_data.dart';
 import 'package:csi5112_project/data/question.dart';
 import 'package:csi5112_project/data/shipping_address_data.dart';
+import 'package:csi5112_project/data/filter_option_data.dart';
 
 import 'package:csi5112_project/service/product_http.dart';
+import 'package:csi5112_project/service/filter_option.dart';
 import 'package:csi5112_project/service/answer_http.dart';
 import 'package:csi5112_project/service/cart_item_http.dart';
 import 'package:csi5112_project/service/customer_http.dart';
@@ -35,6 +37,17 @@ class Injector {
         return RealProductRepository();
       default:
         return RealProductRepository();
+    }
+  }
+
+  FilterOptionRepository get filterOptionRepository {
+    switch (_flavor) {
+      // case Flavor.mock:
+      //   return MockItemRepository();
+      case Flavor.real:
+        return RealFilterOptionRepository();
+      default:
+        return RealFilterOptionRepository();
     }
   }
 

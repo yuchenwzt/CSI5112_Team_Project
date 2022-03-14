@@ -9,11 +9,20 @@ class Answer {
   final String answer;
   final String question_id;
 
+  Answer( {
+    this.answer_id = "",
+    this.role = "",
+    this.role_id = "",
+    this.answer = "",
+    this.question_id = "",
+    DateTime? date
+  }) : date = date ?? DateTime.now();
+
   Answer.fromMap(Map<String, dynamic> map)
     : answer_id = map['answer_id'],
       role = map['role'],
       role_id = map['role_id'],
-      date = map['date'],
+      date = DateTime.parse(map['date']),
       answer = map['answer'],
       question_id = map['question_id'];
 }

@@ -10,6 +10,16 @@ class Customer {
   final String password;
   final String phone;
 
+  Customer( {
+    this.customer_id = "",
+    this.first_name = "",
+    this.last_name = "",
+    this.email = "",
+    this.password = "",
+    this.username = "",
+    this.phone = "",
+  });
+
   Customer.fromMap(Map<String, dynamic> map)
     : customer_id = map['customer_id'],
       first_name = map['first_name'],
