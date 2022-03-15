@@ -17,17 +17,23 @@ class HttpRequest {
 
 Future<http.Response> useRequest(HttpRequest request) async {
   String url = request.httpHeader + request.url;
+  print(request.object);
+  Map<String, String> requestHeaders = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+    // 'Authorization': '<Your token>'
+  };
   switch(request.type) {
     case 'Get': 
-      return await http.get(Uri.parse(url));
+      return await http.get(Uri.parse(url), headers: requestHeaders);
     case 'Post':
-      return await http.post(Uri.parse(url), body: request.object);
+      return await http.post(Uri.parse(url), headers: requestHeaders, body: request.object);
     case 'Put':
-      return await http.put(Uri.parse(url), body: request.object);
+      return await http.put(Uri.parse(url), headers: requestHeaders, body: request.object);
     case 'Delete':
-      return await http.delete(Uri.parse(url), body: request.object);
+      return await http.delete(Uri.parse(url), headers: requestHeaders, body: request.object);
     default: {
-      return await http.post(Uri.parse(url), body: request.object);
+      return await http.post(Uri.parse(url), headers: requestHeaders, body: request.object);
     }
   }
 }

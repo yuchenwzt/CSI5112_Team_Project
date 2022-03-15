@@ -28,6 +28,18 @@ class Merchant {
       password = map['password'],
       username = map['username'],
       phone = map['phone'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'merchant_id': merchant_id,
+      'first_name': first_name,
+      'last_name': last_name,
+      'email': email,
+      'username': username,
+      'password': password,
+      'phone': phone,
+    };
+  }
 }
 
 abstract class MerchantRepository {

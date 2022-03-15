@@ -22,13 +22,13 @@ class User {
   });
 
   User.fromList(List<dynamic> list, bool merchant) 
-    : first_name = list[0]['first_name'],
-      last_name = list[0]['last_name'],
-      email = list[0]['email'],
-      password = list[0]['password'],
-      username = list[0]['username'],
-      phone = list[0]['phone'],
+    : first_name = list[0].first_name,
+      last_name = list[0].last_name,
+      email = list[0].email,
+      password = list[0].password,
+      username = list[0].username,
+      phone = list[0].phone,
       isMerchant = merchant,
-      customer_id = merchant ? "" : list[0]['customer_id'],
-      merchant_id = merchant ? list[0]['merchant_id'] : "";
+      customer_id = merchant ? "" : list[0].customer_id,
+      merchant_id = merchant ? list[0].merchant_id : "";
 }

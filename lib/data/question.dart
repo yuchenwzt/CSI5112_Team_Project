@@ -22,6 +22,16 @@ class Question {
       question = map['question'],
       date = DateTime.parse(map['date']),
       product_id = map['product_id'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'question_id': question_id,
+      'customer_id': customer_id,
+      'question': question,
+      'date': date.toIso8601String(),
+      'product_id': product_id,
+    };
+  }
 }
 
 abstract class QuestionRepository {

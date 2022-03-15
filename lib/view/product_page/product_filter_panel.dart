@@ -6,10 +6,11 @@ import 'package:csi5112_project/data/user_data.dart';
 import '../../components/invisible_dropdown.dart';
 
 class ProductFilterPanel extends StatelessWidget {
-  const ProductFilterPanel({ Key? key, required this.filters, required this.products, this.onSelectFinish, this.onEditFinish, required this.user }) : super(key: key);
+  const ProductFilterPanel({ Key? key, required this.filters, required this.filters_select, required this.products, this.onSelectFinish, this.onEditFinish, required this.user }) : super(key: key);
 
   final List<Product> products;
   final List<String> filters;
+  final List<String> filters_select;
   final User user;
   final onEditFinish;
   final onSelectFinish;
@@ -58,7 +59,8 @@ class ProductFilterPanel extends StatelessWidget {
                   ],
                 )),
                 InvisibleDropdown(
-                  options: filters[1],
+                  options: filters_select[1],
+                  origins: filters[1],
                   index: 1,
                   onFilterFinish: (value, index) => onSelectFinish(value, index)),
               ],
@@ -76,7 +78,8 @@ class ProductFilterPanel extends StatelessWidget {
                       ],
                     )),
                 InvisibleDropdown(
-                  options: filters[2],
+                  options: filters_select[1],
+                  origins: filters[1],
                   index: 2,
                   onFilterFinish: (value, index) => onSelectFinish(value, index)),
               ],

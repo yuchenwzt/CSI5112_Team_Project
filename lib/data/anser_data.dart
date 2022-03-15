@@ -25,6 +25,17 @@ class Answer {
       date = DateTime.parse(map['date']),
       answer = map['answer'],
       question_id = map['question_id'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'answer_id': answer_id,
+      'role': role,
+      'role_id': role_id,
+      'date': date.toIso8601String(),
+      'answer': answer,
+      'question_id': question_id,
+    };
+  }
 }
 
 abstract class AnswerRepository {

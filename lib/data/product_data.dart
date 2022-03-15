@@ -37,6 +37,21 @@ class Product {
     category = map['category'],
     date = DateTime.parse(map['date']),
     manufacturer = map['manufacturer'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'product_id': product_id,
+      'owner': owner,
+      'owner_id': owner_id,
+      'name': name,
+      'price': price.toString(),
+      'image': image,
+      'description': description,
+      'category': category,
+      'date': date.toIso8601String(),
+      'manufacturer': manufacturer,
+    };
+  }
 }
 
 abstract class ProductRepository{

@@ -28,6 +28,18 @@ class Customer {
       username = map['username'],
       password = map['password'],
       phone = map['phone'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'customer_id': customer_id,
+      'first_name': first_name,
+      'last_name': last_name,
+      'email': email,
+      'username': username,
+      'password': password,
+      'phone': phone,
+    };
+  }
 }
 
 abstract class CustomerRepository {

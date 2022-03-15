@@ -17,12 +17,11 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> implements CustomerListViewContract, MerchantListViewContract {
   Identity? _identity;
-  late User currentUser;
   final TextEditingController _unameController = TextEditingController();
   final TextEditingController _passwController = TextEditingController();
   late CustomerListPresenter _presenterCustomer;
   late MerchantListPresenter _presenterMerchant;
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,7 +127,6 @@ class _LoginState extends State<Login> implements CustomerListViewContract, Merc
                         warningNoIdentity();
                       } else {
                         authenticateIdentity(_unameController.text, _passwController.text);
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(user: currentUser)));
                       }
                     },
                     child: const Text(
@@ -207,31 +205,39 @@ class _LoginState extends State<Login> implements CustomerListViewContract, Merc
 
   // sent to 3rd party verification api
   void authenticateIdentity(String uname, String pwd) {
-    onLoadMerchantComplete([Merchant(
-      merchant_id: "62213f1f3945445265a9e1f4",
-      first_name: "Vincent",
-      last_name: "Jackson",
-      email: "vincent@uottawa.ca",
-      password: "1",
-      username: "1",
-      phone: "6130001111"
-    )]);
+    if (_identity == Identity.merchant) {
+      onLoadMerchantComplete([Merchant(
+        merchant_id: "62213f963945445265a9e1f9",
+        first_name: "Selling",
+        last_name: "King",
+        email: "king@uottawa.ca",
+        password: "1",
+        username: "1",
+        phone: "6130002222"
+      )]);
+    } else {
+      onLoadMerchantComplete([Merchant(
+        merchant_id: "62213f1f3945445265a9e1f4",
+        first_name: "Vincent",
+        last_name: "Jackson",
+        email: "vincent@uottawa.ca",
+        password: "1",
+        username: "1",
+        phone: "6130001111"
+      )]);
+    }
   }
 
   @override
   void onLoadCustomerComplete(List<Customer> customer) {
-    setState(() {
-      currentUser = User.fromList(customer, false);
-    });
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(user: User.fromList(customer, false))));
   }
 
   @override
   void onLoadMerchantComplete(List<Merchant> merchant) {
-    setState(() {
-      currentUser = User.fromList(merchant, true);
-    });
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(user: User.fromList(merchant, true))));
   }
-
+ 
   @override
   void onLoadCustomerError(e) {
     warningWrongAuthentication();

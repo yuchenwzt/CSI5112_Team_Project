@@ -19,6 +19,15 @@ class CartItem {
       quantity = map['quantity'],
       product_id = map['product_id'],
       price = map['price'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'item_id': item_id,
+      'quantity': quantity.toString(),
+      'product_id': product_id,
+      'price': price.toString()
+    };
+  }
 }
 
 abstract class CartItemRepository {

@@ -8,6 +8,7 @@ import '../../components/search_bar.dart';
 import '../../components/suspend_page.dart';
 import '../../data/http_data.dart';
 import '../../data/user_data.dart';
+import 'dart:convert';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({Key? key, required this.user}) : super(key: key);
@@ -23,6 +24,7 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
   late FilterOptionListPresenter _presenterFilter;
   List<Product> productsReceived = [];
   List<String> filter_index = ["ascending","",""];
+  List<String> filter_index_select = ["ascending","",""];
   String loadError = "";
   bool isSearching = false;
   bool isLoadError = false;
@@ -59,6 +61,7 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
           child: ProductFilterPanel(
             products: productsReceived,
             filters: filter_index, 
+            filters_select: filter_index_select,
             user: widget.user,
             onSelectFinish: (value, index) => updateFilterIndex(value, index), 
             onEditFinish: (value, type) => updateEditProduct(value, type)
@@ -75,19 +78,19 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
 
   void updateFilterIndex(String newOption, int index) {
     setState(() {
-      filter_index[index] = newOption;
+      filter_index_select[index] = newOption;
     });
     updateProductList();
   }
 
   void updateProductList({
-    String inputSearch = '#',
+    String inputSearch = '%23',
   }) {
     String filterUrl = "";
     if (widget.user.isMerchant) {
-      filterUrl = 'Products/filter/owner?owner_id=${widget.user.merchant_id}&input=$inputSearch&priceSort=${filter_index[0]}&location=${filter_index[1]}&category=${filter_index[2]}';
+      filterUrl = 'Products/filter/owner?owner_id=${widget.user.merchant_id}&input=$inputSearch&priceSort=${filter_index_select[0]}&location=${filter_index_select[1]}&category=${filter_index_select[2]}';
     } else {
-      filterUrl = 'Products/filter?input=$inputSearch&priceSort=${filter_index[0]}&location=${filter_index[1]}&category=${filter_index[2]}';
+      filterUrl = 'Products/filter?input=$inputSearch&priceSort=${filter_index_select[0]}&location=${filter_index_select[1]}&category=${filter_index_select[2]}';
     }
     _presenter.loadProducts(HttpRequest('Get', filterUrl, {}));
   }
@@ -95,13 +98,15 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
   void updateEditProduct(Product product, String type) {
     switch (type) {
       case 'update':
-        _presenter.loadProducts(HttpRequest('Put', 'Products/update?id=${product.product_id}', product));
+        _presenter.loadProducts(HttpRequest('Put', 'Products/update?id=${product.product_id}', jsonEncode(product)));
         break; 
       case 'create':
-        _presenter.loadProducts(HttpRequest('Post', 'Products/create', product));
+        product.owner_id = widget.user.merchant_id;
+        product.owner = widget.user.first_name + " " + widget.user.last_name;
+        _presenter.loadProducts(HttpRequest('Post', 'Products/create', jsonEncode(product)));
         break;
       case 'delete':
-        _presenter.loadProducts(HttpRequest('Post', 'Products/delete', [product.product_id]));
+        _presenter.loadProducts(HttpRequest('Delete', 'Products/delete', jsonEncode(product.product_id)));
         break;
     }
   }
@@ -118,7 +123,8 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
   @override
   void onLoadFilterOptionComplete(FilterOption filterOption) {
     setState(() {
-      filter_index = [filterOption.priceSort, filterOption.categories, filterOption.manufacturers];
+      filter_index = [filterOption.priceSort, filterOption.manufacturers, filterOption.categories];
+      filter_index_select = [filterOption.priceSort, filterOption.manufacturers, filterOption.categories];
       isFilterSearching = false;
       isFilterLoadError = false;
     });

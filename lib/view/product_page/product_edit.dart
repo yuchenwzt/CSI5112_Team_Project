@@ -33,7 +33,7 @@ class ProductEdit extends StatelessWidget {
     ) : FloatingActionButton(
       child: const Icon(Icons.add),
       onPressed: (){
-        showFormDialog(context, newProduct, 'add');
+        showFormDialog(context, newProduct, 'create');
       },
     );
   }
@@ -79,6 +79,22 @@ class ProductEdit extends StatelessWidget {
                           return null;
                         },
                         onSaved: (newValue) => newProduct.name = newValue as String,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Description',
+                        ),
+                        initialValue: product.description,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "The Description Can't be Empty";
+                          }
+                          return null;
+                        },
+                        onSaved: (newValue) => newProduct.description = newValue as String,
                       ),
                     ),
                     Padding(
@@ -133,7 +149,7 @@ class ProductEdit extends StatelessWidget {
                           }
                           return null;
                         },
-                        onSaved: (newValue) => newProduct.price = newValue as int,
+                        onSaved: (newValue) => newProduct.price = int.parse(newValue as String),
                       ),
                     ),
                     Padding(

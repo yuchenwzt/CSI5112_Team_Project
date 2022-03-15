@@ -28,6 +28,18 @@ class ShippingAddress {
       zipcode = map['zipcode'],
       country = map['country'],
       user_id = map['user_id'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'shipping_address_id': shipping_address_id,
+      'address': address,
+      'city': city,
+      'state': state,
+      'zipcode': zipcode,
+      'country': country,
+      'user_id': user_id,
+    };
+  }
 }
 
 abstract class ShippingAddressRepository {

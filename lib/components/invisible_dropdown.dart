@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class InvisibleDropdown extends StatelessWidget {
-  const InvisibleDropdown({ Key? key, required this.options, this.onFilterFinish, required this.index }) : super(key: key);
+  const InvisibleDropdown({ Key? key, required this.options, required this.origins, this.onFilterFinish, required this.index }) : super(key: key);
 
   final String options;
+  final String origins;
   final onFilterFinish;
   final int index;
 
@@ -17,10 +18,12 @@ class InvisibleDropdown extends StatelessWidget {
       maintainSize: true,
       maintainInteractivity: true,
       child: 
-        MultiSelectBottomSheetField(
-          items: buildSelectList(getInitialList(options)),
+        MultiSelectDialogField(
+          items: buildSelectList(getInitialList(origins)),
           initialValue: getInitialList(options),
-          listType: MultiSelectListType.CHIP,
+          listType: MultiSelectListType.LIST,
+          height: 300,
+          searchable: true,
           onConfirm: (values) {
             String res = "";
             values.forEach((value) {
