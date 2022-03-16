@@ -216,8 +216,8 @@ class _LoginState extends State<Login> implements CustomerListViewContract, Merc
         phone: "6130002222"
       )]);
     } else {
-      onLoadMerchantComplete([Merchant(
-        merchant_id: "62213f1f3945445265a9e1f4",
+      onLoadCustomerComplete([Customer(
+        customer_id: "62213f1f3945445265a9e1f4",
         first_name: "Vincent",
         last_name: "Jackson",
         email: "vincent@uottawa.ca",

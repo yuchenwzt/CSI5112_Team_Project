@@ -43,17 +43,4 @@ class InvisibleDropdown extends StatelessWidget {
   List<MultiSelectItem> buildSelectList(List<String> products) {
     return products.map((location) => MultiSelectItem(location, location)).toList();
   }
-
-  // Mock data function, deleted after back-end server set-up
-  // List<Product> filterData(List<Object?> filters, String type) {
-  //   List<Product> newProducts = [];
-  //   for (Product product in products) {
-  //     if (type == "location" && filters.contains(product.manufacturer)) {
-  //       newProducts.add(product);
-  //     } else if (type == "type" && filters.contains(product.category)) {
-  //       newProducts.add(product);
-  //     }
-  //   }
-  //   return newProducts;
-  // }
 }
