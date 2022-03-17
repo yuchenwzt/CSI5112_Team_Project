@@ -6,11 +6,13 @@ class CartItem {
   final int quantity;
   final String product_id;
   final int price;
+  final String customer_id;
 
   CartItem( {
     this.item_id = "",
     this.quantity = 0,
     this.product_id = "",
+    this.customer_id = "",
     this.price = 0,
   });
 
@@ -18,7 +20,8 @@ class CartItem {
     : item_id = map['item_id'],
       quantity = map['quantity'],
       product_id = map['product_id'],
-      price = map['price'];
+      price = map['price'],
+      customer_id = map['customer_id'];
 
   Map<String, dynamic> toJson() {
     return {

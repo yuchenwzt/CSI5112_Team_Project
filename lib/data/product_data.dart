@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 import 'http_data.dart';
 
 class Product {
@@ -11,18 +13,20 @@ class Product {
   String owner;
   String owner_id;
   String image;
+  String image_type;
   DateTime date;
 
   Product( {
     this.product_id = "",
     this.category = "",
     this.description = "",
-    this.image = "",
     this.manufacturer = "",
     this.name = "",
     this.owner = "",
     this.owner_id = "",
     this.price = 0,
+    this.image = "",
+    this.image_type = "",
     DateTime? date
   }) : date = date ?? DateTime.now();
 
@@ -33,6 +37,7 @@ class Product {
     name = map['name'],
     price = map['price'],
     image = map['image'],
+    image_type = map['image_type'],
     description = map['description'],
     category = map['category'],
     date = DateTime.parse(map['date']),
@@ -46,6 +51,7 @@ class Product {
       'name': name,
       'price': price.toString(),
       'image': image,
+      'image_type': image_type,
       'description': description,
       'category': category,
       'date': date.toIso8601String(),
