@@ -78,8 +78,8 @@ class ProductFilterPanel extends StatelessWidget {
                       ],
                     )),
                 InvisibleDropdown(
-                  options: filters_select[1],
-                  origins: filters[1],
+                  options: filters_select[2],
+                  origins: filters[2],
                   index: 2,
                   onFilterFinish: (value, index) => onSelectFinish(value, index)),
               ],
