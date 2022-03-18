@@ -41,13 +41,11 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
     super.initState();
     isSearching = true;
     _presenter.loadProducts(HttpRequest('Get', 'Products/all', {}));
-    _presenterFilter.loadFilterOption(HttpRequest('Get', 'Products/get_filter_option', {}));
   }
 
   void retry() {
     isSearching = true;
     _presenter.loadProducts(HttpRequest('Get', 'Products/all', {}));
-    _presenterFilter.loadFilterOption(HttpRequest('Get', 'Products/get_filter_option', {}));
   }
   
   @override
@@ -118,6 +116,7 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
       isSearching = false;
       isLoadError = false;
     });
+    _presenterFilter.loadFilterOption(HttpRequest('Get', 'Products/get_filter_option', {}));
   }
 
   @override

@@ -17,7 +17,6 @@ class HttpRequest {
 
 Future<http.Response> useRequest(HttpRequest request) async {
   String url = request.httpHeader + request.url;
-  print(request.object);
   Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
