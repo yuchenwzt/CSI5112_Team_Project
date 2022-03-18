@@ -1,3 +1,5 @@
+import 'http_data.dart';
+
 class User {
   final String first_name;
   final String last_name;
@@ -7,7 +9,8 @@ class User {
   final String phone;
   final String merchant_id;
   final String customer_id;
-  final bool isMerchant;
+  bool isMerchant;
+  final String token;
 
   User({
     this.customer_id = "",
@@ -18,17 +21,43 @@ class User {
     this.password = "",
     this.username = "",
     this.phone = "",
+    this.isMerchant = true,
+    this.token = ""
+  });
+
+  User.fromMap(Map<String, dynamic> map) 
+    : first_name = map["first_name"],
+      last_name = map["last_name"],
+      email = map["email"],
+      password = map["password"],
+      username = map["username"],
+      phone = map["phone"],
+      isMerchant = true,
+      customer_id = map["customer_id"] ?? "",
+      merchant_id = map["merchant_id"] ?? "",
+      token = map["token"];
+}
+
+abstract class UserRepository{
+  Future<List<User>> fetch(HttpRequest request);
+}
+
+class LoginUser {
+  final String username;
+  String password;
+  bool isMerchant;
+
+  LoginUser( {
+    this.username = "",
+    this.password = "",
     this.isMerchant = true
   });
 
-  User.fromList(List<dynamic> list, bool merchant) 
-    : first_name = list[0].first_name,
-      last_name = list[0].last_name,
-      email = list[0].email,
-      password = list[0].password,
-      username = list[0].username,
-      phone = list[0].phone,
-      isMerchant = merchant,
-      customer_id = merchant ? "" : list[0].customer_id,
-      merchant_id = merchant ? list[0].merchant_id : "";
+  Map<String, dynamic> toJson() {
+    return {
+      'Username': username,
+      'Password': password,
+      'isMerchant': isMerchant,
+    };
+  }
 }

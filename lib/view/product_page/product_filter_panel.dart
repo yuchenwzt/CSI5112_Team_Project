@@ -26,7 +26,7 @@ class ProductFilterPanel extends StatelessWidget {
               child: Center(
             child: TextButton(
               onPressed: () => {
-                onSelectFinish(filters[0] == 'ascending' ? 'descending' : 'ascending', 0)
+                onSelectFinish(filters_select[0] == 'ascending' ? 'descending' : 'ascending', 0)
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -37,10 +37,10 @@ class ProductFilterPanel extends StatelessWidget {
                     children: <Widget>[
                       Icon(Icons.keyboard_arrow_up,
                           size: 18,
-                          color: filters[0] == 'ascending' ? Colors.black : Colors.grey),
+                          color: filters_select[0] == 'ascending' ? Colors.black : Colors.grey),
                       Icon(Icons.keyboard_arrow_down,
                           size: 18,
-                          color: filters[0] == 'ascending' ? Colors.grey : Colors.black)
+                          color: filters_select[0] == 'ascending' ? Colors.grey : Colors.black)
                     ],
                   )
                 ],

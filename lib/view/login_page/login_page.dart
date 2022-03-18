@@ -1,10 +1,9 @@
-import 'package:csi5112_project/presenter/customer_presenter.dart';
-import 'package:csi5112_project/presenter/merchant_presenter.dart';
-import 'package:csi5112_project/data/customer_data.dart';
-import 'package:csi5112_project/data/merchant_data.dart';
+import 'dart:convert';
+import 'package:csi5112_project/presenter/login_presenter.dart';
 import 'package:csi5112_project/data/user_data.dart';
 import 'package:flutter/material.dart';
 import '../main_page.dart';
+import '../../data/http_data.dart';
 
 enum Identity {merchant, client}
 
@@ -15,12 +14,15 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> implements CustomerListViewContract, MerchantListViewContract {
+class _LoginState extends State<Login> implements UserListViewContract {
   Identity? _identity;
   final TextEditingController _unameController = TextEditingController();
   final TextEditingController _passwController = TextEditingController();
-  late CustomerListPresenter _presenterCustomer;
-  late MerchantListPresenter _presenterMerchant;
+  late UserListPresenter _presenter;
+
+  _LoginState() {
+    _presenter = UserListPresenter(this);
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -205,46 +207,17 @@ class _LoginState extends State<Login> implements CustomerListViewContract, Merc
 
   // sent to 3rd party verification api
   void authenticateIdentity(String uname, String pwd) {
-    if (_identity == Identity.merchant) {
-      onLoadMerchantComplete([Merchant(
-        merchant_id: "62213f963945445265a9e1f9",
-        first_name: "Selling",
-        last_name: "King",
-        email: "king@uottawa.ca",
-        password: "1",
-        username: "1",
-        phone: "6130002222"
-      )]);
-    } else {
-      onLoadCustomerComplete([Customer(
-        customer_id: "62213f1f3945445265a9e1f4",
-        first_name: "Vincent",
-        last_name: "Jackson",
-        email: "vincent@uottawa.ca",
-        password: "1",
-        username: "1",
-        phone: "6130001111"
-      )]);
-    }
+    _presenter.loadUser(HttpRequest('Post', 'token', jsonEncode(LoginUser(username: uname, password: pwd, isMerchant: _identity == Identity.merchant))));
   }
 
   @override
-  void onLoadCustomerComplete(List<Customer> customer) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(user: User.fromList(customer, false))));
-  }
-
-  @override
-  void onLoadMerchantComplete(List<Merchant> merchant) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(user: User.fromList(merchant, true))));
+  void onLoadUserComplete(List<User> user) {
+    user[0].isMerchant = _identity == Identity.merchant;
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(user: user[0])));
   }
  
   @override
-  void onLoadCustomerError(e) {
-    warningWrongAuthentication();
-  }
-
-  @override
-  void onLoadMerchantError(e) {
+  void onLoadUserError(e) {
     warningWrongAuthentication();
   }
 }

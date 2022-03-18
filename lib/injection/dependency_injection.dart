@@ -7,6 +7,7 @@ import 'package:csi5112_project/data/product_data.dart';
 import 'package:csi5112_project/data/question.dart';
 import 'package:csi5112_project/data/shipping_address_data.dart';
 import 'package:csi5112_project/data/filter_option_data.dart';
+import 'package:csi5112_project/data/user_data.dart';
 
 import 'package:csi5112_project/service/product_http.dart';
 import 'package:csi5112_project/service/filter_option.dart';
@@ -17,6 +18,7 @@ import 'package:csi5112_project/service/merchant_http.dart';
 import 'package:csi5112_project/service/order_http.dart';
 import 'package:csi5112_project/service/question_http.dart';
 import 'package:csi5112_project/service/shipping_address_http.dart';
+import 'package:csi5112_project/service/user_http.dart';
 
 enum Flavor { mock, real }
 
@@ -114,6 +116,17 @@ class Injector {
         return RealQuestionRepository();
       default:
         return RealQuestionRepository();
+    }
+  }
+
+  UserRepository get userRepository {
+    switch (_flavor) {
+      // case Flavor.mock:
+      //   return MockCartItemRepository();
+      case Flavor.real:
+        return RealUserRepository();
+      default:
+        return RealUserRepository();
     }
   }
 

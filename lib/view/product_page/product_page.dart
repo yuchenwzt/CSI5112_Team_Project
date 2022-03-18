@@ -40,12 +40,12 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
   void initState() {
     super.initState();
     isSearching = true;
-    _presenter.loadProducts(HttpRequest('Get', 'Products/all', {}));
+    _presenterFilter.loadFilterOption(HttpRequest('Get', widget.user.isMerchant ? 'Products/get_filter_option_merchant?merchant_id=${widget.user.merchant_id}' : 'Products/get_filter_option', {}));
   }
 
   void retry() {
     isSearching = true;
-    _presenter.loadProducts(HttpRequest('Get', 'Products/all', {}));
+    _presenterFilter.loadFilterOption(HttpRequest('Get', widget.user.isMerchant ? 'Products/get_filter_option_merchant?merchant_id=${widget.user.merchant_id}' : 'Products/get_filter_option', {}));
   }
   
   @override
@@ -116,17 +116,17 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
       isSearching = false;
       isLoadError = false;
     });
-    _presenterFilter.loadFilterOption(HttpRequest('Get', 'Products/get_filter_option', {}));
   }
 
   @override
   void onLoadFilterOptionComplete(FilterOption filterOption) {
     setState(() {
-      filter_index = [filterOption.priceSort, filterOption.manufacturers, filterOption.categories];
-      filter_index_select = [filterOption.priceSort, filterOption.manufacturers, filterOption.categories];
+      filter_index = [filter_index_select[0], filterOption.manufacturers, filterOption.categories];
+      filter_index_select = [filter_index_select[0], filterOption.manufacturers, filterOption.categories];
       isFilterSearching = false;
       isFilterLoadError = false;
     });
+    updateProductList();
   }
 
   @override
