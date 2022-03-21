@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import '../../data/product_data.dart';
 import 'product_edit.dart';

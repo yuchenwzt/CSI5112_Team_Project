@@ -62,7 +62,7 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
             filters_select: filter_index_select,
             user: widget.user,
             onSelectFinish: (value, index) => updateFilterIndex(value, index), 
-            onEditFinish: (value, type) => updateEditProduct(value, type)
+            onEditFinish: (value, type) => updateEditProduct(value, type),
           ),
         ),
       ), 
@@ -76,6 +76,7 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
 
   void updateFilterIndex(String newOption, int index) {
     setState(() {
+      isSearching = true;
       filter_index_select[index] = newOption;
     });
     updateProductList();
