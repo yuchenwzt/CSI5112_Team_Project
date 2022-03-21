@@ -1,10 +1,11 @@
 import 'package:csi5112_project/injection/dependency_injection.dart';
 import '../data/order_data.dart';
+import '../data/http_data.dart';
 
 abstract class OrdersListViewContract {
   void onLoadOrdersComplete(List<Order> items);
 
-  void onLoadOrdersError();
+  void onLoadOrdersError(onError);
 }
 
 class OrdersListPresenter {
@@ -15,12 +16,10 @@ class OrdersListPresenter {
     repository = Injector().orderRepository;
   }
 
-  void loadOrder() {
-    assert(view != null);
-
+  void loadOrder(HttpRequest request) {
     repository
-      .fetch()
+      .fetch(request)
       .then((order) => view.onLoadOrdersComplete(order))
-      .catchError((onError) => view.onLoadOrdersError());
+      .catchError((onError) => view.onLoadOrdersError(onError));
   }
 }

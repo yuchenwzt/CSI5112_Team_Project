@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'package:csi5112_project/presenter/login_presenter.dart';
+import 'package:csi5112_project/data/user_data.dart';
 import 'package:flutter/material.dart';
 import '../main_page.dart';
+import '../../data/http_data.dart';
 
 enum Identity {merchant, client}
 
@@ -10,18 +14,23 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends State<Login> implements UserListViewContract {
   Identity? _identity;
   final TextEditingController _unameController = TextEditingController();
   final TextEditingController _passwController = TextEditingController();
+  late UserListPresenter _presenter;
 
+  _LoginState() {
+    _presenter = UserListPresenter(this);
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-            'User',
-             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          'User',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.red,
@@ -118,12 +127,8 @@ class _LoginState extends State<Login> {
                         warningEmptyPassword();
                       } else if (_identity == null) {
                         warningNoIdentity();
-                      } else if (authenticateIdentity(_unameController.text, _passwController.text)) {
-                        if (_identity == Identity.client) {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(isMerchant: false)));
-                        } else {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage(isMerchant: true)));
-                        }
+                      } else {
+                        authenticateIdentity(_unameController.text, _passwController.text);
                       }
                     },
                     child: const Text(
@@ -142,51 +147,77 @@ class _LoginState extends State<Login> {
 
   void warningNoIdentity() {
     showDialog(context: context,
-        builder:(context) => AlertDialog(
-          title: const Text('Login error'),
-          content: const Text('You should choose an identity before entering the system.'),
-          actions: <Widget> [
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'))
-          ]
-        ));
+      builder:(context) => AlertDialog(
+        title: const Text('Login error'),
+        content: const Text('You should choose an identity before entering the system.'),
+        actions: <Widget> [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'))
+        ]
+      ));
   }
 
   void warningEmptyUserName() {
     showDialog(context: context,
-        builder:(context) => AlertDialog(
-            title: const Text('Login error'),
-            content: const Text('Username cannot be empty.'),
-            actions: <Widget> [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'))
-            ]
-        ));
+      builder:(context) => AlertDialog(
+        title: const Text('Login error'),
+        content: const Text('Username cannot be empty.'),
+        actions: <Widget> [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'))
+        ]
+      ));
   }
 
   void warningEmptyPassword() {
     showDialog(context: context,
-        builder:(context) => AlertDialog(
-            title: const Text('Login error'),
-            content: const Text('Password cannot be empty.'),
-            actions: <Widget> [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'))
-            ]
-        ));
+      builder:(context) => AlertDialog(
+        title: const Text('Login error'),
+        content: const Text('Password cannot be empty.'),
+        actions: <Widget> [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'))
+        ]
+      ));
+  }
+
+  void warningWrongAuthentication() {
+    showDialog(context: context,
+      builder:(context) => AlertDialog(
+        title: const Text('Login error'),
+        content: const Text('UserName or Password might be wrong.'),
+        actions: <Widget> [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'))
+        ]
+      ));
   }
 
   // sent to 3rd party verification api
-  bool authenticateIdentity(String uname, String pwd) {
-    return true;
+  void authenticateIdentity(String uname, String pwd) {
+    _presenter.loadUser(HttpRequest('Post', 'token', jsonEncode(LoginUser(username: uname, password: pwd, isMerchant: _identity == Identity.merchant))));
+  }
+
+  @override
+  void onLoadUserComplete(List<User> user) {
+    user[0].isMerchant = _identity == Identity.merchant;
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(user: user[0])));
+  }
+ 
+  @override
+  void onLoadUserError(e) {
+    warningWrongAuthentication();
   }
 }

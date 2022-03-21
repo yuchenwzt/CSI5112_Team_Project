@@ -1,60 +1,63 @@
-import 'dart:async';
-
-class Address {
-  String name;
-  String phonenumber;
-  String address;
-
-  Address({
-    this.name = "",
-    this.address = "",
-    this.phonenumber = "",
-  });
-}
+import 'http_data.dart';
 
 class User {
-  final String id;
-  final String name;
+  final String first_name;
+  final String last_name;
+  final String email;
+  final String username;
   final String password;
-  final bool isMerchant;
-  final String phonenumber;
-  List<Address> address;
-  final List cart;
-  final List<List> history;
+  final String phone;
+  final String merchant_id;
+  final String customer_id;
+  bool isMerchant;
+  final String token;
 
   User({
-    this.id = "",
-    this.name = "",
+    this.customer_id = "",
+    this.merchant_id = "",
+    this.first_name = "",
+    this.last_name = "",
+    this.email = "",
     this.password = "",
-    this.isMerchant = false,
-    this.phonenumber = "",
-    this.address = const [],
-    this.cart = const [],
-    this.history = const [],
+    this.username = "",
+    this.phone = "",
+    this.isMerchant = true,
+    this.token = ""
   });
 
-  User.fromMap(Map<String, dynamic> map)
-    : id = map['id'],
-      name = map['name'],
-      password = map['password'],
-      isMerchant = map['isMerchant'],
-      phonenumber = map['phonenumber'],
-      address = map['address'],
-      cart = map['cart'],
-      history = map['history'];
+  User.fromMap(Map<String, dynamic> map) 
+    : first_name = map["first_name"],
+      last_name = map["last_name"],
+      email = map["email"],
+      password = map["password"],
+      username = map["username"],
+      phone = map["phone"],
+      isMerchant = true,
+      customer_id = map["customer_id"] ?? "",
+      merchant_id = map["merchant_id"] ?? "",
+      token = map["token"];
 }
 
-abstract class UserRepository {
-  Future<User> fetch();
+abstract class UserRepository{
+  Future<List<User>> fetch(HttpRequest request);
 }
 
-class FetchDataException implements Exception {
-  String message;
+class LoginUser {
+  final String username;
+  String password;
+  bool isMerchant;
 
-  FetchDataException(this.message);
+  LoginUser( {
+    this.username = "",
+    this.password = "",
+    this.isMerchant = true
+  });
 
-  @override
-  String toString() {
-    return "Exception:$message";
+  Map<String, dynamic> toJson() {
+    return {
+      'Username': username,
+      'Password': password,
+      'isMerchant': isMerchant,
+    };
   }
 }

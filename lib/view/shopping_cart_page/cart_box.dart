@@ -7,20 +7,19 @@ class CardBox extends StatefulWidget {
       this.updateNum,
       required this.isClicked,
       this.updatePrice,
-      required this.itemPrice})
+      required this.productPrice})
       : super(key: key);
 
   final int selectedValue;
   final updateNum;
   final bool isClicked;
   final updatePrice;
-  final String itemPrice;
+  final int productPrice;
   @override
   _CartCardBoxState createState() => _CartCardBoxState();
 }
 
 class _CartCardBoxState extends State<CardBox> {
-  final itemFormKey = GlobalKey<FormState>();
   var value = 1;
   @override
   Widget build(BuildContext context) {
@@ -61,7 +60,7 @@ class _CartCardBoxState extends State<CardBox> {
             setState(() {
               if (widget.isClicked) {
                 widget.updatePrice(
-                    (newValue! - value) * int.parse(widget.itemPrice));
+                    (newValue! - value) * widget.productPrice);
               }
               value = newValue!;
               widget.updateNum(value);

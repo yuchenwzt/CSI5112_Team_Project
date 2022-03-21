@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../data/user_data.dart';
 import 'address_card.dart';
 
 class AddressPage extends StatefulWidget {
   const AddressPage({Key? key, required this.user, this.onEditFinish}) : super(key: key);
 
-  final User user;
+  final dynamic user;
   final onEditFinish;
 
   @override

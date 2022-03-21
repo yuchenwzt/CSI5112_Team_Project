@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../data/user_data.dart';
 import 'invoice_page.dart';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({Key? key, required this.user}) : super(key: key);
 
-  final User user;
+  final dynamic user;
 
   @override
   Widget build(BuildContext context) {

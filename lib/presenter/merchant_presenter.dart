@@ -1,11 +1,10 @@
 import 'package:csi5112_project/data/merchant_data.dart';
-
+import '../data/http_data.dart';
 import '../injection/dependency_injection.dart';
 
 abstract class MerchantListViewContract {
-  void onLoadMerchantsComplete(List<Merchant> merchants);
-
-  void onLoadMerchantsError();
+  void onLoadMerchantComplete(List<Merchant> merchants);
+  void onLoadMerchantError(onError);
 }
 
 class MerchantListPresenter {
@@ -16,12 +15,10 @@ class MerchantListPresenter {
     repository = Injector().merchantRepository;
   }
 
-  void loadItems() {
-    assert(view != null);
-
+  void loadMerchant(HttpRequest request) {
     repository
-        .fetch()
-        .then((merchants) => view.onLoadMerchantsComplete(merchants))
-        .catchError((onError) => view.onLoadMerchantsError());
+      .fetch(request)
+      .then((merchants) => view.onLoadMerchantComplete(merchants))
+      .catchError((onError) => view.onLoadMerchantError(onError));
   }
 }

@@ -1,29 +1,18 @@
 import './address_page.dart';
 import './historicalorders_page.dart';
 import 'package:flutter/material.dart';
-import '../../../../data/user_data.dart';
-import '../../../../presenter/user_presenter.dart';
+import 'package:csi5112_project/data/user_data.dart';
+import '../../data/shipping_address_data.dart';
 
 class UserPage extends StatefulWidget {
-  const UserPage({Key? key}) : super(key: key);
+  const UserPage({Key? key, required this.user}) : super(key: key);
+  final User user;
 
   @override
-  _UserPageState createState() => _UserPageState();
+  _UserRolePageState createState() => _UserRolePageState();
 }
 
-class _UserPageState extends State<UserPage> implements UserViewContract {
-  late UserPresenter _presenter;
-  User user = User();
-  _UserPageState() {
-    _presenter = UserPresenter(this);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _presenter.loadUsers();
-  }
-
+class _UserRolePageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +26,7 @@ class _UserPageState extends State<UserPage> implements UserViewContract {
               ),
               const Image(image: AssetImage("images/user.png"), width: 200.0),
               Text(
-                "Hello, " + user.name,
+                "Hello, " + widget.user.merchant_id,
                 style: const TextStyle(fontSize: 20, height: 4),
               ),
               TextButton(
@@ -50,7 +39,7 @@ class _UserPageState extends State<UserPage> implements UserViewContract {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
-                      return AddressPage(user: user, onEditFinish: (value) => updateUserAddress(value),);
+                      return AddressPage(user: widget.user, onEditFinish: (value) => updateUserAddress(value));
                     }),
                   );
                 },
@@ -65,7 +54,7 @@ class _UserPageState extends State<UserPage> implements UserViewContract {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
-                      return HistoryPage(user: user);
+                      return HistoryPage(user: widget.user);
                     }),
                   );
                 },
@@ -87,23 +76,7 @@ class _UserPageState extends State<UserPage> implements UserViewContract {
   }
 
   // mock update func, deleted when build up backend
-  void updateUserAddress(Address newAddress) {
-    var newUser = user;
-    user.address[0] = newAddress;
-    setState(() {
-      user = newUser;
-    });
-  }
-
-  @override
-  void onLoadUsersComplete(User userReceived) {
-    setState(() {
-      user = userReceived;
-    });
-  }
-
-  @override
-  void onLoadUsersError() {
-    // TODO: implement onLoadUsersError
+  void updateUserAddress(ShippingAddress newAddress) {
+    var newUser = widget.user;
   }
 }
