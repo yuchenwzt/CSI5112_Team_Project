@@ -2,48 +2,55 @@ import 'package:flutter/material.dart';
 import '../../data/product_data.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker_web/image_picker_web.dart';
+import '../../components/invisible_dropdown.dart';
 
 class ProductEdit extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => ProductEditState();
 
-  const ProductEdit({ Key? key, required this.product, this.onEditFinish, required this.editRole }) : super(key: key);
+  const ProductEdit(
+      {Key? key,
+      required this.product,
+      this.onEditFinish,
+      required this.editRole})
+      : super(key: key);
 
-  final Product product; 
+  final Product product;
   final String editRole;
   final onEditFinish;
 }
 
 class ProductEditState extends State<ProductEdit> {
-  
   final productFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     Product newProduct = widget.product;
-    return widget.editRole == "edit" ? Row(
-      children: [
-        TextButton(
-          style: ButtonStyle(padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)),
-          onPressed: () {
-            showFormDialog(context, newProduct, 'update');
-          },
-          child: const Text("Edit")
-        ),
-        TextButton(
-          style: ButtonStyle(padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)),
-          onPressed: () {
-            widget.onEditFinish(newProduct, 'delete');
-          },
-          child: const Text("Delete")
-        ),
-      ]
-    ) : FloatingActionButton(
-      child: const Icon(Icons.add),
-      onPressed: (){
-        showFormDialog(context, newProduct, 'create');
-      },
-    );
+    return widget.editRole == "edit"
+        ? Row(children: [
+            TextButton(
+                style: ButtonStyle(
+                    padding:
+                        MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)),
+                onPressed: () {
+                  showFormDialog(context, newProduct, 'update');
+                },
+                child: const Text("Edit")),
+            TextButton(
+                style: ButtonStyle(
+                    padding:
+                        MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)),
+                onPressed: () {
+                  widget.onEditFinish(newProduct, 'delete');
+                },
+                child: const Text("Delete")),
+          ])
+        : FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () {
+              showFormDialog(context, newProduct, 'create');
+            },
+          );
   }
 
   Future<List<String>> _getImgInfo() async {
@@ -56,12 +63,11 @@ class ProductEditState extends State<ProductEdit> {
 
   void showFormDialog(BuildContext context, Product newProduct, String type) {
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        String imageInfo = "";
-        String image_type = "network";
-        return StatefulBuilder(
-          builder: (context, state) {
+        context: context,
+        builder: (BuildContext context) {
+          String imageInfo = "";
+          String image_type = "network";
+          return StatefulBuilder(builder: (context, state) {
             return AlertDialog(
               scrollable: true,
               content: Stack(
@@ -98,7 +104,8 @@ class ProductEditState extends State<ProductEdit> {
                               }
                               return null;
                             },
-                            onSaved: (newValue) => newProduct.name = newValue as String,
+                            onSaved: (newValue) =>
+                                newProduct.name = newValue as String,
                           ),
                         ),
                         Padding(
@@ -114,24 +121,29 @@ class ProductEditState extends State<ProductEdit> {
                               }
                               return null;
                             },
-                            onSaved: (newValue) => newProduct.description = newValue as String,
+                            onSaved: (newValue) =>
+                                newProduct.description = newValue as String,
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              labelText: 'Category',
-                            ),
-                            initialValue: widget.product.category,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "The Category Can't be Empty";
-                              }
-                              return null;
-                            },
-                            onSaved: (newValue) => newProduct.category = newValue as String,
-                          ),
+                          child: DropdownButtonFormField(
+                              decoration: const InputDecoration(
+                                labelText: 'Category',
+                              ),
+                              value: widget.product.category,
+                              items: const [
+                                DropdownMenuItem(
+                                    value: 'Camera', child: Text("Camera")),
+                                DropdownMenuItem(
+                                    value: 'Computer', child: Text("Computer")),
+                                DropdownMenuItem(value: '', child: Text("")),
+                              ],
+                              onChanged: (newValue) {
+                                setState(() {
+                                  newProduct.category = newValue as String;
+                                });
+                              }),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
@@ -150,7 +162,8 @@ class ProductEditState extends State<ProductEdit> {
                             decoration: const InputDecoration(
                               labelText: 'Date',
                             ),
-                            initialValue: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                            initialValue:
+                                DateFormat('yyyy-MM-dd').format(DateTime.now()),
                             readOnly: true,
                           ),
                         ),
@@ -169,7 +182,8 @@ class ProductEditState extends State<ProductEdit> {
                               }
                               return null;
                             },
-                            onSaved: (newValue) => newProduct.price = int.parse(newValue as String),
+                            onSaved: (newValue) => newProduct.price =
+                                int.parse(newValue as String),
                           ),
                         ),
                         Padding(
@@ -179,7 +193,8 @@ class ProductEditState extends State<ProductEdit> {
                               labelText: 'Manufacturer',
                             ),
                             initialValue: widget.product.manufacturer,
-                            onSaved: (newValue) => newProduct.manufacturer = newValue as String,
+                            onSaved: (newValue) =>
+                                newProduct.manufacturer = newValue as String,
                           ),
                         ),
                         Padding(
@@ -187,11 +202,14 @@ class ProductEditState extends State<ProductEdit> {
                           child: TextFormField(
                             decoration: InputDecoration(
                               labelText: 'Image',
-                              hintText: image_type == "local" ? "You can upload an image" : "Enter a network image url",
+                              hintText: image_type == "local"
+                                  ? "You can upload an image"
+                                  : "Enter a network image url",
                             ),
                             initialValue: widget.product.image,
                             readOnly: image_type == "local",
-                            onChanged: (newValue) => newProduct.image = newValue,
+                            onChanged: (newValue) =>
+                                newProduct.image = newValue,
                           ),
                         ),
                         SizedBox(
@@ -200,55 +218,61 @@ class ProductEditState extends State<ProductEdit> {
                             children: [
                               Expanded(
                                 child: RadioListTile<String>(
-                                  activeColor: Colors.blue,
-                                  controlAffinity: ListTileControlAffinity.leading,
-                                  title: const Text("Network"),
-                                  value: image_type,
-                                  onChanged: (String? value) {
-                                    state(() {
-                                      image_type = "network";
-                                    });
-                                  }, groupValue: "network"),
+                                    activeColor: Colors.blue,
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    title: const Text("Network"),
+                                    value: image_type,
+                                    onChanged: (String? value) {
+                                      state(() {
+                                        image_type = "network";
+                                      });
+                                    },
+                                    groupValue: "network"),
                               ),
                               const SizedBox(width: 20),
                               Expanded(
                                 child: RadioListTile<String>(
-                                  activeColor: Colors.blue,
-                                  controlAffinity: ListTileControlAffinity.leading,
-                                  title: const Text("Local"),
-                                  value: image_type,
-                                  onChanged: (value) {
-                                    state(() {
-                                      image_type = "local";
-                                    });
-                                  }, groupValue: "local"),
+                                    activeColor: Colors.blue,
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    title: const Text("Local"),
+                                    value: image_type,
+                                    onChanged: (value) {
+                                      state(() {
+                                        image_type = "local";
+                                      });
+                                    },
+                                    groupValue: "local"),
                               ),
                             ],
                           ),
                         ),
                         Visibility(
-                          visible: image_type == 'local',
-                          child: Row(
-                            children: <Widget>[
-                              ButtonBar(
-                                alignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  ElevatedButton(
-                                    onPressed: () async { 
-                                      List<String> res = await _getImgInfo();
-                                      newProduct.image = res[1];
-                                      state(() {
-                                        imageInfo = res[0];
-                                      }); 
-                                    },
-                                    child: const Text('Select Upload Image'),
-                                  ),
-                                ],
-                              ),
-                              Text(imageInfo != "" ? "You have successfully upload: " + imageInfo : ""),
-                            ],
-                          )
-                        ),
+                            visible: image_type == 'local',
+                            child: Row(
+                              children: <Widget>[
+                                ButtonBar(
+                                  alignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        List<String> res = await _getImgInfo();
+                                        newProduct.image = res[1];
+                                        state(() {
+                                          imageInfo = res[0];
+                                        });
+                                      },
+                                      child: const Text('Select Upload Image'),
+                                    ),
+                                  ],
+                                ),
+                                Text(imageInfo != ""
+                                    ? "You have successfully upload: " +
+                                        imageInfo
+                                    : ""),
+                              ],
+                            )),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: ElevatedButton(
@@ -269,10 +293,7 @@ class ProductEditState extends State<ProductEdit> {
                 ],
               ),
             );
-          }
-        );
-      }
-    );
+          });
+        });
   }
 }
-

@@ -26,8 +26,10 @@ class _CartBottomBarState extends State<CartBottomBar> {
   Widget build(BuildContext context) {
     return Positioned(
       child: Container(
+        height: 50,
         color: Colors.white,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             TextButton.icon(
               onPressed: () {
@@ -37,33 +39,56 @@ class _CartBottomBarState extends State<CartBottomBar> {
                 });
               },
               icon: Icon(
-                Icons.add_circle_outline,
+                Icons.check_circle_outline,
                 color: isClicked
                     ? Colors.green
                     : const Color.fromRGBO(200, 200, 200, 1),
               ),
-              label: const Text("Select all"),
+              label: const Text(
+                "Select all",
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
             ),
-            Text('Total:  \$' + widget.amountPrice.toString() + '  '),
-            Text('Tax:  \$' +
-                (widget.amountPrice * 0.13).toString() +
-                '           '),
-            OutlinedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return PaymentPage(user: widget.user);
-                  }),
-                );
-              },
-              child: const Text('Place the order'),
-            )
+            Text(
+              'Total:  \$' + widget.amountPrice.toString() + '  ',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
+            Text(
+              'Tax:  \$' +
+                  (widget.amountPrice * 0.13).toString() +
+                  '           ',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
+            SizedBox(
+              width: 180,
+              height: 35,
+              child: Material(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(5),
+                elevation: 6,
+                child: MaterialButton(
+                  child: const Text(
+                    'Place the order',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return PaymentPage(user: widget.user);
+                      }),
+                    );
+                  },
+                ),
+              ),
+            ),
           ],
         ),
       ),
-      left: 10,
-      bottom: 7,
+      left: 15,
+      right: 15,
+      bottom: 15,
     );
   }
 }
