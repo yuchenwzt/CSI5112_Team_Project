@@ -86,6 +86,7 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
     String inputSearch = '%23',
   }) {
     String filterUrl = "";
+    if (inputSearch == "") inputSearch = "%23";
     if (widget.user.isMerchant) {
       filterUrl = 'Products/filter/owner?owner_id=${widget.user.merchant_id}&input=$inputSearch&priceSort=${filter_index_select[0]}&location=${filter_index_select[1]}&category=${filter_index_select[2]}';
     } else {

@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 
-const String http_header = "https://localhost:7027/api/";
+const String http_header = "http://csiteamwork-1443910782.us-east-1.elb.amazonaws.com/api/";
 
 class HttpRequest {
   final String httpHeader = http_header;
