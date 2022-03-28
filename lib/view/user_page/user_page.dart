@@ -3,6 +3,8 @@ import './historicalorders_page.dart';
 import 'package:flutter/material.dart';
 import 'package:csi5112_project/data/user_data.dart';
 import '../../data/shipping_address_data.dart';
+import '../login_page/login_page.dart';
+import '../../main.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key, required this.user}) : super(key: key);
@@ -29,25 +31,29 @@ class _UserRolePageState extends State<UserPage> {
                 "Hello, " + widget.user.merchant_id,
                 style: const TextStyle(fontSize: 20, height: 4),
               ),
+              const Padding(padding: EdgeInsets.only(top: 30)),
               TextButton(
                 child: const Text(
                   "Manage My Address",
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 18),
                 ),
                 // textColor: Colors.blue,
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
-                      return AddressPage(user: widget.user, onEditFinish: (value) => updateUserAddress(value));
+                      return AddressPage(
+                          user: widget.user,
+                          onEditFinish: (value) => updateUserAddress(value));
                     }),
                   );
                 },
               ),
+              const Padding(padding: EdgeInsets.only(top: 5)),
               TextButton(
                 child: const Text(
                   " View Orders Receipts",
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 18),
                 ),
                 // textColor: Colors.blue,
                 onPressed: () {
@@ -63,13 +69,31 @@ class _UserRolePageState extends State<UserPage> {
                 " ",
                 style: TextStyle(height: 4),
               ),
-              ElevatedButton(
-                child: const Text(
-                  "Sign out",
-                  style: TextStyle(fontSize: 20),
-                ),
-                onPressed: () {},
-              ),
+              //const Padding(padding: EdgeInsets.only(top: 5)),
+              SizedBox(
+                  width: 200,
+                  height: 40,
+                  child: Material(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(5),
+                    elevation: 6,
+                    child: MaterialButton(
+                      child: const Text(
+                        'Sign out',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          // ignore: unnecessary_new
+                          new MaterialPageRoute(
+                            builder: ((context) => const Login()),
+                          ),
+                          (route) => false,
+                        );
+                      },
+                    ),
+                  ))
             ]),
       ),
     );

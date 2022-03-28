@@ -6,6 +6,7 @@ import 'product_img.dart';
 import '../../data/product_data.dart';
 import 'package:csi5112_project/data/user_data.dart';
 // import '../item_chat_page/item_chat_page.dart';
+import 'package:csi5112_project/main.dart';
 
 class DetailPage extends StatelessWidget {
   const DetailPage({
@@ -29,10 +30,10 @@ class DetailPage extends StatelessWidget {
         ProductDescription(product: product),
         const Padding(padding: EdgeInsets.only(top: 30)),
         SizedBox(
-            width: 30,
-            height: 30,
+            //width: 30,
+            height: 40,
             child: Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30),
+              padding: const EdgeInsets.only(left: 20, right: 20),
               child: Material(
                 color: Colors.red,
                 borderRadius: BorderRadius.circular(5),
@@ -55,10 +56,10 @@ class DetailPage extends StatelessWidget {
             )),
         const Padding(padding: EdgeInsets.only(top: 20)),
         SizedBox(
-            width: 30,
-            height: 30,
+            //width: 30,
+            height: 40,
             child: Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30),
+              padding: const EdgeInsets.only(left: 20, right: 20),
               child: Material(
                 color: Colors.grey,
                 borderRadius: BorderRadius.circular(5),
