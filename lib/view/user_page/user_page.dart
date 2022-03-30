@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:csi5112_project/data/user_data.dart';
 import '../../data/shipping_address_data.dart';
 import '../login_page/login_page.dart';
-import '../../main.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key, required this.user}) : super(key: key);
@@ -28,7 +27,7 @@ class _UserRolePageState extends State<UserPage> {
               ),
               const Image(image: AssetImage("images/user.png"), width: 200.0),
               Text(
-                "Hello, " + widget.user.merchant_id,
+                "Hello, " + widget.user.first_name + " " + widget.user.last_name,
                 style: const TextStyle(fontSize: 20, height: 4),
               ),
               const Padding(padding: EdgeInsets.only(top: 30)),
@@ -79,18 +78,11 @@ class _UserRolePageState extends State<UserPage> {
                     elevation: 6,
                     child: MaterialButton(
                       child: const Text(
-                        'Sign out',
+                        'Log out',
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          // ignore: unnecessary_new
-                          new MaterialPageRoute(
-                            builder: ((context) => const Login()),
-                          ),
-                          (route) => false,
-                        );
+                        Navigator.popUntil(context, (route) => route is Login);
                       },
                     ),
                   ))

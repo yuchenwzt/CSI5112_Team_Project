@@ -7,11 +7,12 @@ import 'package:intl/intl.dart';
 import 'package:csi5112_project/data/user_data.dart';
 
 class ProductCard extends StatefulWidget {
-  const ProductCard({ Key? key, required this.product, this.onEditFinish, required this.user }) : super(key: key);
+  const ProductCard({ Key? key, required this.product, this.onEditFinish, required this.user, required this.filters_dropdown_list }) : super(key: key);
 
   final Product product;
   final onEditFinish;
   final User user;
+  final String filters_dropdown_list;
 
   @override
   _ProductCardState createState() => _ProductCardState();
@@ -68,7 +69,7 @@ class _ProductCardState extends State<ProductCard> {
                   maintainState: false,
                   maintainSize: false,
                   maintainSemantics: false,
-                  child: ProductEdit(product: widget.product, onEditFinish: widget.onEditFinish, editRole: "edit")
+                  child: ProductEdit(product: widget.product, onEditFinish: widget.onEditFinish, editRole: "edit", filters_dropdown_list: widget.filters_dropdown_list),
                 ),
               ],
             ),

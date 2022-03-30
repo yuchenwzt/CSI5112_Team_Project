@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../data/product_data.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker_web/image_picker_web.dart';
-import '../../components/invisible_dropdown.dart';
 
 class ProductEdit extends StatefulWidget {
   @override
@@ -12,11 +11,13 @@ class ProductEdit extends StatefulWidget {
       {Key? key,
       required this.product,
       this.onEditFinish,
+      required this.filters_dropdown_list,
       required this.editRole})
       : super(key: key);
 
   final Product product;
   final String editRole;
+  final String filters_dropdown_list;
   final onEditFinish;
 }
 
@@ -59,6 +60,11 @@ class ProductEditState extends State<ProductEdit> {
     res[0] = infos.fileName as String;
     res[1] = infos.base64 as String;
     return res;
+  }
+
+  List<DropdownMenuItem> showAllFilter(String filters_dropdown_list) {
+    List<String> list = filters_dropdown_list.split("_");
+    return list.map((list) => DropdownMenuItem(value: list, child: Text(list))).toList();
   }
 
   void showFormDialog(BuildContext context, Product newProduct, String type) {
@@ -127,18 +133,12 @@ class ProductEditState extends State<ProductEdit> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: DropdownButtonFormField(
+                          child: DropdownButtonFormField<dynamic>(
                               decoration: const InputDecoration(
                                 labelText: 'Category',
                               ),
                               value: widget.product.category,
-                              items: const [
-                                DropdownMenuItem(
-                                    value: 'Camera', child: Text("Camera")),
-                                DropdownMenuItem(
-                                    value: 'Computer', child: Text("Computer")),
-                                DropdownMenuItem(value: '', child: Text("")),
-                              ],
+                              items: showAllFilter(widget.filters_dropdown_list),
                               onChanged: (newValue) {
                                 setState(() {
                                   newProduct.category = newValue as String;

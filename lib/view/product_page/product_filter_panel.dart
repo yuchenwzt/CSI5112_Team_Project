@@ -6,9 +6,10 @@ import 'package:csi5112_project/data/user_data.dart';
 import '../../components/invisible_dropdown.dart';
 import 'edit_catrgories.dart';
 
-class ProductFilterPanel extends StatelessWidget {
+class ProductFilterPanel extends StatefulWidget {
+  
   const ProductFilterPanel(
-      {Key? key,
+    {Key? key,
       required this.filters,
       required this.filters_select,
       required this.products,
@@ -25,6 +26,19 @@ class ProductFilterPanel extends StatelessWidget {
   final onSelectFinish;
 
   @override
+  ProductFilterPanelState createState() => ProductFilterPanelState();
+}
+
+class ProductFilterPanelState extends State<ProductFilterPanel> {
+  late String filters_dropdown_list;
+  
+  @override
+  void initState() {
+    super.initState();
+    filters_dropdown_list = widget.filters[2];
+  }
+  
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -35,8 +49,8 @@ class ProductFilterPanel extends StatelessWidget {
               child: Center(
             child: TextButton(
               onPressed: () => {
-                onSelectFinish(
-                    filters_select[0] == 'ascending'
+                widget.onSelectFinish(
+                     widget.filters_select[0] == 'ascending'
                         ? 'descending'
                         : 'ascending',
                     0)
@@ -50,12 +64,12 @@ class ProductFilterPanel extends StatelessWidget {
                     children: <Widget>[
                       Icon(Icons.keyboard_arrow_up,
                           size: 18,
-                          color: filters_select[0] == 'ascending'
+                          color: widget.filters_select[0] == 'ascending'
                               ? Colors.black
                               : Colors.grey),
                       Icon(Icons.keyboard_arrow_down,
                           size: 18,
-                          color: filters_select[0] == 'ascending'
+                          color: widget.filters_select[0] == 'ascending'
                               ? Colors.grey
                               : Colors.black)
                     ],
@@ -76,11 +90,11 @@ class ProductFilterPanel extends StatelessWidget {
                   ],
                 )),
                 InvisibleDropdown(
-                    options: filters_select[1],
-                    origins: filters[1],
+                    options: widget.filters_select[1],
+                    origins: widget.filters[1],
                     index: 1,
                     onFilterFinish: (value, index) =>
-                        onSelectFinish(value, index)),
+                        widget.onSelectFinish(value, index)),
               ],
             ),
           ),
@@ -89,59 +103,55 @@ class ProductFilterPanel extends StatelessWidget {
               children: [
                 Center(
                     child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    //const Text("Category"),
-
-                    Visibility(
-                        visible: !user.isMerchant,
-                        child: const Text("Category")),
-
-                    Visibility(
-                        visible: !user.isMerchant,
-                        child: const Icon(Icons.filter_alt)),
-                  ],
-                )),
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Icon(widget.user.isMerchant ? null : Icons.filter_alt),
+                        Text(widget.user.isMerchant ? "" : "Categories  ")
+                      ],
+                  )
+                ),
                 Visibility(
-                    visible: !user.isMerchant,
-                    child: InvisibleDropdown(
-                        options: filters_select[2],
-                        origins: filters[2],
-                        index: 2,
-                        onFilterFinish: (value, index) =>
-                            onSelectFinish(value, index))),
+                  visible: !widget.user.isMerchant,
+                  maintainState: false,
+                  child: InvisibleDropdown(
+                    options: widget.filters_select[2],
+                    origins: widget.filters[2],
+                    index: 2,
+                    onFilterFinish: (value, index) =>
+                        widget.onSelectFinish(value, index))),
                 Visibility(
-                    visible: user.isMerchant,
-                    maintainState: false,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          const Padding(padding: EdgeInsets.only(top: 120)),
-                          const Icon(Icons.edit),
-                          TextButton(
-                              onPressed: () {
-                                //showFormDialog(context, origins);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) {
-                                    return EditCate();
-                                  }),
-                                );
-                              },
-                              child: const Text("Edit Categories",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)))
-                        ]))
+                  visible: widget.user.isMerchant,
+                  maintainState: false,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      const Padding(padding: EdgeInsets.only(top: 120)),
+                      const Icon(Icons.edit),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) {
+                              return EditCate(options: filters_dropdown_list, onCateEditFinish: onCateEditFinish);
+                            }),
+                          );
+                        },
+                        child: const Text("Edit Categories",
+                          style: TextStyle(
+                            color: Colors.black, fontSize: 14)))
+                    ]
+                  )
+                )
               ],
             ),
           ),
         ]),
       ),
       floatingActionButton: Visibility(
-        visible: user.isMerchant,
+        visible: widget.user.isMerchant,
         maintainState: false,
         child: ProductEdit(
-            product: Product(), onEditFinish: onEditFinish, editRole: "add"),
+            product: Product(), onEditFinish: widget.onEditFinish, editRole: "add", filters_dropdown_list: filters_dropdown_list),
       ),
       body: GridView(
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -155,10 +165,21 @@ class ProductFilterPanel extends StatelessWidget {
     );
   }
 
+  void onCateEditFinish(List<String> res) {
+    String list = "";
+    for (String s in res) {
+      list += s;
+      list += "_";
+    }
+    setState(() {
+      filters_dropdown_list = list.substring(0, list.length - 1);
+    });
+  }
+
   List<ProductCard> buildProductList() {
-    return products
-        .map((productsState) => ProductCard(
-            product: productsState, user: user, onEditFinish: onEditFinish))
-        .toList();
+    return widget.products
+      .map((productsState) => ProductCard(
+        product: productsState, user: widget.user, onEditFinish: widget.onEditFinish, filters_dropdown_list: filters_dropdown_list))
+      .toList();
   }
 }
