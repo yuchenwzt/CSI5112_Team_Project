@@ -8,6 +8,7 @@ import '../../data/product_data.dart';
 import 'package:csi5112_project/data/user_data.dart';
 import 'package:csi5112_project/data/cart_item_data.dart';
 import '../../data/http_data.dart';
+import '../product_question_page/question_page.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage({
@@ -69,7 +70,7 @@ class DetailPageState extends State<DetailPage> implements CartItemsListViewCont
             )),
         ),
         const Padding(padding: EdgeInsets.only(top: 30)),
-        // ItemChatPage(item: product, onEditFinish: onEditFinish)
+        QuestionPage(product: widget.product, user: widget.user)
       ]),
     );
   }

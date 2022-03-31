@@ -3,10 +3,10 @@ import 'http_data.dart';
 
 class Question {
   final String question_id;
-  final String customer_id;
-  final String question;
-  final DateTime date;
-  final String product_id;
+  String customer_id;
+  String question;
+  DateTime date;
+  String product_id;
   
   Question( {
     this.question_id = "",

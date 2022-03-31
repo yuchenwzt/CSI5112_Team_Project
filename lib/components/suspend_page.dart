@@ -38,7 +38,7 @@ class SuspendCard extends StatelessWidget {
             child: ListTile(
               leading: Icon(Icons.album),
               title: Text('The Data is Empty'),
-              subtitle: Text('Please wait for Merchant to update more'),
+              subtitle: Text('Please wait for update'),
             ),
           ),
         );
