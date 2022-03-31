@@ -52,6 +52,16 @@ class _CartCardState extends State<CartItemCard> implements ProductsListViewCont
   }
 
   @override
+  void onUpdateProductsComplete(List<Product> products) {
+    setState(() {
+      product = products.first;
+    });
+  }
+
+  @override
+  void onUpdateProductsError(e) {}
+
+  @override
   void onLoadProductsError(e) {}
 
   @override

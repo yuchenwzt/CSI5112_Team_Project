@@ -3,10 +3,10 @@ import 'http_data.dart';
 
 class CartItem {
   final String item_id;
-  final int quantity;
-  final String product_id;
-  final int price;
-  final String customer_id;
+  int quantity;
+  String product_id;
+  int price;
+  String customer_id;
 
   CartItem( {
     this.item_id = "",
@@ -28,7 +28,8 @@ class CartItem {
       'item_id': item_id,
       'quantity': quantity.toString(),
       'product_id': product_id,
-      'price': price.toString()
+      'price': price.toString(),
+      'customer_id': customer_id
     };
   }
 }

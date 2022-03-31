@@ -36,9 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   multi_select_flutter: ^4.0.0
   http: ^0.13.4
-  dio: ^4.0.0 
   intl: ^0.17.0
   image_picker_web: any
+  provider: ^6.0.1
 
 dev_dependencies:
   flutter_test:

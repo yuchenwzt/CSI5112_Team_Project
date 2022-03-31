@@ -6,6 +6,10 @@ abstract class ProductsListViewContract {
   void onLoadProductsComplete(List<Product> products);
 
   void onLoadProductsError(onError);
+
+  void onUpdateProductsComplete(List<Product> products);
+
+  void onUpdateProductsError(onError);
 }
 
 class ProductsListPresenter {
@@ -21,5 +25,12 @@ class ProductsListPresenter {
       .fetch(request)
       .then((products) => view.onLoadProductsComplete(products))
       .catchError((onError) => view.onLoadProductsError(onError));
+  }
+
+  void updateProducts(HttpRequest request) {
+    repository
+      .fetch(request)
+      .then((products) => view.onUpdateProductsComplete(products))
+      .catchError((onError) => view.onUpdateProductsError(onError));
   }
 }

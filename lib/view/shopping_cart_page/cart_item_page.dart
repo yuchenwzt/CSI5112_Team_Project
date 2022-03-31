@@ -16,8 +16,8 @@ class CartPage extends StatefulWidget {
 }
 
 class CartPageState extends State<CartPage>
-    implements CartItemsListViewContractCart {
-  late CartItemsListPresenterCart _presenter;
+    implements CartItemsListViewContract {
+  late CartItemsListPresenter _presenter;
   List<CartItem> itemsCart = [];
   int amountPrice = 0;
   bool isSearching = false;
@@ -25,7 +25,7 @@ class CartPageState extends State<CartPage>
   bool isClickedAll = false;
   int amountPriceAdd = 0;
   CartPageState() {
-    _presenter = CartItemsListPresenterCart(this);
+    _presenter = CartItemsListPresenter(this);
   }
 
   List<Widget> _getListItems() {
@@ -85,7 +85,7 @@ class CartPageState extends State<CartPage>
   }
 
   @override
-  void onLoadCartItemsError() {
+  void onLoadCartItemsError(e) {
     
   }
 }

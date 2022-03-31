@@ -9,6 +9,7 @@ import '../../components/suspend_page.dart';
 import '../../data/http_data.dart';
 import '../../data/user_data.dart';
 import 'dart:convert';
+import 'package:provider/provider.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({Key? key, required this.user}) : super(key: key);
@@ -55,14 +56,19 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
         appBar: AppBar(
           flexibleSpace: SearchBar(onSearchFinish: (value) => updateProductList(inputSearch: value)),
         ),
-        body: Center(
-          child: ProductFilterPanel(
-            products: productsReceived,
-            filters: filter_index, 
-            filters_select: filter_index_select,
-            user: widget.user,
-            onSelectFinish: (value, index) => updateFilterIndex(value, index), 
-            onEditFinish: (value, type) => updateEditProduct(value, type),
+        body: Provider.value(
+          value: filter_index[2],
+          updateShouldNotify: (oldValue, newValue) => true,
+          child: Center(
+            child: ProductFilterPanel(
+              products: productsReceived,
+              filters: filter_index, 
+              filters_select: filter_index_select,
+              user: widget.user,
+              onSelectFinish: (value, index) => updateFilterIndex(value, index), 
+              onEditFinish: (value, type) => updateEditProduct(value, type),
+              onCateUpdateFinish: (value, origin, type) => onCateUpdateFinish(value, origin, type),
+            ),
           ),
         ),
       ), 
@@ -72,6 +78,18 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
       data: productsReceived,
       retry: () => retry()
     );
+  }
+
+  void onCateUpdateFinish(String value, String origin, String type) {
+    String filterUrl = "";
+    if (type == 'update') {
+      filterUrl = 'Products/update_category?owner_id=${widget.user.merchant_id}&category=$value&origin=$origin';
+      _presenter.updateProducts(HttpRequest('Put', filterUrl, jsonEncode("")));
+    } else {
+      filterUrl = 'Products/delete_category?category=$value&owner_id=${widget.user.merchant_id}';
+      _presenter.updateProducts(HttpRequest('Delete', filterUrl, jsonEncode("")));
+    }
+    retry();
   }
 
   void updateFilterIndex(String newOption, int index) {
@@ -98,15 +116,15 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
   void updateEditProduct(Product product, String type) {
     switch (type) {
       case 'update':
-        _presenter.loadProducts(HttpRequest('Put', 'Products/update?id=${product.product_id}', jsonEncode(product)));
+        _presenter.updateProducts(HttpRequest('Put', 'Products/update?id=${product.product_id}', jsonEncode(product)));
         break; 
       case 'create':
         product.owner_id = widget.user.merchant_id;
         product.owner = widget.user.first_name + " " + widget.user.last_name;
-        _presenter.loadProducts(HttpRequest('Post', 'Products/create', jsonEncode(product)));
+        _presenter.updateProducts(HttpRequest('Post', 'Products/create', jsonEncode(product)));
         break;
       case 'delete':
-        _presenter.loadProducts(HttpRequest('Delete', 'Products/delete', jsonEncode(product.product_id)));
+        _presenter.updateProducts(HttpRequest('Delete', 'Products/delete', jsonEncode(product.product_id)));
         break;
     }
   }
@@ -118,6 +136,11 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
       isSearching = false;
       isLoadError = false;
     });
+  }
+
+  @override
+  void onUpdateProductsComplete(List<Product> products) {
+    retry();
   }
 
   @override
@@ -133,6 +156,15 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
 
   @override
   void onLoadProductsError(e) {
+    setState(() {
+      isSearching = false;
+      isLoadError = true;
+      loadError = e.toString();
+    });
+  }
+
+  @override
+  void onUpdateProductsError(e) {
     setState(() {
       isSearching = false;
       isLoadError = true;

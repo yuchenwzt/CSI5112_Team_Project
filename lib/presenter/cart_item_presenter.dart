@@ -2,17 +2,17 @@ import 'package:csi5112_project/data/cart_item_data.dart';
 import 'package:csi5112_project/injection/dependency_injection.dart';
 import '../data/http_data.dart';
 
-abstract class CartItemsListViewContractCart {
+abstract class CartItemsListViewContract {
   void onLoadCartItemsComplete(List<CartItem> items);
 
-  void onLoadCartItemsError();
+  void onLoadCartItemsError(onError);
 }
 
-class CartItemsListPresenterCart {
-  CartItemsListViewContractCart view;
+class CartItemsListPresenter {
+  CartItemsListViewContract view;
   late CartItemRepository repository;
 
-  CartItemsListPresenterCart(this.view) {
+  CartItemsListPresenter(this.view) {
     repository = Injector().cartItemRepository;
   }
 
@@ -20,6 +20,6 @@ class CartItemsListPresenterCart {
     repository
       .fetch(request)
       .then((items) => view.onLoadCartItemsComplete(items))
-      .catchError((onError) => view.onLoadCartItemsError());
+      .catchError((onError) => view.onLoadCartItemsError(onError));
   }
 }

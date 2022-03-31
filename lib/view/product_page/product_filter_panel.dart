@@ -5,6 +5,7 @@ import 'product_edit.dart';
 import 'package:csi5112_project/data/user_data.dart';
 import '../../components/invisible_dropdown.dart';
 import 'edit_catrgories.dart';
+import 'package:provider/provider.dart';
 
 class ProductFilterPanel extends StatefulWidget {
   
@@ -15,6 +16,7 @@ class ProductFilterPanel extends StatefulWidget {
       required this.products,
       this.onSelectFinish,
       this.onEditFinish,
+      this.onCateUpdateFinish,
       required this.user})
       : super(key: key);
 
@@ -24,6 +26,7 @@ class ProductFilterPanel extends StatefulWidget {
   final User user;
   final onEditFinish;
   final onSelectFinish;
+  final onCateUpdateFinish;
 
   @override
   ProductFilterPanelState createState() => ProductFilterPanelState();
@@ -36,6 +39,12 @@ class ProductFilterPanelState extends State<ProductFilterPanel> {
   void initState() {
     super.initState();
     filters_dropdown_list = widget.filters[2];
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    filters_dropdown_list = Provider.of<String>(context);
   }
   
   @override
@@ -132,7 +141,11 @@ class ProductFilterPanelState extends State<ProductFilterPanel> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) {
-                              return EditCate(options: filters_dropdown_list, onCateEditFinish: onCateEditFinish);
+                              return EditCate(
+                                options: filters_dropdown_list, 
+                                onCateAddFinish: onCateAddFinish,
+                                onCateUpdateFinish: widget.onCateUpdateFinish,
+                              );
                             }),
                           );
                         },
@@ -165,12 +178,18 @@ class ProductFilterPanelState extends State<ProductFilterPanel> {
     );
   }
 
-  void onCateEditFinish(List<String> res) {
+  void onCateAddFinish(List<String> res) {
     String list = "";
+    bool flag = false;
     for (String s in res) {
-      list += s;
-      list += "_";
+      if (s != "") {
+        list += s;
+        list += "_";
+      } else {
+        flag = true;
+      }
     }
+    if (flag) list += '_';
     setState(() {
       filters_dropdown_list = list.substring(0, list.length - 1);
     });

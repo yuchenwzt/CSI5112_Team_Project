@@ -64,7 +64,7 @@ class ProductEditState extends State<ProductEdit> {
 
   List<DropdownMenuItem> showAllFilter(String filters_dropdown_list) {
     List<String> list = filters_dropdown_list.split("_");
-    return list.map((list) => DropdownMenuItem(value: list, child: Text(list))).toList();
+    return list.map((s) => DropdownMenuItem(value: s, child: Text(s))).toList();
   }
 
   void showFormDialog(BuildContext context, Product newProduct, String type) {
@@ -137,7 +137,7 @@ class ProductEditState extends State<ProductEdit> {
                               decoration: const InputDecoration(
                                 labelText: 'Category',
                               ),
-                              value: widget.product.category,
+                              value: type == 'create' ? widget.filters_dropdown_list.split('_')[0] : widget.product.category,
                               items: showAllFilter(widget.filters_dropdown_list),
                               onChanged: (newValue) {
                                 setState(() {
