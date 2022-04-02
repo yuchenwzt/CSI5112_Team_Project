@@ -40,6 +40,7 @@ class User {
 
 abstract class UserRepository{
   Future<List<User>> fetch(HttpRequest request);
+  Future<bool> check(HttpRequest request);
 }
 
 class LoginUser {

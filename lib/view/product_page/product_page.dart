@@ -54,7 +54,7 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
     return SuspendCard(
       child: Scaffold(
         appBar: AppBar(
-          flexibleSpace: SearchBar(onSearchFinish: (value) => updateProductList(inputSearch: value)),
+          flexibleSpace: SearchBar(onSearchFinish: (value) => updateProductList(inputSearch: value), hintText: "Search the Product name",),
         ),
         body: Provider.value(
           value: filter_index[2],

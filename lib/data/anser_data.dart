@@ -3,11 +3,11 @@ import 'http_data.dart';
 
 class Answer {
   final String answer_id;
-  final String role;
-  final String role_id;
-  final DateTime date;
-  final String answer;
-  final String question_id;
+  String role;
+  String role_id;
+  DateTime date;
+  String answer;
+  String question_id;
 
   Answer( {
     this.answer_id = "",

@@ -1,23 +1,26 @@
-import 'package:csi5112_project/presenter/login_presenter.dart';
+import 'dart:async';
 import 'package:csi5112_project/view/login_page/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:csi5112_project/presenter/register_presenter.dart';
+import 'package:csi5112_project/data/user_data.dart';
+import '../../data/http_data.dart';
 
 enum Identity {merchant, client}
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
 
-
   @override
   _RegisterState createState() => _RegisterState();
 }
 
-class _RegisterState extends State<Register> {
+class _RegisterState extends State<Register> implements UserRegisterListViewContract {
   bool _isObscure = true;
   bool _isObscureSecond = true;
-  Identity? _identity;
-  Identity? _selected;
+  bool userNameExisted = false;
+  bool isChecking = false;
+  Identity? _identity = Identity.merchant;
+  Identity? _selected = Identity.merchant;
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _passwordSecond = TextEditingController();
@@ -25,7 +28,21 @@ class _RegisterState extends State<Register> {
   final TextEditingController _lastname = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _phone = TextEditingController();
-  late UserListPresenter _presenter;
+  late UserRegisterListPresenter _presenter;
+
+  Duration durationTime = const Duration(seconds: 1);
+  Timer timer = Timer(const Duration(seconds: 1), () {});
+
+  @override
+  void dispose() {
+    _username.clear();
+    timer.cancel();
+    super.dispose();
+  }
+
+  _RegisterState() {
+    _presenter = UserRegisterListPresenter(this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,13 +93,32 @@ class _RegisterState extends State<Register> {
                     padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 8),
                     child: SizedBox(
                       width: 350,
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'User Name',
-                        ),
-                        autofocus: true,
-                        controller: _username,
+                      child: Column(
+                        children: <Widget>[
+                          TextField(
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'User Name',
+                            ),
+                            autofocus: true,
+                            controller: _username,
+                            onChanged: (String text) {
+                              debounceCheck(text);
+                            },
+                          ),
+                          Visibility(
+                            visible: isChecking,
+                            child: const Text("Checking Username")
+                          ),
+                          Visibility(
+                            visible: !isChecking && userNameExisted,
+                            child: const Text("This username is already existed")
+                          ),
+                          Visibility(
+                            visible: !isChecking && _username.text.isNotEmpty && !userNameExisted,
+                            child: const Text("This username is valid")
+                          )
+                        ],
                       ),
                     ),
                   ),
@@ -93,7 +129,7 @@ class _RegisterState extends State<Register> {
                       child: TextField(
                         obscureText: _isObscure,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                           labelText: 'Password',
                           suffixIcon: IconButton(
                               onPressed: () {
@@ -118,7 +154,7 @@ class _RegisterState extends State<Register> {
                       child: TextField(
                         obscureText: _isObscureSecond,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                           labelText: 'Confirm your password',
                           suffixIcon: IconButton(
                               onPressed: () {
@@ -171,8 +207,8 @@ class _RegisterState extends State<Register> {
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
                           value: _selected,
-                          hint: Text('You will register as:'),
-                          items: [
+                          hint: const Text('You will register as:'),
+                          items: const [
                             DropdownMenuItem(
                                 child: Text('Merchant'),
                                 value: Identity.merchant
@@ -202,7 +238,7 @@ class _RegisterState extends State<Register> {
                           padding: const EdgeInsets.symmetric(vertical: 20),
                         ),
                         onPressed: () {
-                          if (checkField() && checkUsername()) {
+                          if (checkField()) {
                             register();
                             popUpSuccess();
                           }
@@ -221,19 +257,17 @@ class _RegisterState extends State<Register> {
     );
   }
 
-
-
-  // interact with backend via http
-  // TODO
-  void register() {}
-
-  // check username
-  // Assumption: the username is unique
-  // TODO
-  bool checkUsername() {
-    // popRegisterError("The username has been taken.");
-    return true;
+  void debounceCheck(String text) {
+    timer.cancel();
+    setState(() {
+      isChecking = true;
+      timer = Timer(const Duration(seconds: 1), () {
+        _presenter.checkUser(HttpRequest('Get', 'Register?username=$text&role=$_identity', {}));
+      });
+    });
   }
+
+  void register() {}
 
   bool checkField() {
     if(checkEmptyField()) {
@@ -252,7 +286,7 @@ class _RegisterState extends State<Register> {
 
   bool checkEmptyField() {
     return _username.text == '' || _password.text == '' || _passwordSecond.text == '' ||
-          _phone.text == '' || _email.text == '' || _firstname.text == '' || _lastname.text == '' || _identity == null;
+      _phone.text == '' || _email.text == '' || _firstname.text == '' || _lastname.text == '' || _identity == null;
   }
 
   bool matchPassword() {
@@ -261,32 +295,49 @@ class _RegisterState extends State<Register> {
 
   void popUpSuccess() {
     showDialog(context: context,
-        builder:(context) => AlertDialog(
-            title: const Text('Success'),
-            content: const Text('You have registered in the system successfully'),
-            actions: <Widget> [
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-                  },
-                  child: const Text('OK'))
-            ]
-        ));
+      builder:(context) => AlertDialog(
+        title: const Text('Success'),
+        content: const Text('You have registered in the system successfully'),
+        actions: <Widget> [
+          TextButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const Login()));
+            },
+            child: const Text('OK'))
+        ]
+      ));
   }
 
   void popRegisterError(String err) {
     showDialog(context: context,
-        builder:(context) => AlertDialog(
-            title: const Text('Register error'),
-            content: Text(err),
-            actions: <Widget> [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'))
-            ]
-        ));
+      builder:(context) => AlertDialog(
+        title: const Text('Register error'),
+        content: Text(err),
+        actions: <Widget> [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'))
+        ]
+      ));
   }
 
+  @override
+  void onLoadUserRegisterComplete(List<User> user) {
+
+  }
+
+  @override
+  void onLoadUserRegisterCheck(bool valid) {
+    setState(() {
+      userNameExisted = valid;
+      isChecking = false;
+    });
+  }
+
+  @override
+  void onLoadUserRegisterError(e) {
+    popRegisterError(e);
+  }
 }

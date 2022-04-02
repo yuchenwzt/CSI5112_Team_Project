@@ -42,7 +42,7 @@ class _ProductCardState extends State<ProductCard> {
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: Image(
-                image: widget.product.image_type == "network" ? Image.network(widget.product.image).image : Image.memory(base64Decode(widget.product.image)).image,
+                image: Image.network(widget.product.image).image,
                 width: 160,
                 height: 160,
                 fit: BoxFit.fitHeight,

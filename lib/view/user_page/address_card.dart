@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import '../../data/shipping_address_data.dart';
 
 class AddressCard extends StatelessWidget {
-  AddressCard({ Key? key, required this.address, this.onEditFinish }) : super(key: key);
+  AddressCard({ Key? key, required this.address }) : super(key: key);
 
   final ShippingAddress address;
   final itemFormKey = GlobalKey<FormState>();
-  final onEditFinish;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class AddressCard extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        address.city,
+        address.city + " " + address.state + " " + address.country,
         textAlign: TextAlign.center,
         style: const TextStyle(
           // color: Colors.blue,
@@ -40,7 +39,7 @@ class AddressCard extends StatelessWidget {
         ),
       ),
       trailing: Text(
-        address.address,
+        address.zipcode,
         textAlign: TextAlign.center,
         style: const TextStyle(
           // color: Colors.blue,
@@ -83,12 +82,12 @@ class AddressCard extends StatelessWidget {
                       padding: const EdgeInsets.all(4.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
-                          labelText: 'User Name',
+                          labelText: 'address',
                         ),
                         initialValue: newAddress.address,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "The Name Can't be Empty";
+                            return "The address Can't be Empty";
                           }
                           return null;
                         },
@@ -99,12 +98,12 @@ class AddressCard extends StatelessWidget {
                       padding: const EdgeInsets.all(4.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
-                          labelText: 'User Phone Number',
+                          labelText: 'City',
                         ),
-                        initialValue: newAddress.zipcode,
+                        initialValue: newAddress.city,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "The Number Can't be Empty";
+                            return "The City Can't be Empty";
                           }
                           return null;
                         },
@@ -115,12 +114,44 @@ class AddressCard extends StatelessWidget {
                       padding: const EdgeInsets.all(4.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
-                          labelText: 'Address',
+                          labelText: 'State',
                         ),
-                        initialValue: newAddress.address,
+                        initialValue: newAddress.state,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "The Address Can't be Empty";
+                            return "The State Can't be Empty";
+                          }
+                          return null;
+                        },
+                        onSaved: (newValue) => newAddress.address = newValue as String,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Country',
+                        ),
+                        initialValue: newAddress.country,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "The Country Can't be Empty";
+                          }
+                          return null;
+                        },
+                        onSaved: (newValue) => newAddress.address = newValue as String,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Zipcode',
+                        ),
+                        initialValue: newAddress.zipcode,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "The Zipcode Can't be Empty";
                           }
                           return null;
                         },
@@ -134,7 +165,6 @@ class AddressCard extends StatelessWidget {
                         onPressed: () {
                           if (itemFormKey.currentState!.validate()) {
                             itemFormKey.currentState!.save();
-                            onEditFinish(newAddress);
                             Navigator.pop(context);
                           }
                         },

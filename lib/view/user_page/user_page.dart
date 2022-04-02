@@ -2,7 +2,6 @@ import './address_page.dart';
 import './historicalorders_page.dart';
 import 'package:flutter/material.dart';
 import 'package:csi5112_project/data/user_data.dart';
-import '../../data/shipping_address_data.dart';
 import '../login_page/login_page.dart';
 
 class UserPage extends StatefulWidget {
@@ -36,14 +35,11 @@ class _UserRolePageState extends State<UserPage> {
                   "Manage My Address",
                   style: TextStyle(fontSize: 18),
                 ),
-                // textColor: Colors.blue,
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
-                      return AddressPage(
-                          user: widget.user,
-                          onEditFinish: (value) => updateUserAddress(value));
+                      return AddressPage(user: widget.user);
                     }),
                   );
                 },
@@ -59,7 +55,7 @@ class _UserRolePageState extends State<UserPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
-                      return HistoryPage(user: widget.user);
+                      return HistoryOrderPage(user: widget.user);
                     }),
                   );
                 },
@@ -89,10 +85,5 @@ class _UserRolePageState extends State<UserPage> {
             ]),
       ),
     );
-  }
-
-  // mock update func, deleted when build up backend
-  void updateUserAddress(ShippingAddress newAddress) {
-    var newUser = widget.user;
   }
 }

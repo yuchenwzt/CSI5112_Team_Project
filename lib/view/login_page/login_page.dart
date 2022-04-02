@@ -16,7 +16,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> implements UserListViewContract {
-  Identity? _identity;
+  Identity? _identity = Identity.merchant;
   final TextEditingController _unameController = TextEditingController();
   final TextEditingController _passwController = TextEditingController();
   late UserListPresenter _presenter;
@@ -112,26 +112,6 @@ class _LoginState extends State<Login> implements UserListViewContract {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 5),
-                child: SizedBox(
-                  width: 350,
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                    ),
-                    onPressed: () {
-                      navigateToRegistration();
-                    },
-                    child: const Text(
-                      'Sign up',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: SizedBox(
                   width: 350,
@@ -159,6 +139,13 @@ class _LoginState extends State<Login> implements UserListViewContract {
                   ),
                 ),
               ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: const TextStyle(fontSize: 16),
+                ),
+                onPressed: () {navigateToRegistration();},
+                child: const Text("Don't have an account yet? Register here!"),
+              )
             ],
           ),
         ),

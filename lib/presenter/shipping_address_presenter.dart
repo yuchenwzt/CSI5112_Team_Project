@@ -16,7 +16,7 @@ class ShippingAddressPresenter {
     repository = Injector().shippingAddressRepository;
   }
 
-  void loadUsers(HttpRequest request) {
+  void loadAddress(HttpRequest request) {
     repository
       .fetch(request)
       .then((user) => view.onLoadShippingAddressComplete(user))

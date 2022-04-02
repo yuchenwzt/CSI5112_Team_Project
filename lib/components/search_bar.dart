@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatefulWidget {
-  const SearchBar({ Key? key, this.onSearchFinish}) : super(key: key);
+  const SearchBar({ Key? key, this.onSearchFinish, required this.hintText}) : super(key: key);
 
   final onSearchFinish;
+  final String hintText;
 
   @override
   _SearchBarState createState() => _SearchBarState();
@@ -23,9 +24,9 @@ class _SearchBarState extends State<SearchBar> {
         child: Center(
           child: TextField(
             controller: searchController,
-            decoration: const InputDecoration(
-              hintText: 'Search',
-              prefixIcon: Icon(Icons.search)
+            decoration: InputDecoration(
+              hintText: widget.hintText,
+              prefixIcon: const Icon(Icons.search)
             ),
             onSubmitted: (value) {onFilter();},
           ),

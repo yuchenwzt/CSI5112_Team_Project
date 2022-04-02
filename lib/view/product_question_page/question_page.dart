@@ -4,6 +4,7 @@ import 'package:csi5112_project/components/suspend_page.dart';
 import 'package:csi5112_project/data/http_data.dart';
 import 'package:csi5112_project/data/user_data.dart';
 import 'package:csi5112_project/presenter/question_presenter.dart';
+import 'package:csi5112_project/view/product_question_page/answer_page.dart';
 import 'package:flutter/material.dart';
 import '../../data/product_data.dart';
 import '../../data/question.dart';
@@ -42,6 +43,9 @@ class QuestionPageState extends State<QuestionPage> implements QuestionsListView
   @override
   Widget build(BuildContext context) {
     Question newQuestion = Question();
+    var _dialogWidth = MediaQuery.of(context).size.width * 0.8;
+    var _dialogHeight = MediaQuery.of(context).size.height * 0.5;
+    
     return Column(
       children: [
         const Text("Chat about this product",
@@ -65,7 +69,7 @@ class QuestionPageState extends State<QuestionPage> implements QuestionsListView
         
         SuspendCard(
           child: Column(
-            children: buildQuestionList(),
+            children: buildQuestionList(_dialogWidth, _dialogHeight),
           ),
           isLoadError: isLoadError, 
           isSearching: isSearching, 
@@ -112,15 +116,42 @@ class QuestionPageState extends State<QuestionPage> implements QuestionsListView
     _presenter.loadQuestions(HttpRequest('Post', 'Questions/create', jsonEncode(newQuestion)));
   }
 
-  List<ListTile> buildQuestionList() {
+  List<Card> buildQuestionList(var _dialogWidth, var _dialogHeight) {
     return questionsReceived.map((question) => 
-      ListTile(
-        leading: const Icon(Icons.person),
-        title: Text(question.customer_id.substring(0, 4) + "... posted on " + DateFormat('yyyy-MM-dd').format(question.date),
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        subtitle: Text(question.question,
-          style: const TextStyle(fontSize: 14, color: Colors.black)
-        )
+      Card(
+        key: Key(question.question_id),
+        child: InkWell(
+          onTap: () {
+            showDialog(
+              context: context, 
+              builder: (BuildContext context) {
+                return UnconstrainedBox(
+                  constrainedAxis: Axis.vertical,
+                  child: SizedBox(
+                    width: _dialogWidth,
+                    child: Dialog(
+                      insetPadding: EdgeInsets.zero,
+                      child: Container(
+                        height: _dialogHeight,
+                        child: Center(
+                          child: AnswerPage(user: widget.user, question: question),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
+            );
+          },
+          child: ListTile(
+            leading: const Icon(Icons.person),
+            title: Text("Customer " + question.customer_id.substring(0, 4) + "... posted on " + DateFormat('yyyy-MM-dd').format(question.date),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            subtitle: Text(question.question,
+              style: const TextStyle(fontSize: 14, color: Colors.black)
+            )
+          ),
+        ),
       ),
     ).toList();
   }

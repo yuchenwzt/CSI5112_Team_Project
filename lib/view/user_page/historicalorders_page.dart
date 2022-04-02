@@ -1,10 +1,35 @@
 import 'package:flutter/material.dart';
 import 'invoice_page.dart';
+import 'package:csi5112_project/data/http_data.dart';
+import 'package:csi5112_project/data/user_data.dart';
+import 'package:csi5112_project/data/order_data.dart';
+import 'package:csi5112_project/presenter/order_presenter.dart';
 
-class HistoryPage extends StatelessWidget {
-  const HistoryPage({Key? key, required this.user}) : super(key: key);
+class HistoryOrderPage extends StatefulWidget {
+  const HistoryOrderPage({Key? key, required this.user}) : super(key: key);
+  final User user;
 
-  final dynamic user;
+  @override
+  HistoryOrderState createState() => HistoryOrderState();
+}
+
+class HistoryOrderState extends State<HistoryOrderPage> implements OrdersListViewContract {
+  late OrdersListPresenter _presenter;
+  List<Order> ordersReceived = [];
+  bool isSearching = false;
+  bool isLoadError = false;
+  String loadError = "";
+
+  @override
+  void initState() {
+    super.initState();
+    isSearching = true;
+    _presenter.loadOrder(HttpRequest('Get', 'ShippingAddress/by_user?user_id=${widget.user.isMerchant ? widget.user.merchant_id : widget.user.customer_id}', {}));
+  }
+
+  HistoryOrderState() {
+    _presenter = OrdersListPresenter(this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,19 +38,19 @@ class HistoryPage extends StatelessWidget {
         title: const Text("Orders"),
       ),
       body: ListView.separated(
-        itemCount: user.history.length,
+        itemCount: ordersReceived.length,
         itemBuilder: (BuildContext context, int index) {
-          List curInvoice = user.history[index];
-          String itemName = user.history[index][3];
-          String date = user.history[index][7];
-          String image = user.history[index][8];
+          String curInvoice = widget.user.customer_id;
+          String itemName = widget.user.customer_id;
+          String date = widget.user.customer_id;
+          String image = widget.user.customer_id;
           return ListTile(
               onTap: () async {
                 await Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
-                    return InvoicePage(
-                      invoice: curInvoice,
+                    return Text(""
+                      // invoice: curInvoice,
                     );
                   }),
                 );
@@ -45,5 +70,23 @@ class HistoryPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  @override
+  void onLoadOrdersComplete(List<Order> items) {
+    setState(() {
+      ordersReceived = items;
+      isSearching = false;
+      isLoadError = false;
+    });
+  }
+
+  @override
+  void onLoadOrdersError(e) {
+    setState(() {
+      isSearching = false;
+      isLoadError = true;
+      loadError = e;
+    });
   }
 }

@@ -46,7 +46,7 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
     return SuspendCard(
       child: Scaffold(
         appBar: AppBar(
-          flexibleSpace: SearchBar(onSearchFinish: (value) => updateItemList(value)),
+          flexibleSpace: SearchBar(onSearchFinish: (value) => updateItemList(value), hintText: "Search the Customer's ID",),
         ),
         body: Center(
           child: OrderFilterPanel(orders: ordersFiltered, isMerchant: widget.user.isMerchant),
