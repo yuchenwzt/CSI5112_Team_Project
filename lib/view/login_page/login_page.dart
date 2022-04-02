@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:csi5112_project/presenter/login_presenter.dart';
 import 'package:csi5112_project/data/user_data.dart';
+import 'package:csi5112_project/view/register_page/register_page.dart';
 import 'package:flutter/material.dart';
 import '../main_page.dart';
 import '../../data/http_data.dart';
@@ -108,6 +109,26 @@ class _LoginState extends State<Login> implements UserListViewContract {
                         }, groupValue: _identity,),
                     ),
                   ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 5),
+                child: SizedBox(
+                  width: 350,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                    ),
+                    onPressed: () {
+                      navigateToRegistration();
+                    },
+                    child: const Text(
+                      'Sign up',
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ),
               ),
               Padding(
@@ -219,5 +240,9 @@ class _LoginState extends State<Login> implements UserListViewContract {
   @override
   void onLoadUserError(e) {
     warningWrongAuthentication();
+  }
+
+  void navigateToRegistration() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Register()));
   }
 }
