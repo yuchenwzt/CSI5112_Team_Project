@@ -11,7 +11,8 @@ import '../../data/question.dart';
 import 'package:intl/intl.dart';
 
 class QuestionPage extends StatefulWidget {
-  const QuestionPage({ Key? key, required this.product, required this.user }) : super(key: key);
+  const QuestionPage({Key? key, required this.product, required this.user})
+      : super(key: key);
 
   final Product product;
   final User user;
@@ -20,7 +21,8 @@ class QuestionPage extends StatefulWidget {
   QuestionPageState createState() => QuestionPageState();
 }
 
-class QuestionPageState extends State<QuestionPage> implements QuestionsListViewContract {
+class QuestionPageState extends State<QuestionPage>
+    implements QuestionsListViewContract {
   TextEditingController questionController = TextEditingController();
 
   late QuestionsListPresenter _presenter;
@@ -37,85 +39,99 @@ class QuestionPageState extends State<QuestionPage> implements QuestionsListView
   void initState() {
     super.initState();
     isSearching = true;
-    _presenter.loadQuestions(HttpRequest('Get', 'Questions?product_id=${widget.product.product_id}', {}));
+    _presenter.loadQuestions(HttpRequest(
+        'Get', 'Questions?product_id=${widget.product.product_id}', {}));
+  }
+
+  retry() {
+    isSearching = true;
+    _presenter.loadQuestions(HttpRequest(
+        'Get', 'Questions?product_id=${widget.product.product_id}', {}));
   }
 
   @override
   Widget build(BuildContext context) {
     Question newQuestion = Question();
+<<<<<<< HEAD
     var _dialogWidth = MediaQuery.of(context).size.width * 0.8;
     var _dialogHeight = MediaQuery.of(context).size.height * 0.5;
     
     return Column(
       children: [
         const Text("Chat about this product",
+=======
+    return Column(children: [
+      const Text("Chat about this product",
+>>>>>>> change code
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.blue,
             fontSize: 30,
-          )
-        ),
-        
-        const Padding(padding: EdgeInsets.only(top: 10)),
-        const Text("Frequent Questions from others",
+          )),
+      const Padding(padding: EdgeInsets.only(top: 10)),
+      const Text("Frequent Questions from others",
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Color.fromARGB(255, 6, 189, 143),
             fontSize: 20,
-          )
-        ),
-        
-        const Padding(padding: EdgeInsets.only(top: 20)),
-        
-        SuspendCard(
+          )),
+      const Padding(padding: EdgeInsets.only(top: 20)),
+      SuspendCard(
           child: Column(
             children: buildQuestionList(_dialogWidth, _dialogHeight),
           ),
-          isLoadError: isLoadError, 
-          isSearching: isSearching, 
-          loadError: loadError, data: questionsReceived),
-        
-        Padding(padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
-          child: TextField(
+          isLoadError: isLoadError,
+          isSearching: isSearching,
+          loadError: loadError,
+          data: questionsReceived,
+          retry: () => retry()),
+      Padding(
+        padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
+        child: TextField(
           controller: questionController,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Add Question',
-            ),
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Add Question',
           ),
         ),
-        
-        Padding(padding: const EdgeInsets.only(top: 20),
-          child: SizedBox(
-          width: 500,
-          height: 40,
-          child: Padding(padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
-            child: Material(
-              color: Colors.blue,
-              borderRadius: BorderRadius.circular(5),
-              elevation: 6,
-              child: MaterialButton(
-                child: const Text(
-                  'Create Your Question',
-                  style: TextStyle(color: Colors.white),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: SizedBox(
+            width: 500,
+            height: 40,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
+              child: Material(
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(5),
+                elevation: 6,
+                child: MaterialButton(
+                  child: const Text(
+                    'Create Your Question',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    addQuestion(newQuestion);
+                  },
                 ),
-                onPressed: () {addQuestion(newQuestion);},
               ),
-            ),
-          )
-        ),
-        ),
-      ]
-    );
-  }
-  
-  void addQuestion(Question newQuestion) {
-    newQuestion.customer_id = widget.user.isMerchant ? widget.user.merchant_id : widget.user.customer_id;
-    newQuestion.question = questionController.text;
-    newQuestion.product_id = widget.product.product_id;
-    _presenter.loadQuestions(HttpRequest('Post', 'Questions/create', jsonEncode(newQuestion)));
+            )),
+      ),
+    ]);
   }
 
+  void addQuestion(Question newQuestion) {
+    newQuestion.customer_id = widget.user.isMerchant
+        ? widget.user.merchant_id
+        : widget.user.customer_id;
+    newQuestion.question = questionController.text;
+    newQuestion.product_id = widget.product.product_id;
+    _presenter.loadQuestions(
+        HttpRequest('Post', 'Questions/create', jsonEncode(newQuestion)));
+  }
+
+<<<<<<< HEAD
   List<Card> buildQuestionList(var _dialogWidth, var _dialogHeight) {
     return questionsReceived.map((question) => 
       Card(
@@ -154,6 +170,23 @@ class QuestionPageState extends State<QuestionPage> implements QuestionsListView
         ),
       ),
     ).toList();
+=======
+  List<ListTile> buildQuestionList() {
+    return questionsReceived
+        .map(
+          (question) => ListTile(
+              leading: const Icon(Icons.person),
+              title: Text(
+                  question.customer_id.substring(0, 4) +
+                      "... posted on " +
+                      DateFormat('yyyy-MM-dd').format(question.date),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold)),
+              subtitle: Text(question.question,
+                  style: const TextStyle(fontSize: 14, color: Colors.black))),
+        )
+        .toList();
+>>>>>>> change code
   }
 
   @override
@@ -167,6 +200,10 @@ class QuestionPageState extends State<QuestionPage> implements QuestionsListView
 
   @override
   void onLoadQuestionsError(e) {
-
+    setState(() {
+      isSearching = false;
+      isLoadError = true;
+      loadError = e;
+    });
   }
 }

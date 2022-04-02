@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class SuspendCard extends StatelessWidget {
-  const SuspendCard({ 
-    Key? key, 
-    required this.child, 
-    required this.isLoadError, 
-    required this.isSearching, 
-    required this.loadError, 
+  const SuspendCard({
+    Key? key,
+    required this.child,
+    required this.isLoadError,
+    required this.isSearching,
+    required this.loadError,
     required this.data,
-    this.retry,
+    required this.retry,
   }) : super(key: key);
 
   final String loadError;
