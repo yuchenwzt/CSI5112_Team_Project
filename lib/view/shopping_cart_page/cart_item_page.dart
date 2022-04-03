@@ -1,6 +1,4 @@
-import 'package:csi5112_project/data/cart_item_data.dart';
 import 'package:csi5112_project/data/cart_product.dart';
-import 'package:csi5112_project/presenter/cart_item_presenter.dart';
 import 'package:csi5112_project/presenter/cart_product_presenter.dart';
 import 'package:csi5112_project/view/shopping_cart_page/cart_bottom_bar.dart';
 import 'package:csi5112_project/view/shopping_cart_page/cart_item_card.dart';
@@ -17,8 +15,7 @@ class CartPage extends StatefulWidget {
   CartPageState createState() => CartPageState();
 }
 
-class CartPageState extends State<CartPage>
-    implements CartProductsListViewContract {
+class CartPageState extends State<CartPage> implements CartProductsListViewContract {
   late CartProductsListPresenter _presenter;
   List<CartProduct> cartProducts = [];
   int amountPrice = 0;
@@ -26,6 +23,7 @@ class CartPageState extends State<CartPage>
   bool isClicked = false;
   bool isClickedAll = false;
   int amountPriceAdd = 0;
+
   CartPageState() {
     _presenter = CartProductsListPresenter(this);
   }
@@ -33,11 +31,11 @@ class CartPageState extends State<CartPage>
   List<Widget> _getListItems() {
     var items = cartProducts.map((value) {
       return CartItemCard(
-          cartProduct: value,
-          updatePrice: updatePrice,
-          amountPrice: amountPrice,
-          isClickedAll: isClickedAll,
-          amountPriceAdd: amountPriceAdd);
+        cartProduct: value,
+        updatePrice: updatePrice,
+        amountPrice: amountPrice,
+        isClickedAll: isClickedAll,
+        amountPriceAdd: amountPriceAdd);
     });
     return items.toList();
   }
@@ -47,15 +45,8 @@ class CartPageState extends State<CartPage>
     super.initState();
     isSearching = true;
     isClicked = false;
-    CartProduct a = CartProduct();
-    cartProducts.add(a);
-    setState(() {
-      cartProducts = cartProducts;
-    });
     _presenter.loadCartProducts(HttpRequest('Get',
         'CartItems/by_customer?customer_id=${widget.user.customer_id}', {}));
-    // _presenter.loadCartProducts(HttpRequest('Get',
-    //     'CartItems/by_customer?customer_id=62213f1f3945445265a9e1f4', {}));
   }
 
   retry() {
@@ -63,8 +54,6 @@ class CartPageState extends State<CartPage>
     isClicked = false;
     _presenter.loadCartProducts(HttpRequest('Get',
         'CartItems/by_customer?customer_id=${widget.user.customer_id}', {}));
-    // _presenter.loadCartProducts(HttpRequest('Get',
-    //     'CartItems/by_customer?customer_id=62213f1f3945445265a9e1f4', {}));
   }
 
   void updatePrice(int value) {
@@ -97,7 +86,6 @@ class CartPageState extends State<CartPage>
 
   @override
   void onLoadCartProductsComplete(List<CartProduct> items) {
-    print(items.toString());
     setState(() {
       cartProducts = items;
       isSearching = false;
@@ -106,14 +94,4 @@ class CartPageState extends State<CartPage>
 
   @override
   void onLoadCartProductsError(e) {}
-
-  @override
-  void onUpdateCartProductsComplete(List<CartProduct> products) {
-    // TODO: implement onUpdateCartProductsComplete
-  }
-
-  @override
-  void onUpdateCartProductsError(onError) {
-    // TODO: implement onUpdateCartProductsError
-  }
 }

@@ -1,11 +1,6 @@
 import 'package:csi5112_project/data/cart_product.dart';
-import 'package:csi5112_project/presenter/cart_product_presenter.dart';
 import 'package:csi5112_project/view/shopping_cart_page/cart_box.dart';
 import 'package:flutter/material.dart';
-import 'package:csi5112_project/data/cart_item_data.dart';
-import 'package:csi5112_project/data/product_data.dart';
-import '../../data/http_data.dart';
-import '../../presenter/product_presenter.dart';
 
 class CartItemCard extends StatefulWidget {
   const CartItemCard(
@@ -28,43 +23,15 @@ class CartItemCard extends StatefulWidget {
 }
 
 class _CartCardState extends State<CartItemCard> {
-  // late ProductsListPresenter _presenter;
   final itemFormKey = GlobalKey<FormState>();
   bool isClicked = false;
   int selectedValue = 1;
-  late final CartProduct cartProduct;
-
-  @override
-  void initState() {
-    super.initState();
-    // _presenter.loadProducts(HttpRequest('Get', 'Products?product_id=${widget.cartProduct.product_id}', {}));
-  }
 
   void updateNum(int value) {
     setState(() {
       selectedValue = value;
     });
   }
-
-  // @override
-  // void onLoadCartProductsComplete(List<CartProduct> products) {
-  //   setState(() {
-  //     cartProduct = products.first;
-  //   });
-  // }
-
-  // @override
-  // void onUpdateCartProductsComplete(List<CartProduct> products) {
-  //   setState(() {
-  //     cartProduct = products.first;
-  //   });
-  // }
-
-  // @override
-  // void onUpdateCartProductsError(e) {}
-
-  // @override
-  // void onLoadCartProductsError(e) {}
 
   @override
   Widget build(BuildContext context) {
@@ -102,9 +69,9 @@ class _CartCardState extends State<CartItemCard> {
                 });
               },
             ),
-            title: Text(cartProduct.name,
+            title: Text(widget.cartProduct.name,
                 style: const TextStyle(fontSize: 20, color: Colors.black)),
-            subtitle: Text(cartProduct.description,
+            subtitle: Text(widget.cartProduct.description,
                 style: const TextStyle(fontSize: 20, color: Colors.blueGrey)),
             trailing: Column(children: <Widget>[
               Text(

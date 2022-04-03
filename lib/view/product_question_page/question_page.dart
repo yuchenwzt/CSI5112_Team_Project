@@ -52,17 +52,12 @@ class QuestionPageState extends State<QuestionPage>
   @override
   Widget build(BuildContext context) {
     Question newQuestion = Question();
-<<<<<<< HEAD
     var _dialogWidth = MediaQuery.of(context).size.width * 0.8;
     var _dialogHeight = MediaQuery.of(context).size.height * 0.5;
     
     return Column(
       children: [
         const Text("Chat about this product",
-=======
-    return Column(children: [
-      const Text("Chat about this product",
->>>>>>> change code
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.blue,
@@ -131,7 +126,6 @@ class QuestionPageState extends State<QuestionPage>
         HttpRequest('Post', 'Questions/create', jsonEncode(newQuestion)));
   }
 
-<<<<<<< HEAD
   List<Card> buildQuestionList(var _dialogWidth, var _dialogHeight) {
     return questionsReceived.map((question) => 
       Card(
@@ -170,23 +164,6 @@ class QuestionPageState extends State<QuestionPage>
         ),
       ),
     ).toList();
-=======
-  List<ListTile> buildQuestionList() {
-    return questionsReceived
-        .map(
-          (question) => ListTile(
-              leading: const Icon(Icons.person),
-              title: Text(
-                  question.customer_id.substring(0, 4) +
-                      "... posted on " +
-                      DateFormat('yyyy-MM-dd').format(question.date),
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold)),
-              subtitle: Text(question.question,
-                  style: const TextStyle(fontSize: 14, color: Colors.black))),
-        )
-        .toList();
->>>>>>> change code
   }
 
   @override

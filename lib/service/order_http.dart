@@ -5,7 +5,7 @@ import '../data/http_data.dart';
 
 class RealOrderRepository implements OrderRepository {
   @override
-  Future<List<Order>> fetch(HttpRequest request) async {
+  Future<List<OrderDetail>> fetch(HttpRequest request) async {
     var response = await useRequest(request);
     final String jsonBody = response.body;
     final statusCode = response.statusCode;
@@ -16,6 +16,6 @@ class RealOrderRepository implements OrderRepository {
     
     final ordersContainer = jsonDecode(jsonBody);
     final List orders = ordersContainer;
-    return orders.map((orderRow) => Order.fromMap(orderRow)).toList();
+    return orders.map((orderRow) => OrderDetail.fromMap(orderRow)).toList();
   }
 }

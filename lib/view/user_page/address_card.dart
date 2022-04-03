@@ -1,25 +1,34 @@
 import 'package:flutter/material.dart';
 import '../../data/shipping_address_data.dart';
 
-class AddressCard extends StatelessWidget {
-  AddressCard({ Key? key, required this.address }) : super(key: key);
+GlobalKey<AddressCardState> sonKey = GlobalKey();
 
+class AddressCard extends StatefulWidget {
+  const AddressCard({ Key? key, required this.address, this.onEditFinish }) : super(key: key);
+
+  final onEditFinish;
   final ShippingAddress address;
+
+  @override
+  State<StatefulWidget> createState() => AddressCardState();
+}
+
+class AddressCardState extends State<AddressCard> {
   final itemFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    ShippingAddress newAddress = address;
+    ShippingAddress newAddress = widget.address;
     return ListTile(
       leading: TextButton(
         style: ButtonStyle(padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)),
         onPressed: () {
-          showFormDialog(context, newAddress);
+          showFormDialog(context, newAddress, 'update');
         },
         child: const Text("Edit"),
       ),
       title: Text(
-        address.address,
+        widget.address.address,
         textAlign: TextAlign.center,
         style: const TextStyle(
           // color: Colors.blue,
@@ -29,7 +38,7 @@ class AddressCard extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        address.city + " " + address.state + " " + address.country,
+        widget.address.city + " " + widget.address.state + " " + widget.address.country,
         textAlign: TextAlign.center,
         style: const TextStyle(
           // color: Colors.blue,
@@ -39,7 +48,7 @@ class AddressCard extends StatelessWidget {
         ),
       ),
       trailing: Text(
-        address.zipcode,
+        widget.address.zipcode,
         textAlign: TextAlign.center,
         style: const TextStyle(
           // color: Colors.blue,
@@ -51,7 +60,7 @@ class AddressCard extends StatelessWidget {
     );
   }
 
-  void showFormDialog(BuildContext context, ShippingAddress newAddress) {
+  void showFormDialog(BuildContext context, ShippingAddress newAddress, String type) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -107,7 +116,7 @@ class AddressCard extends StatelessWidget {
                           }
                           return null;
                         },
-                        onSaved: (newValue) => newAddress.country = newValue as String,
+                        onSaved: (newValue) => newAddress.city = newValue as String,
                       ),
                     ),
                     Padding(
@@ -123,7 +132,7 @@ class AddressCard extends StatelessWidget {
                           }
                           return null;
                         },
-                        onSaved: (newValue) => newAddress.address = newValue as String,
+                        onSaved: (newValue) => newAddress.state = newValue as String,
                       ),
                     ),
                     Padding(
@@ -139,7 +148,7 @@ class AddressCard extends StatelessWidget {
                           }
                           return null;
                         },
-                        onSaved: (newValue) => newAddress.address = newValue as String,
+                        onSaved: (newValue) => newAddress.country = newValue as String,
                       ),
                     ),
                     Padding(
@@ -155,7 +164,7 @@ class AddressCard extends StatelessWidget {
                           }
                           return null;
                         },
-                        onSaved: (newValue) => newAddress.address = newValue as String,
+                        onSaved: (newValue) => newAddress.zipcode = newValue as String,
                       ),
                     ),
                     Padding(
@@ -165,6 +174,7 @@ class AddressCard extends StatelessWidget {
                         onPressed: () {
                           if (itemFormKey.currentState!.validate()) {
                             itemFormKey.currentState!.save();
+                            widget.onEditFinish(newAddress, type);
                             Navigator.pop(context);
                           }
                         },

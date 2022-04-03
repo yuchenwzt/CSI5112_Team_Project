@@ -19,8 +19,8 @@ class OrderPage extends StatefulWidget {
 
 class OrderPageState extends State<OrderPage> implements OrdersListViewContract {
   late OrdersListPresenter _presenter;
-  List<Order> ordersReceived = [];
-  List<Order> ordersFiltered = [];
+  List<OrderDetail> ordersReceived = [];
+  List<OrderDetail> ordersFiltered = [];
   String loadError = "";
   bool isSearching = false;
   bool isLoadError = false;
@@ -43,13 +43,14 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
   
   @override
   Widget build(BuildContext context) {
+    String hintText = "Search the " + (widget.user.isMerchant ? "Customer" : "Merchant") + "'s ID";
     return SuspendCard(
       child: Scaffold(
         appBar: AppBar(
-          flexibleSpace: SearchBar(onSearchFinish: (value) => updateItemList(value), hintText: "Search the Customer's ID",),
+          flexibleSpace: SearchBar(onSearchFinish: (value) => updateItemList(value), hintText: hintText,),
         ),
         body: Center(
-          child: OrderFilterPanel(orders: ordersFiltered, isMerchant: widget.user.isMerchant),
+          child: OrderFilterPanel(orders: ordersFiltered, user: widget.user, updateOrderStatus: updateOrderStatus),
         ),
       ), 
       isLoadError: isLoadError, 
@@ -60,14 +61,22 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
     );
   }
 
-  void updateItemList(List<Order> items) {
+  void updateOrderStatus() {
+    if(widget.user.isMerchant) {
+
+    } else {
+
+    }
+  }
+
+  void updateItemList(List<OrderDetail> items) {
     setState(() {
       ordersFiltered = items;
     });
   }
 
   @override
-  void onLoadOrdersComplete(List<Order> orders) {
+  void onLoadOrdersComplete(List<OrderDetail> orders) {
     setState(() {
       ordersReceived = orders;
       ordersFiltered = orders;
