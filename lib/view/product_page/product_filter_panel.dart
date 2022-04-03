@@ -1,3 +1,4 @@
+import 'package:csi5112_project/components/suspend_page.dart';
 import 'package:flutter/material.dart';
 import '../../data/product_data.dart';
 import 'product_card.dart';
@@ -9,7 +10,7 @@ import 'package:provider/provider.dart';
 
 class ProductFilterPanel extends StatefulWidget {
   
-  const ProductFilterPanel(
+  ProductFilterPanel(
     {Key? key,
       required this.filters,
       required this.filters_select,
@@ -17,7 +18,12 @@ class ProductFilterPanel extends StatefulWidget {
       this.onSelectFinish,
       this.onEditFinish,
       this.onCateUpdateFinish,
-      required this.user})
+      required this.user,
+      required this.isLoadError,
+      required this.isSearching,
+      required this.loadError,
+      this.retry
+      })
       : super(key: key);
 
   final List<Product> products;
@@ -27,6 +33,10 @@ class ProductFilterPanel extends StatefulWidget {
   final onEditFinish;
   final onSelectFinish;
   final onCateUpdateFinish;
+  final bool isLoadError;
+  final bool isSearching;
+  final String loadError;
+  final retry;
 
   @override
   ProductFilterPanelState createState() => ProductFilterPanelState();
@@ -166,14 +176,21 @@ class ProductFilterPanelState extends State<ProductFilterPanel> {
         child: ProductEdit(
             product: Product(), onEditFinish: widget.onEditFinish, editRole: "add", filters_dropdown_list: filters_dropdown_list),
       ),
-      body: GridView(
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 400,
-          mainAxisSpacing: 2,
-          childAspectRatio: 2 / 3.1,
-        ),
-        shrinkWrap: true,
-        children: buildProductList(),
+      body: SuspendCard(
+        child: GridView(
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 400,
+            mainAxisSpacing: 2,
+            childAspectRatio: 2 / 3.1,
+          ),
+          shrinkWrap: true,
+          children: buildProductList(),
+        ), 
+        isLoadError: widget.isLoadError, 
+        isSearching: widget.isSearching, 
+        loadError: widget.loadError, 
+        data: widget.products, 
+        retry: widget.retry
       ),
     );
   }
