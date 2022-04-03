@@ -1,3 +1,4 @@
+import 'package:csi5112_project/data/cart_product.dart';
 import 'package:csi5112_project/data/customer_data.dart';
 import 'package:csi5112_project/data/anser_data.dart';
 import 'package:csi5112_project/data/cart_item_data.dart';
@@ -8,6 +9,7 @@ import 'package:csi5112_project/data/question.dart';
 import 'package:csi5112_project/data/shipping_address_data.dart';
 import 'package:csi5112_project/data/filter_option_data.dart';
 import 'package:csi5112_project/data/user_data.dart';
+import 'package:csi5112_project/service/cart_product_http.dart';
 
 import 'package:csi5112_project/service/product_http.dart';
 import 'package:csi5112_project/service/filter_option.dart';
@@ -105,6 +107,17 @@ class Injector {
         return RealCartItemRepository();
       default:
         return RealCartItemRepository();
+    }
+  }
+
+  CartProductRepository get cartProductRepository {
+    switch (_flavor) {
+      // case Flavor.mock:
+      //   return MockCartItemRepository();
+      case Flavor.real:
+        return RealCartProductRepository();
+      default:
+        return RealCartProductRepository();
     }
   }
 

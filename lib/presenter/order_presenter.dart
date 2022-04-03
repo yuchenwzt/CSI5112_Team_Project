@@ -3,7 +3,7 @@ import '../data/order_data.dart';
 import '../data/http_data.dart';
 
 abstract class OrdersListViewContract {
-  void onLoadOrdersComplete(List<Order> items);
+  void onLoadOrdersComplete(List<OrderDetail> items);
 
   void onLoadOrdersError(onError);
 }

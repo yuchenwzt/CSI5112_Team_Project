@@ -62,3 +62,35 @@ class LoginUser {
     };
   }
 }
+
+class RegisterUser {
+  final String username;
+  String first_name;
+  String last_name;
+  String phone;
+  String email;
+  String password;
+  bool isMerchant;
+
+  RegisterUser({
+    this.username = "",
+    this.first_name = "",
+    this.isMerchant = true,
+    this.last_name = "",
+    this.phone = "",
+    this.email = "",
+    this.password = ""
+  });
+  
+  Map<String, dynamic> toJson() {
+    return {
+      'Username': username,
+      'first_name': first_name,
+      'isMerchant': isMerchant,
+      'last_name': last_name,
+      'phone': phone,
+      'email': email,
+      'password': password,
+    };
+  }
+}

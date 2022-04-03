@@ -17,16 +17,14 @@ class InvoicePage extends StatelessWidget {
         itemCount: invoice.length,
         itemBuilder: (context, index) {
           List<String> list = [
-            'Customer Name:',
-            'Quantity:',
+            'Order Id:',
+            'Customer Id:',
             'Product Id:',
             'Product Name:',
-            'Type:',
-            'Price:',
-            'Order Id:',
-            'Date:',
-            'Image:',
-            'Description:',
+            'Quantity:',
+            'Price After Tax:'
+            'Merchant Id:',
+            'Purchase Date:',
           ];
 
           return ListTile(

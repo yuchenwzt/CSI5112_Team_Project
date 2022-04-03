@@ -37,6 +37,11 @@ class AnswerPageState extends State<AnswerPage> implements AnswersListViewContra
     isSearching = true;
     _presenter.loadAnswer(HttpRequest('Get', 'Answers/by_question?question_id=${widget.question.question_id}', {}));
   }
+  
+  void retry() {
+    isSearching = true;
+    _presenter.loadAnswer(HttpRequest('Get', 'Answers/by_question?question_id=${widget.question.question_id}', {}));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +73,7 @@ class AnswerPageState extends State<AnswerPage> implements AnswersListViewContra
           ),
           isLoadError: isLoadError, 
           isSearching: isSearching, 
-          loadError: loadError, data: answersReceived),
+          loadError: loadError, data: answersReceived, retry: () => retry(),),
         
         Padding(padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
           child: TextField(

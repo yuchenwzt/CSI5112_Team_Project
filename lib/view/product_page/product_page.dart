@@ -13,19 +13,20 @@ import 'package:provider/provider.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({Key? key, required this.user}) : super(key: key);
-  
+
   final User user;
 
   @override
   ProductListState createState() => ProductListState();
 }
 
-class ProductListState extends State<ProductPage> implements ProductsListViewContract, FilterOptionListViewContract {
+class ProductListState extends State<ProductPage>
+    implements ProductsListViewContract, FilterOptionListViewContract {
   late ProductsListPresenter _presenter;
   late FilterOptionListPresenter _presenterFilter;
   List<Product> productsReceived = [];
-  List<String> filter_index = ["ascending","",""];
-  List<String> filter_index_select = ["ascending","",""];
+  List<String> filter_index = ["ascending", "", ""];
+  List<String> filter_index_select = ["ascending", "", ""];
   String loadError = "";
   bool isSearching = false;
   bool isLoadError = false;
@@ -40,15 +41,26 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
   @override
   void initState() {
     super.initState();
+    // print('object');
     isSearching = true;
-    _presenterFilter.loadFilterOption(HttpRequest('Get', widget.user.isMerchant ? 'Products/get_filter_option_merchant?merchant_id=${widget.user.merchant_id}' : 'Products/get_filter_option', {}));
+    _presenterFilter.loadFilterOption(HttpRequest(
+        'Get',
+        widget.user.isMerchant
+            ? 'Products/get_filter_option_merchant?merchant_id=${widget.user.merchant_id}'
+            : 'Products/get_filter_option',
+        {}));
   }
 
   void retry() {
     isSearching = true;
-    _presenterFilter.loadFilterOption(HttpRequest('Get', widget.user.isMerchant ? 'Products/get_filter_option_merchant?merchant_id=${widget.user.merchant_id}' : 'Products/get_filter_option', {}));
+    _presenterFilter.loadFilterOption(HttpRequest(
+        'Get',
+        widget.user.isMerchant
+            ? 'Products/get_filter_option_merchant?merchant_id=${widget.user.merchant_id}'
+            : 'Products/get_filter_option',
+        {}));
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return SuspendCard(
@@ -71,10 +83,10 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
             ),
           ),
         ),
-      ), 
-      isLoadError: isLoadError, 
-      isSearching: isSearching, 
-      loadError: loadError, 
+      ),
+      isLoadError: isLoadError,
+      isSearching: isSearching,
+      loadError: loadError,
       data: productsReceived,
       retry: () => retry()
     );
@@ -83,11 +95,14 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
   void onCateUpdateFinish(String value, String origin, String type) {
     String filterUrl = "";
     if (type == 'update') {
-      filterUrl = 'Products/update_category?owner_id=${widget.user.merchant_id}&category=$value&origin=$origin';
+      filterUrl =
+          'Products/update_category?owner_id=${widget.user.merchant_id}&category=$value&origin=$origin';
       _presenter.updateProducts(HttpRequest('Put', filterUrl, jsonEncode("")));
     } else {
-      filterUrl = 'Products/delete_category?category=$value&owner_id=${widget.user.merchant_id}';
-      _presenter.updateProducts(HttpRequest('Delete', filterUrl, jsonEncode("")));
+      filterUrl =
+          'Products/delete_category?category=$value&owner_id=${widget.user.merchant_id}';
+      _presenter
+          .updateProducts(HttpRequest('Delete', filterUrl, jsonEncode("")));
     }
     retry();
   }
@@ -106,9 +121,11 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
     String filterUrl = "";
     if (inputSearch == "") inputSearch = "%23";
     if (widget.user.isMerchant) {
-      filterUrl = 'Products/filter/owner?owner_id=${widget.user.merchant_id}&input=$inputSearch&priceSort=${filter_index_select[0]}&location=${filter_index_select[1]}&category=${filter_index_select[2]}';
+      filterUrl =
+          'Products/filter/owner?owner_id=${widget.user.merchant_id}&input=$inputSearch&priceSort=${filter_index_select[0]}&location=${filter_index_select[1]}&category=${filter_index_select[2]}';
     } else {
-      filterUrl = 'Products/filter?input=$inputSearch&priceSort=${filter_index_select[0]}&location=${filter_index_select[1]}&category=${filter_index_select[2]}';
+      filterUrl =
+          'Products/filter?input=$inputSearch&priceSort=${filter_index_select[0]}&location=${filter_index_select[1]}&category=${filter_index_select[2]}';
     }
     _presenter.loadProducts(HttpRequest('Get', filterUrl, {}));
   }
@@ -116,15 +133,18 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
   void updateEditProduct(Product product, String type) {
     switch (type) {
       case 'update':
-        _presenter.updateProducts(HttpRequest('Put', 'Products/update?id=${product.product_id}', jsonEncode(product)));
-        break; 
+        _presenter.updateProducts(HttpRequest('Put',
+            'Products/update?id=${product.product_id}', jsonEncode(product)));
+        break;
       case 'create':
         product.owner_id = widget.user.merchant_id;
         product.owner = widget.user.first_name + " " + widget.user.last_name;
-        _presenter.updateProducts(HttpRequest('Post', 'Products/create', jsonEncode(product)));
+        _presenter.updateProducts(
+            HttpRequest('Post', 'Products/create', jsonEncode(product)));
         break;
       case 'delete':
-        _presenter.updateProducts(HttpRequest('Delete', 'Products/delete', jsonEncode(product.product_id)));
+        _presenter.updateProducts(HttpRequest(
+            'Delete', 'Products/delete', jsonEncode(product.product_id)));
         break;
     }
   }
@@ -146,8 +166,16 @@ class ProductListState extends State<ProductPage> implements ProductsListViewCon
   @override
   void onLoadFilterOptionComplete(FilterOption filterOption) {
     setState(() {
-      filter_index = [filter_index_select[0], filterOption.manufacturers, filterOption.categories];
-      filter_index_select = [filter_index_select[0], filterOption.manufacturers, filterOption.categories];
+      filter_index = [
+        filter_index_select[0],
+        filterOption.manufacturers,
+        filterOption.categories
+      ];
+      filter_index_select = [
+        filter_index_select[0],
+        filterOption.manufacturers,
+        filterOption.categories
+      ];
       isFilterSearching = false;
       isFilterLoadError = false;
     });

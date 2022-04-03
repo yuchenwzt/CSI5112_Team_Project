@@ -4,6 +4,7 @@ import 'package:csi5112_project/data/http_data.dart';
 import 'package:csi5112_project/data/user_data.dart';
 import 'package:csi5112_project/data/order_data.dart';
 import 'package:csi5112_project/presenter/order_presenter.dart';
+import 'package:csi5112_project/components/suspend_page.dart';
 
 class HistoryOrderPage extends StatefulWidget {
   const HistoryOrderPage({Key? key, required this.user}) : super(key: key);
@@ -15,7 +16,7 @@ class HistoryOrderPage extends StatefulWidget {
 
 class HistoryOrderState extends State<HistoryOrderPage> implements OrdersListViewContract {
   late OrdersListPresenter _presenter;
-  List<Order> ordersReceived = [];
+  List<OrderDetail> ordersReceived = [];
   bool isSearching = false;
   bool isLoadError = false;
   String loadError = "";
@@ -24,7 +25,12 @@ class HistoryOrderState extends State<HistoryOrderPage> implements OrdersListVie
   void initState() {
     super.initState();
     isSearching = true;
-    _presenter.loadOrder(HttpRequest('Get', 'ShippingAddress/by_user?user_id=${widget.user.isMerchant ? widget.user.merchant_id : widget.user.customer_id}', {}));
+    _presenter.loadOrder(HttpRequest('Get', 'SalesOrders?id=${widget.user.isMerchant ? widget.user.merchant_id : widget.user.customer_id}&role=${widget.user.isMerchant ? 'Merchant' : 'Customer'}', {}));
+  }
+
+  void retry() {
+    isSearching = true;
+    _presenter.loadOrder(HttpRequest('Get', 'SalesOrders?id=${widget.user.isMerchant ? widget.user.merchant_id : widget.user.customer_id}&role=${widget.user.isMerchant ? 'Merchant' : 'Customer'}', {}));
   }
 
   HistoryOrderState() {
@@ -37,43 +43,37 @@ class HistoryOrderState extends State<HistoryOrderPage> implements OrdersListVie
       appBar: AppBar(
         title: const Text("Orders"),
       ),
-      body: ListView.separated(
-        itemCount: ordersReceived.length,
-        itemBuilder: (BuildContext context, int index) {
-          String curInvoice = widget.user.customer_id;
-          String itemName = widget.user.customer_id;
-          String date = widget.user.customer_id;
-          String image = widget.user.customer_id;
-          return ListTile(
-              onTap: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return Text(""
-                      // invoice: curInvoice,
-                    );
-                  }),
-                );
-              },
-              title: Text(itemName),
-              subtitle: Text("Ordered on " + date),
-              trailing: const Text("Invoice >"),
-              leading: CircleAvatar(
-                child: Text("Image" + image),
-              ));
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return const Divider(
-            color: Colors.black,
-            thickness: .1,
-          );
-        },
-      ),
+      body: SuspendCard(
+        child: ListView(
+          children: buildOrderVoiceList(),
+        ),
+        isLoadError: isLoadError, 
+        isSearching: isSearching, 
+        loadError: loadError, 
+        data: ordersReceived, 
+        retry: retry,
+      )
     );
   }
 
+  List<InvoicePage> buildOrderVoiceList() {
+    return ordersReceived.map((order) => InvoicePage(invoice: toVoiceList(order))).toList();
+  }
+
+  List<String> toVoiceList(OrderDetail orderDetail) {
+    List<String> invoice = []; 
+    invoice.add(orderDetail.salesOrder.order_id);
+    invoice.add(orderDetail.salesOrder.customer_id);
+    invoice.add(orderDetail.salesOrder.product_id);
+    invoice.add(orderDetail.salesOrder.product_name);
+    invoice.add(orderDetail.salesOrder.quantity.toString());
+    invoice.add(orderDetail.salesOrder.merchant_id);
+    invoice.add(orderDetail.salesOrder.date.toString());
+    return invoice;
+  }
+
   @override
-  void onLoadOrdersComplete(List<Order> items) {
+  void onLoadOrdersComplete(List<OrderDetail> items) {
     setState(() {
       ordersReceived = items;
       isSearching = false;

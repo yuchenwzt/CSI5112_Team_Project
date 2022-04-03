@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:csi5112_project/presenter/register_presenter.dart';
 import 'package:csi5112_project/data/user_data.dart';
 import '../../data/http_data.dart';
-
-enum Identity {merchant, client}
+import 'dart:convert';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -19,8 +18,7 @@ class _RegisterState extends State<Register> implements UserRegisterListViewCont
   bool _isObscureSecond = true;
   bool userNameExisted = false;
   bool isChecking = false;
-  Identity? _identity = Identity.merchant;
-  Identity? _selected = Identity.merchant;
+  String _selected = 'Merchant';
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _passwordSecond = TextEditingController();
@@ -211,16 +209,15 @@ class _RegisterState extends State<Register> implements UserRegisterListViewCont
                           items: const [
                             DropdownMenuItem(
                                 child: Text('Merchant'),
-                                value: Identity.merchant
+                                value: 'Merchant'
                             ),
                             DropdownMenuItem(
                                 child: Text('Customer'),
-                                value: Identity.client
+                                value: 'Customer'
                             )],
-                          onChanged: (Identity? value) {
+                          onChanged: (String? value) {
                             setState(() {
-                              _identity = value;
-                              _selected = value;
+                              _selected = value as String;
                             });
                           },
                         ),
@@ -239,8 +236,17 @@ class _RegisterState extends State<Register> implements UserRegisterListViewCont
                         ),
                         onPressed: () {
                           if (checkField()) {
-                            register();
-                            popUpSuccess();
+                            _presenter.loadUser(HttpRequest('Post', 'Register', 
+                              jsonEncode(RegisterUser(
+                                first_name: _firstname.text,
+                                last_name: _lastname.text,
+                                username: _username.text,
+                                phone: _phone.text,
+                                email: _email.text,
+                                password: _password.text,
+                                isMerchant: _selected == 'Merchant',
+                              )
+                            )));
                           }
                         },
                         child: const Text(
@@ -262,12 +268,11 @@ class _RegisterState extends State<Register> implements UserRegisterListViewCont
     setState(() {
       isChecking = true;
       timer = Timer(const Duration(seconds: 1), () {
-        _presenter.checkUser(HttpRequest('Get', 'Register?username=$text&role=$_identity', {}));
+        String input = text == "" ? '%23' : text;
+        _presenter.checkUser(HttpRequest('Get', 'Register?username=$input&role=$_selected', {}));
       });
     });
   }
-
-  void register() {}
 
   bool checkField() {
     if(checkEmptyField()) {
@@ -286,7 +291,7 @@ class _RegisterState extends State<Register> implements UserRegisterListViewCont
 
   bool checkEmptyField() {
     return _username.text == '' || _password.text == '' || _passwordSecond.text == '' ||
-      _phone.text == '' || _email.text == '' || _firstname.text == '' || _lastname.text == '' || _identity == null;
+      _phone.text == '' || _email.text == '' || _firstname.text == '' || _lastname.text == '';
   }
 
   bool matchPassword() {
@@ -325,7 +330,7 @@ class _RegisterState extends State<Register> implements UserRegisterListViewCont
 
   @override
   void onLoadUserRegisterComplete(List<User> user) {
-
+    popUpSuccess();
   }
 
   @override
@@ -334,10 +339,5 @@ class _RegisterState extends State<Register> implements UserRegisterListViewCont
       userNameExisted = valid;
       isChecking = false;
     });
-  }
-
-  @override
-  void onLoadUserRegisterError(e) {
-    popRegisterError(e);
   }
 }
