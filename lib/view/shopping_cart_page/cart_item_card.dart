@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class CartItemCard extends StatefulWidget {
   const CartItemCard(
       {Key? key,
+      required this.refresh,
       required this.cartProduct,
       this.updatePrice,
       required this.amountPrice,
@@ -13,6 +14,7 @@ class CartItemCard extends StatefulWidget {
       : super(key: key);
 
   final CartProduct cartProduct;
+  final refresh;
   final updatePrice;
   final int amountPrice;
   final bool isClickedAll;
@@ -27,6 +29,12 @@ class _CartCardState extends State<CartItemCard> {
   bool isClicked = false;
   int selectedValue = 1;
 
+  @override
+  void initState() {
+    super.initState();
+    // _presenter.loadProducts(HttpRequest('Get', 'Products?product_id=${widget.cartProduct.product_id}', {}));
+  }
+
   void updateNum(int value) {
     setState(() {
       selectedValue = value;
@@ -40,6 +48,8 @@ class _CartCardState extends State<CartItemCard> {
       child: Column(
         children: <Widget>[
           CardBox(
+              refresh: () => widget.refresh,
+              cartProduct: widget.cartProduct,
               selectedValue: selectedValue,
               updateNum: updateNum,
               isClicked: isClicked,
@@ -48,7 +58,7 @@ class _CartCardState extends State<CartItemCard> {
           AspectRatio(
             aspectRatio: 16 / 9,
             child: Image.network(
-              "https://imagepphcloud.thepaper.cn/pph/image/187/667/867.png",
+              widget.cartProduct.image,
               height: 30,
               // fit: BoxFit.cover,
             ),
@@ -79,7 +89,10 @@ class _CartCardState extends State<CartItemCard> {
                       widget.cartProduct.price.toString() +
                       "    " +
                       "tax: \$" +
-                      (widget.cartProduct.price * 0.13).toString(),
+                      (widget.cartProduct.price * 0.13).toString() +
+                      "    " +
+                      "quantity: " +
+                      (widget.cartProduct.quantity.toString()),
                   style: const TextStyle(fontSize: 17, color: Colors.black)),
             ]),
           )
