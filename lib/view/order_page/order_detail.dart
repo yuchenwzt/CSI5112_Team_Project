@@ -47,13 +47,6 @@ class OrderDetailState extends State<OrderDetailPage> implements ShippingAddress
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
                       'Your Product Status is ' + widget.order.salesOrder.status,
                       style: TextStyle(color: Colors.black.withOpacity(0.6)),
                     ),
@@ -62,15 +55,16 @@ class OrderDetailState extends State<OrderDetailPage> implements ShippingAddress
                     alignment: MainAxisAlignment.start,
                     children: [
                       widget.user.isMerchant ? TextButton(
-                        onPressed: widget.order.salesOrder.status == 'Processing' ? () {
+                        onPressed: widget.order.salesOrder.status == 'processing' ? () {
+                          selectedAddress = shippingAddressReceived[0].shipping_address_id;
                           buildOrderList(context);
                         } : null,
                         child: const Text("Ship Product"),
                       ) :
                       TextButton(
-                        onPressed: () {
+                        onPressed: widget.order.salesOrder.status == 'delivering' ? () {
                           widget.updateOrderStatus(widget.order.salesOrder.order_id, "");
-                        },
+                        } : null,
                         child: const Text("Receive Confirm"),
                       ),
                     ],
