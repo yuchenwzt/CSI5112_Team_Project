@@ -91,7 +91,7 @@ class HistoryOrderState extends State<HistoryOrderPage> implements OrdersListVie
     invoice.add(orderDetail.salesOrder.quantity.toString());
     invoice.add(orderDetail.salesOrder.merchant_id);
     invoice.add(DateFormat('yyyy-MM-dd').format(orderDetail.salesOrder.date));
-    invoice.add(orderDetail.salesOrder.price.toString());
+    invoice.add((orderDetail.salesOrder.price * orderDetail.salesOrder.quantity * 1.13).toStringAsFixed(2));
     return invoice;
   }
 

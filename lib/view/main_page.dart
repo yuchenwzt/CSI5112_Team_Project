@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'product_page/product_page.dart';
 import 'order_page/order_page.dart';
 import 'user_page/user_page.dart';
+import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key, required this.user}) : super(key: key);
@@ -16,6 +17,7 @@ class MainPage extends StatefulWidget {
 
 class MainPageState extends State<MainPage> {
   int selectedIndex = 0;
+  bool isReload = false;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
   static const List<Widget> titleOptions = <Widget>[
@@ -40,6 +42,7 @@ class MainPageState extends State<MainPage> {
   void onItemTapped(int index) {
     setState(() {
       selectedIndex = index;
+      isReload = index == 1 || index == 2 ? true : false;
     });
   }
 
@@ -63,8 +66,16 @@ class MainPageState extends State<MainPage> {
         index: selectedIndex,
         children: <Widget>[
           TabNavigator(index: 0, pages: pages),
-          TabNavigator(index: 1, pages: pages),
-          TabNavigator(index: 2, pages: pages),
+          Provider.value(
+            value: isReload,
+            updateShouldNotify: (oldValue, newValue) => true,
+            child: TabNavigator(index: 1, pages: pages),
+          ),
+          Provider.value(
+            value: isReload,
+            updateShouldNotify: (oldValue, newValue) => true,
+            child: TabNavigator(index: 2, pages: pages),
+          ),
           TabNavigator(index: 3, pages: pages),
         ],
       ),

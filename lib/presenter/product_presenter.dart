@@ -1,5 +1,5 @@
 import '../data/product_data.dart';
-import '../Injection/dependency_injection.dart';
+import '../injection/dependency_injection.dart';
 import '../data/http_data.dart';
 
 abstract class ProductsListViewContract {

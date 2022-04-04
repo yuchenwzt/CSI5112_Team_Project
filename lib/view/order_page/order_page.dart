@@ -1,6 +1,4 @@
-import 'dart:html';
-
-import 'package:csi5112_project/data/shipping_address_data.dart';
+import 'dart:convert';
 import 'package:csi5112_project/presenter/order_presenter.dart';
 import 'package:flutter/material.dart';
 import '../../data/order_data.dart';
@@ -10,6 +8,7 @@ import './order_filter_panel.dart';
 import '../../components/suspend_page.dart';
 import '../../data/http_data.dart';
 import '../../data/user_data.dart';
+import 'package:provider/provider.dart';
 
 class OrderPage extends StatefulWidget {
   const OrderPage({ Key? key, required this.user }) : super(key: key);
@@ -23,7 +22,6 @@ class OrderPage extends StatefulWidget {
 class OrderPageState extends State<OrderPage> implements OrdersListViewContract {
   late OrdersListPresenter _presenter;
   List<OrderDetail> ordersReceived = [];
-  List<OrderDetail> ordersFiltered = [];
   String loadError = "";
   bool isSearching = false;
   bool isLoadError = false;
@@ -38,6 +36,14 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
     isSearching = true;
     String url = getSearchUrl("", false);
     _presenter.loadOrder(HttpRequest('Get', url, {}));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (Provider.of<bool>(context)) {
+      retry();
+    }
   }
 
   void retry() {
@@ -69,7 +75,7 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
           flexibleSpace: SearchBar(onSearchFinish: (value) => updateItemList(value), hintText: hintText,),
         ),
         body: Center(
-          child: OrderFilterPanel(orders: ordersFiltered, user: widget.user, updateOrderStatus: updateOrderStatus),
+          child: OrderFilterPanel(orders: ordersReceived, user: widget.user, updateOrderStatus: updateOrderStatus),
         ),
       ), 
       isLoadError: isLoadError, 
@@ -82,9 +88,9 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
 
   void updateOrderStatus(String orderId, String shippingId) {
     if(widget.user.isMerchant) {
-      _presenter.loadOrder(HttpRequest('Put', 'SalesOrders/deliver_product?merchant_id=${widget.user.merchant_id}&order_id=$orderId&merchant_shipping_address_id=$shippingId', {}));
+      _presenter.loadOrder(HttpRequest('Put', 'SalesOrders/deliver_product?merchant_id=${widget.user.merchant_id}&order_id=$orderId&merchant_shipping_address_id=$shippingId', jsonEncode({})));
     } else {
-      _presenter.loadOrder(HttpRequest('Put', 'SalesOrders/recieve_product?customer_id=${widget.user.customer_id}&order_id=$orderId', {}));
+      _presenter.loadOrder(HttpRequest('Put', 'SalesOrders/recieve_product?customer_id=${widget.user.customer_id}&order_id=$orderId', jsonEncode({})));
     }
   }
 
@@ -97,7 +103,6 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
   void onLoadOrdersComplete(List<OrderDetail> orders) {
     setState(() {
       ordersReceived = orders;
-      ordersFiltered = orders;
       isSearching = false;
     });
   }

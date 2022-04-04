@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../data/order_data.dart';
 import '../../data/user_data.dart';
 import './order_detail.dart';
+import 'package:intl/intl.dart';
 
 class OrderFilterPanel extends StatelessWidget {
   const OrderFilterPanel({ Key? key, required this.orders, required this.user, this.updateOrderStatus }) : super(key: key);
@@ -10,7 +11,6 @@ class OrderFilterPanel extends StatelessWidget {
   final User user;
   final updateOrderStatus;
 
-  @override
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -24,7 +24,7 @@ class OrderFilterPanel extends StatelessWidget {
       title: user.isMerchant ? Text("Client " + ordersState.salesOrder.customer_id.substring(0,6) + "... purchased " + ordersState.salesOrder.product_id.substring(0,6) + "... on " + ordersState.salesOrder.date.toString(),
         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)) 
         : 
-        Text("Product " + ordersState.salesOrder.name + " on " + ordersState.salesOrder.date.toString(),
+        Text("Product " + ordersState.salesOrder.name + " on " + DateFormat('yyyy-MM-dd').format(ordersState.salesOrder.date),
         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       subtitle: Text("Merchant ID: " + ordersState.salesOrder.merchant_id + " Order Status: " + ordersState.salesOrder.status,
         style: const TextStyle(fontSize: 14, color: Colors.black)
