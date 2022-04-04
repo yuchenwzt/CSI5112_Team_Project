@@ -22,9 +22,9 @@ class InvoicePage extends StatelessWidget {
             'Product Id:',
             'Product Name:',
             'Quantity:',
-            'Price After Tax:'
             'Merchant Id:',
             'Purchase Date:',
+            'Total Price After Tax:'
           ];
 
           return ListTile(
@@ -40,7 +40,7 @@ class InvoicePage extends StatelessWidget {
             thickness: .1,
           );
         },
-      ),
+      ),  
     );
   }
 }

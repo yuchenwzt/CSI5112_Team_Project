@@ -73,6 +73,7 @@ class CartPageState extends State<CartPage> implements CartProductsListViewContr
     return Stack(
       children: <Widget>[
         ListView(
+          shrinkWrap: true,
           children: _getListItems(),
         ),
         CartBottomBar(

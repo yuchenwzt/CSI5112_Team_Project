@@ -5,7 +5,6 @@ import '../../data/product_data.dart';
 import '../../presenter/product_presenter.dart';
 import 'product_filter_panel.dart';
 import '../../components/search_bar.dart';
-import '../../components/suspend_page.dart';
 import '../../data/http_data.dart';
 import '../../data/user_data.dart';
 import 'dart:convert';
@@ -41,7 +40,6 @@ class ProductListState extends State<ProductPage>
   @override
   void initState() {
     super.initState();
-    // print('object');
     isSearching = true;
     _presenterFilter.loadFilterOption(HttpRequest(
         'Get',

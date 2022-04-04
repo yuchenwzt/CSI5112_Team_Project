@@ -74,7 +74,7 @@ class EditCateState extends State<EditCate> {
         "Edit Categories",
         textAlign: TextAlign.center,
       )),
-      body: ListView(children: [
+      body: ListView(shrinkWrap: true, children: [
         const Padding(padding: EdgeInsets.only(top: 10)),
         SizedBox(
           height: 400,

@@ -9,10 +9,9 @@
             "request": "launch",
             "type": "dart",
             "args": [
-                "--web-hostname",
-                "127.0.0.1",
-                "--no-sound-null-safety"
+                "--web-port=8080",
+                "--web-hostname=127.0.0.1",
             ]
-        }
+        },
     ]
 }

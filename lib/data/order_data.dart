@@ -3,35 +3,29 @@ import 'http_data.dart';
 import 'shipping_address_data.dart';
 
 class OrderDetail {
-  late Order salesOrder;
-  late ShippingAddress customerAddress;
-  late ShippingAddress merchantAddress;
-
-  OrderDetail({
-    ShippingAddress? customerAddress,
-    ShippingAddress? merchantAddress,
-    Order? salesOrder
-  }) : customerAddress = customerAddress ?? ShippingAddress(), merchantAddress = merchantAddress ?? ShippingAddress(), salesOrder = salesOrder ?? Order();
+  Order salesOrder;
+  ShippingAddress customerAddress;
+  ShippingAddress merchantAddress;
 
   OrderDetail.fromMap(Map<String, dynamic> map) :
     salesOrder = Order.fromMap(map['salesOrder']),
     customerAddress = ShippingAddress.fromMap(map['customerAddress']),
-    merchantAddress = ShippingAddress.fromMap(map['MerchantAddress']);
+    merchantAddress = ShippingAddress.fromMap(map['merchantAddress']);
 }
 
 class Order {
   final String order_id;
   String customer_id;
   String merchant_id;
-  String product_id;
-  int quantity;
   String customer_shipping_address_id;
   String merchant_shipping_address_id;
-  DateTime date;
+  int quantity;
+  String product_id;
   String status;
+  String name;
   String image;
-  String product_name;
   int price;
+  DateTime date;
 
   Order( {
     this.order_id = "",
@@ -43,7 +37,7 @@ class Order {
     this.merchant_shipping_address_id = "",
     this.status = "",
     this.image = "",
-    this.product_name = "",
+    this.name = "",
     this.price = 0,
     DateTime? date
   }) : date = date ?? DateTime.now();
@@ -58,7 +52,7 @@ class Order {
       product_id = map['product_id'],
       date = DateTime.parse(map['date']),
       image = map['image'],
-      product_name = map['name'],
+      name = map['name'],
       price = map['price'],
       status = map['status'];
 
@@ -73,7 +67,7 @@ class Order {
       'product_id': product_id,
       'date': date.toIso8601String(),
       'image': image,
-      'name': product_name,
+      'name': name,
       'price': price,
       'status': status,
     };

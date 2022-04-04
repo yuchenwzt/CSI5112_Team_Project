@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/shipping_address_data.dart';
 
-GlobalKey<AddressCardState> sonKey = GlobalKey();
-
 class AddressCard extends StatefulWidget {
   const AddressCard({ Key? key, required this.address, this.onEditFinish }) : super(key: key);
 
@@ -20,18 +18,28 @@ class AddressCardState extends State<AddressCard> {
   Widget build(BuildContext context) {
     ShippingAddress newAddress = widget.address;
     return ListTile(
-      leading: TextButton(
-        style: ButtonStyle(padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)),
-        onPressed: () {
-          showFormDialog(context, newAddress, 'update');
-        },
-        child: const Text("Edit"),
+      leading: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextButton(
+            style: ButtonStyle(padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)),
+            onPressed: () {
+              showFormDialog(context, newAddress, 'update');
+            },
+            child: const Text("Edit"),
+          ),TextButton(
+            style: ButtonStyle(padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero)),
+            onPressed: () {
+              widget.onEditFinish(newAddress, 'delete');
+            },
+            child: const Text("Delete"),
+          ),
+        ],
       ),
       title: Text(
         widget.address.address,
         textAlign: TextAlign.center,
         style: const TextStyle(
-          // color: Colors.blue,
           fontSize: 20.0,
           height: 1.2,
           fontFamily: "Courier",
@@ -41,7 +49,6 @@ class AddressCardState extends State<AddressCard> {
         widget.address.city + " " + widget.address.state + " " + widget.address.country,
         textAlign: TextAlign.center,
         style: const TextStyle(
-          // color: Colors.blue,
           fontSize: 20,
           height: 1.2,
           fontFamily: "Courier",
@@ -51,7 +58,6 @@ class AddressCardState extends State<AddressCard> {
         widget.address.zipcode,
         textAlign: TextAlign.center,
         style: const TextStyle(
-          // color: Colors.blue,
           fontSize: 20.0,
           height: 1.2,
           fontFamily: "Courier",

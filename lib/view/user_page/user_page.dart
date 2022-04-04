@@ -47,10 +47,9 @@ class _UserRolePageState extends State<UserPage> {
               const Padding(padding: EdgeInsets.only(top: 5)),
               TextButton(
                 child: const Text(
-                  " View Orders Receipts",
+                  " View Order Receipts",
                   style: TextStyle(fontSize: 18),
                 ),
-                // textColor: Colors.blue,
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -78,7 +77,14 @@ class _UserRolePageState extends State<UserPage> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        Navigator.popUntil(context, (route) => route is Login);
+                        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return const Login();
+                              },
+                            ),
+                          (_) => false,
+                        );
                       },
                     ),
                   ))

@@ -57,10 +57,7 @@ class _ProductCardState extends State<ProductCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: Expanded(child: Text( '\$' + widget.product.price.toString(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.red)))
-                ),
+                Expanded(child: Text( '\$' + widget.product.price.toString(), textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.red))),
                 
                 Expanded(child: Text("Stored in " + widget.product.manufacturer, textAlign: TextAlign.center, style: const TextStyle(fontSize: 14, color: Colors.grey))),
                 

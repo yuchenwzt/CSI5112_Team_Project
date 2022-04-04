@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:csi5112_project/components/suspend_page.dart';
 import 'package:csi5112_project/data/http_data.dart';
 import 'package:csi5112_project/data/user_data.dart';
@@ -141,7 +140,7 @@ class QuestionPageState extends State<QuestionPage>
                     width: _dialogWidth,
                     child: Dialog(
                       insetPadding: EdgeInsets.zero,
-                      child: Container(
+                      child: SizedBox(
                         height: _dialogHeight,
                         child: Center(
                           child: AnswerPage(user: widget.user, question: question),

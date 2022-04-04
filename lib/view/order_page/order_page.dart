@@ -1,3 +1,6 @@
+import 'dart:html';
+
+import 'package:csi5112_project/data/shipping_address_data.dart';
 import 'package:csi5112_project/presenter/order_presenter.dart';
 import 'package:flutter/material.dart';
 import '../../data/order_data.dart';
@@ -33,17 +36,33 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
   void initState() {
     super.initState();
     isSearching = true;
-    _presenter.loadOrder(HttpRequest('Get', 'SalesOrders/all', {}));
+    String url = getSearchUrl("", false);
+    _presenter.loadOrder(HttpRequest('Get', url, {}));
   }
 
   void retry() {
     isSearching = true;
-    _presenter.loadOrder(HttpRequest('Get', 'SalesOrders/all', {}));
+    String url = getSearchUrl("", false);
+    _presenter.loadOrder(HttpRequest('Get', url, {}));
+  }
+
+  String getSearchUrl(String input, bool isSearch) {
+    String customerId = widget.user.isMerchant ? '%23' : widget.user.customer_id;
+    String merchantId = widget.user.isMerchant ? widget.user.merchant_id : '%23';
+    String role = widget.user.isMerchant ? 'Merchant' : 'Customer';
+    if (isSearch) {
+      if (widget.user.isMerchant) {
+        customerId = input;
+      } else {
+        merchantId = input;
+      }
+    }
+    return 'SalesOrders/search_salesOrder_by_userId?customer_id=$customerId&merchant_id=$merchantId&role=$role';
   }
   
   @override
   Widget build(BuildContext context) {
-    String hintText = "Search the " + (widget.user.isMerchant ? "Customer" : "Merchant") + "'s ID";
+    String hintText = "Search the " + (widget.user.isMerchant ? "Customer" : "Merchant") + "'s ID"; 
     return SuspendCard(
       child: Scaffold(
         appBar: AppBar(
@@ -57,22 +76,21 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
       isSearching: isSearching, 
       loadError: loadError, 
       data: ordersReceived,
-      retry: () => retry(),
+      retry: () => retry(),  
     );
   }
 
-  void updateOrderStatus() {
+  void updateOrderStatus(String orderId, String shippingId) {
     if(widget.user.isMerchant) {
-
+      _presenter.loadOrder(HttpRequest('Put', 'SalesOrders/deliver_product?merchant_id=${widget.user.merchant_id}&order_id=$orderId&merchant_shipping_address_id=$shippingId', {}));
     } else {
-
+      _presenter.loadOrder(HttpRequest('Put', 'SalesOrders/recieve_product?customer_id=${widget.user.customer_id}&order_id=$orderId', {}));
     }
   }
 
-  void updateItemList(List<OrderDetail> items) {
-    setState(() {
-      ordersFiltered = items;
-    });
+  void updateItemList(String input) {
+    if (input == "") input = "%23";
+    _presenter.loadOrder(HttpRequest('Get', getSearchUrl(input, true), {}));
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'invoice_page.dart';
 import 'package:csi5112_project/data/http_data.dart';
@@ -25,12 +26,14 @@ class HistoryOrderState extends State<HistoryOrderPage> implements OrdersListVie
   void initState() {
     super.initState();
     isSearching = true;
-    _presenter.loadOrder(HttpRequest('Get', 'SalesOrders?id=${widget.user.isMerchant ? widget.user.merchant_id : widget.user.customer_id}&role=${widget.user.isMerchant ? 'Merchant' : 'Customer'}', {}));
+    String url = widget.user.isMerchant ? 'SalesOrders/search_salesOrder_by_userId?customer_id=%23&merchant_id=${widget.user.merchant_id}&role=Merchant' : 'SalesOrders/search_salesOrder_by_userId?customer_id=${widget.user.customer_id}&merchant_id=%23&role=Customer';
+    _presenter.loadOrder(HttpRequest('Get', url, {}));
   }
 
   void retry() {
     isSearching = true;
-    _presenter.loadOrder(HttpRequest('Get', 'SalesOrders?id=${widget.user.isMerchant ? widget.user.merchant_id : widget.user.customer_id}&role=${widget.user.isMerchant ? 'Merchant' : 'Customer'}', {}));
+    String url = widget.user.isMerchant ? 'SalesOrders/search_salesOrder_by_userId?customer_id=%23&merchant_id=${widget.user.merchant_id}&role=Merchant' : 'SalesOrders/search_salesOrder_by_userId?customer_id=${widget.user.customer_id}&merchant_id=%23&role=Customer';
+    _presenter.loadOrder(HttpRequest('Get', url, {}));
   }
 
   HistoryOrderState() {
@@ -41,11 +44,34 @@ class HistoryOrderState extends State<HistoryOrderPage> implements OrdersListVie
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Orders"),
+        title: const Text("Order Receipts"),
       ),
       body: SuspendCard(
-        child: ListView(
-          children: buildOrderVoiceList(),
+        child: ListView.separated(
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              onTap: () async {
+                await Navigator.push(context, 
+                  MaterialPageRoute(builder: (context) {
+                    return InvoicePage(invoice: toVoiceList(ordersReceived[index]));
+                  }),
+                );
+              },
+              title: Text(ordersReceived[index].salesOrder.name),
+              subtitle: Text("Ordered on " + DateFormat('yyyy-MM-dd').format(ordersReceived[index].salesOrder.date)),
+              trailing: const Text("Invoice >"),
+              leading: CircleAvatar(
+                backgroundImage: Image.network(ordersReceived[index].salesOrder.image).image,
+              )
+            );
+          }, 
+          separatorBuilder: (BuildContext context, int index) {
+            return const Divider(
+              color: Colors.black,
+              thickness: .1,
+            );
+          }, 
+          itemCount: ordersReceived.length
         ),
         isLoadError: isLoadError, 
         isSearching: isSearching, 
@@ -56,19 +82,16 @@ class HistoryOrderState extends State<HistoryOrderPage> implements OrdersListVie
     );
   }
 
-  List<InvoicePage> buildOrderVoiceList() {
-    return ordersReceived.map((order) => InvoicePage(invoice: toVoiceList(order))).toList();
-  }
-
   List<String> toVoiceList(OrderDetail orderDetail) {
     List<String> invoice = []; 
     invoice.add(orderDetail.salesOrder.order_id);
     invoice.add(orderDetail.salesOrder.customer_id);
     invoice.add(orderDetail.salesOrder.product_id);
-    invoice.add(orderDetail.salesOrder.product_name);
+    invoice.add(orderDetail.salesOrder.name);
     invoice.add(orderDetail.salesOrder.quantity.toString());
     invoice.add(orderDetail.salesOrder.merchant_id);
-    invoice.add(orderDetail.salesOrder.date.toString());
+    invoice.add(DateFormat('yyyy-MM-dd').format(orderDetail.salesOrder.date));
+    invoice.add(orderDetail.salesOrder.price.toString());
     return invoice;
   }
 
@@ -86,7 +109,7 @@ class HistoryOrderState extends State<HistoryOrderPage> implements OrdersListVie
     setState(() {
       isSearching = false;
       isLoadError = true;
-      loadError = e;
+      loadError = e.toString();
     });
   }
 }

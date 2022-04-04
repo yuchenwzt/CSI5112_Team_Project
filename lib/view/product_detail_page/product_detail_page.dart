@@ -38,37 +38,40 @@ class DetailPageState extends State<DetailPage> implements CartItemsListViewCont
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.product.category + " Store")),
-      body: ListView(children: [
-        const Padding(padding: EdgeInsets.only(top: 10)),
-        ProductImg(product: widget.product),
-        ProductDescription(product: widget.product),
-        const Padding(padding: EdgeInsets.only(top: 30)),
-        Visibility(
-          visible: !widget.user.isMerchant,
-          maintainState: false,
-          maintainSize: false,
-          maintainSemantics: false,
-          child: SizedBox(
-            //width: 30,
-            height: 40,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Material(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(5),
-                elevation: 6,
-                child: MaterialButton(
-                  child: const Text(
-                    'Add to Cart',
-                    style: TextStyle(color: Colors.white),
+      body: ListView(
+        shrinkWrap: true,
+        children: [
+          const Padding(padding: EdgeInsets.only(top: 10)),
+          ProductImg(product: widget.product),
+          ProductDescription(product: widget.product),
+          const Padding(padding: EdgeInsets.only(top: 30)),
+          Visibility(
+            visible: !widget.user.isMerchant,
+            maintainState: false,
+            maintainSize: false,
+            maintainSemantics: false,
+            child: SizedBox(
+              //width: 30,
+              height: 40,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Material(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(5),
+                  elevation: 6,
+                  child: MaterialButton(
+                    child: const Text(
+                      'Add to Cart',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      addToCart();
+                    },
                   ),
-                  onPressed: () {
-                    addToCart();
-                  },
                 ),
-              ),
-            )),
-        ),
+              )
+            ),
+          ),
         const Padding(padding: EdgeInsets.only(top: 30)),
         QuestionPage(product: widget.product, user: widget.user)
       ]),
