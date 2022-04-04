@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 
-const String http_header = "http://csiteamwork-1443910782.us-east-1.elb.amazonaws.com/api/";
+const String http_header =
+    "http://csiteamwork-1443910782.us-east-1.elb.amazonaws.com/api/";
 // const String http_header = "https://localhost:7027/api/";
 
 class HttpRequest {
@@ -9,11 +10,7 @@ class HttpRequest {
   String url;
   Object object;
 
-  HttpRequest(
-    this.type,
-    this.url,
-    this.object
-  );
+  HttpRequest(this.type, this.url, this.object);
 }
 
 Future<http.Response> useRequest(HttpRequest request) async {
@@ -23,18 +20,23 @@ Future<http.Response> useRequest(HttpRequest request) async {
     'Accept': 'application/json',
     // 'Authorization': '<Your token>'
   };
-  switch(request.type) {
-    case 'Get': 
+  switch (request.type) {
+    case 'Get':
       return await http.get(Uri.parse(url), headers: requestHeaders);
     case 'Post':
-      return await http.post(Uri.parse(url), headers: requestHeaders, body: request.object);
+      return await http.post(Uri.parse(url),
+          headers: requestHeaders, body: request.object);
     case 'Put':
-      return await http.put(Uri.parse(url), headers: requestHeaders, body: request.object);
+      return await http.put(Uri.parse(url),
+          headers: requestHeaders, body: request.object);
     case 'Delete':
-      return await http.delete(Uri.parse(url), headers: requestHeaders, body: request.object);
-    default: {
-      return await http.post(Uri.parse(url), headers: requestHeaders, body: request.object);
-    }
+      return await http.delete(Uri.parse(url),
+          headers: requestHeaders, body: request.object);
+    default:
+      {
+        return await http.post(Uri.parse(url),
+            headers: requestHeaders, body: request.object);
+      }
   }
 }
 

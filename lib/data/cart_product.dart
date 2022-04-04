@@ -6,7 +6,6 @@ class CartProduct {
   int quantity;
   String product_id;
   int price;
-  String customer_id;
   String category;
   String description;
   String manufacturer;
@@ -21,7 +20,6 @@ class CartProduct {
       {this.item_id = "",
       this.quantity = 0,
       this.product_id = "",
-      this.customer_id = "",
       this.price = 0,
       this.category = "erttret",
       this.description = "ghjgj",
@@ -39,7 +37,6 @@ class CartProduct {
         quantity = map['quantity'],
         product_id = map['product_id'],
         price = map['price'],
-        customer_id = map['customer_id'],
         owner = map['owner'],
         owner_id = map['owner_id'],
         name = map['name'],
@@ -56,7 +53,6 @@ class CartProduct {
       'quantity': quantity.toString(),
       'product_id': product_id,
       'price': price.toString(),
-      'customer_id': customer_id,
       'owner': owner,
       'owner_id': owner_id,
       'name': name,

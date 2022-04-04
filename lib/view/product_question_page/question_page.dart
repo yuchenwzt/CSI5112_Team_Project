@@ -53,10 +53,9 @@ class QuestionPageState extends State<QuestionPage>
     Question newQuestion = Question();
     var _dialogWidth = MediaQuery.of(context).size.width * 0.8;
     var _dialogHeight = MediaQuery.of(context).size.height * 0.5;
-    
-    return Column(
-      children: [
-        const Text("Chat about this product",
+
+    return Column(children: [
+      const Text("Chat about this product",
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.blue,
@@ -126,43 +125,49 @@ class QuestionPageState extends State<QuestionPage>
   }
 
   List<Card> buildQuestionList(var _dialogWidth, var _dialogHeight) {
-    return questionsReceived.map((question) => 
-      Card(
-        key: Key(question.question_id),
-        child: InkWell(
-          onTap: () {
-            showDialog(
-              context: context, 
-              builder: (BuildContext context) {
-                return UnconstrainedBox(
-                  constrainedAxis: Axis.vertical,
-                  child: SizedBox(
-                    width: _dialogWidth,
-                    child: Dialog(
-                      insetPadding: EdgeInsets.zero,
-                      child: SizedBox(
-                        height: _dialogHeight,
-                        child: Center(
-                          child: AnswerPage(user: widget.user, question: question),
+    return questionsReceived
+        .map(
+          (question) => Card(
+            key: Key(question.question_id),
+            child: InkWell(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return UnconstrainedBox(
+                        constrainedAxis: Axis.vertical,
+                        child: SizedBox(
+                          width: _dialogWidth,
+                          child: Dialog(
+                            insetPadding: EdgeInsets.zero,
+                            child: Container(
+                              height: _dialogHeight,
+                              child: Center(
+                                child: AnswerPage(
+                                    user: widget.user, question: question),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                );
-              }
-            );
-          },
-          child: ListTile(
-            leading: const Icon(Icons.person),
-            title: Text("Customer " + question.customer_id.substring(0, 4) + "... posted on " + DateFormat('yyyy-MM-dd').format(question.date),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            subtitle: Text(question.question,
-              style: const TextStyle(fontSize: 14, color: Colors.black)
-            )
+                      );
+                    });
+              },
+              child: ListTile(
+                  leading: const Icon(Icons.person),
+                  title: Text(
+                      "Customer " +
+                          question.customer_id.substring(0, 4) +
+                          "... posted on " +
+                          DateFormat('yyyy-MM-dd').format(question.date),
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
+                  subtitle: Text(question.question,
+                      style:
+                          const TextStyle(fontSize: 14, color: Colors.black))),
+            ),
           ),
-        ),
-      ),
-    ).toList();
+        )
+        .toList();
   }
 
   @override

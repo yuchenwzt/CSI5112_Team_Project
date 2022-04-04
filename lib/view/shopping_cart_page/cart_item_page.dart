@@ -15,7 +15,8 @@ class CartPage extends StatefulWidget {
   CartPageState createState() => CartPageState();
 }
 
-class CartPageState extends State<CartPage> implements CartProductsListViewContract {
+class CartPageState extends State<CartPage>
+    implements CartProductsListViewContract {
   late CartProductsListPresenter _presenter;
   List<CartProduct> cartProducts = [];
   int amountPrice = 0;
@@ -23,7 +24,7 @@ class CartPageState extends State<CartPage> implements CartProductsListViewContr
   bool isClicked = false;
   bool isClickedAll = false;
   int amountPriceAdd = 0;
-
+  var reload = false;
   CartPageState() {
     _presenter = CartProductsListPresenter(this);
   }
@@ -31,11 +32,12 @@ class CartPageState extends State<CartPage> implements CartProductsListViewContr
   List<Widget> _getListItems() {
     var items = cartProducts.map((value) {
       return CartItemCard(
-        cartProduct: value,
-        updatePrice: updatePrice,
-        amountPrice: amountPrice,
-        isClickedAll: isClickedAll,
-        amountPriceAdd: amountPriceAdd);
+          refresh: () => retry(),
+          cartProduct: value,
+          updatePrice: updatePrice,
+          amountPrice: amountPrice,
+          isClickedAll: isClickedAll,
+          amountPriceAdd: amountPriceAdd);
     });
     return items.toList();
   }
@@ -45,17 +47,24 @@ class CartPageState extends State<CartPage> implements CartProductsListViewContr
     super.initState();
     isSearching = true;
     isClicked = false;
+    // CartProduct a = CartProduct();
+    // cartProducts.add(a);
+    // setState(() {
+    //   cartProducts = cartProducts;
+    // });
     _presenter.loadCartProducts(HttpRequest('Get',
         'CartItems/by_customer?customer_id=${widget.user.customer_id}', {}));
   }
 
   retry() {
+    print("object");
     isSearching = true;
     isClicked = false;
     _presenter.loadCartProducts(HttpRequest('Get',
         'CartItems/by_customer?customer_id=${widget.user.customer_id}', {}));
   }
 
+  reloadPage(bool reload) {}
   void updatePrice(int value) {
     setState(() {
       amountPrice = amountPrice + value;

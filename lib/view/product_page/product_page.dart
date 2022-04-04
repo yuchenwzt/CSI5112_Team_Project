@@ -63,25 +63,28 @@ class ProductListState extends State<ProductPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: SearchBar(onSearchFinish: (value) => updateProductList(inputSearch: value), hintText: "Search the Product name",),
+        flexibleSpace: SearchBar(
+          onSearchFinish: (value) => updateProductList(inputSearch: value),
+          hintText: "Search the Product name",
+        ),
       ),
       body: Provider.value(
         value: filter_index[2],
         updateShouldNotify: (oldValue, newValue) => true,
         child: Center(
           child: ProductFilterPanel(
-            products: productsReceived,
-            filters: filter_index, 
-            filters_select: filter_index_select,
-            user: widget.user,
-            onSelectFinish: (value, index) => updateFilterIndex(value, index), 
-            onEditFinish: (value, type) => updateEditProduct(value, type),
-            onCateUpdateFinish: (value, origin, type) => onCateUpdateFinish(value, origin, type),
-            isLoadError: isLoadError,
-            isSearching: isSearching,
-            loadError: loadError,
-            retry: () => retry()
-          ),
+              products: productsReceived,
+              filters: filter_index,
+              filters_select: filter_index_select,
+              user: widget.user,
+              onSelectFinish: (value, index) => updateFilterIndex(value, index),
+              onEditFinish: (value, type) => updateEditProduct(value, type),
+              onCateUpdateFinish: (value, origin, type) =>
+                  onCateUpdateFinish(value, origin, type),
+              isLoadError: isLoadError,
+              isSearching: isSearching,
+              loadError: loadError,
+              retry: () => retry()),
         ),
       ),
     );
@@ -115,8 +118,10 @@ class ProductListState extends State<ProductPage>
   }) {
     String filterUrl = "";
     if (inputSearch == "") inputSearch = "%23";
-    String filterIndex1 = filter_index_select[1].isEmpty ? '%23' : filter_index_select[1];
-    String filterIndex2 = filter_index_select[2].isEmpty ? '%23' : filter_index_select[2];
+    String filterIndex1 =
+        filter_index_select[1].isEmpty ? '%23' : filter_index_select[1];
+    String filterIndex2 =
+        filter_index_select[2].isEmpty ? '%23' : filter_index_select[2];
     if (widget.user.isMerchant) {
       filterUrl =
           'Products/filter/owner?owner_id=${widget.user.merchant_id}&input=$inputSearch&priceSort=${filter_index_select[0]}&location=$filterIndex1&category=$filterIndex2';
