@@ -63,8 +63,9 @@ class OrderFilterPanel extends StatelessWidget {
           leftIcon: statusIcon(ordersState.salesOrder.status),
           contentBorderColor: statusColor(ordersState.salesOrder.status),
           headerBackgroundColor: statusColor(ordersState.salesOrder.status),
-          header: Text("[" + DateFormat('yyyy-MM-dd').format(ordersState.salesOrder.date) + "] " + ordersState.salesOrder.name + ' (' + ordersState.salesOrder.product_id.substring(0,6) + '...) ' + 'Order ID ' + ordersState.salesOrder.order_id.substring(0, 6) + '...', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
-          content: OrderDetailPage(user: user, updateOrderStatus: updateOrderStatus, order: ordersState),
+          contentBackgroundColor: const Color.fromRGBO(138, 135, 135, 0.15),
+          header: Text("[" + DateFormat('yyyy-MM-dd').format(ordersState.salesOrder.date) + "] " + ordersState.salesOrder.name + ' (...' + ordersState.salesOrder.product_id.substring(ordersState.salesOrder.product_id.length - 6,ordersState.salesOrder.product_id.length) + ') ' + 'Order ID ...' + ordersState.salesOrder.order_id.substring(ordersState.salesOrder.order_id.length - 6, ordersState.salesOrder.order_id.length), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+          content: OrderDetailPage(user: user, updateOrderStatus: updateOrderStatus, order: ordersState, statusColor: statusColor(ordersState.salesOrder.status), statusIcon: statusIcon(ordersState.salesOrder.status)),
         )
       ).toList(),
     );

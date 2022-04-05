@@ -171,10 +171,16 @@ class ProductFilterPanelState extends State<ProductFilterPanel> {
         ]),
       ),
       floatingActionButton: Visibility(
-        visible: widget.user.isMerchant,
+        visible: true,
         maintainState: false,
-        child: ProductEdit(
-            product: Product(), onEditFinish: widget.onEditFinish, editRole: "add", filters_dropdown_list: filters_dropdown_list),
+        child: widget.user.isMerchant ? ProductEdit(
+            product: Product(), onEditFinish: widget.onEditFinish, editRole: "add", filters_dropdown_list: filters_dropdown_list)
+            : FloatingActionButton(
+              child: const Icon(Icons.refresh),
+              onPressed: () {
+                widget.retry();
+              },
+            ),
       ),
       body: SuspendCard(
         child: GridView(

@@ -13,12 +13,16 @@ class OrderDetailPage extends StatefulWidget {
       {Key? key,
       required this.order,
       required this.user,
+      required this.statusColor,
+      required this.statusIcon,
       this.updateOrderStatus})
       : super(key: key);
 
   final OrderDetail order;
   final User user;
   final updateOrderStatus;
+  final Color? statusColor;
+  final Icon? statusIcon;
 
   @override
   State<StatefulWidget> createState() => OrderDetailState();
@@ -54,35 +58,43 @@ class OrderDetailState extends State<OrderDetailPage>
             children: [
               ListTile(
                 leading: const Icon(Icons.receipt),
-                title: widget.user.isMerchant ? Text("Client ID: " + widget.order.salesOrder.customer_id) 
+                title: widget.user.isMerchant ? Text("Client ID: " + widget.order.salesOrder.customer_id, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)) 
                   : 
-                  Text("Merchant ID: " + widget.order.salesOrder.merchant_id),
+                  Text("Merchant ID: " + widget.order.salesOrder.merchant_id, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(padding: EdgeInsets.only(top: 10),),
-                    Text('Product Name: ' + widget.order.salesOrder.name),
-                    Text('Product ID: ' + widget.order.salesOrder.product_id),
-                    Text('Quantity: ' + widget.order.salesOrder.quantity.toString()),
-                    Text('Product Name: ' + widget.order.salesOrder.name)
+                    Text('Product Name: ' + widget.order.salesOrder.name, style: const TextStyle(fontSize: 20)),
+                    Text('Product ID: ' + widget.order.salesOrder.product_id, style: const TextStyle(fontSize: 20)),
+                    Text('Quantity: ' + widget.order.salesOrder.quantity.toString(), style: const TextStyle(fontSize: 20)),
+                    Text('Price: ' + widget.order.salesOrder.price.toString() + ' (Before Tax)', style: const TextStyle(fontSize: 20)),
+                    Text('Product Name: ' + widget.order.salesOrder.name, style: const TextStyle(fontSize: 20))
                   ],
                 ),
               ),
+              const Padding(padding: EdgeInsets.only(top: 10)),
               ListTile(
                 leading: const Icon(Icons.location_on),
-                title: const Text("Customer Address"),
-                subtitle: Text(widget.order.customerAddress.address + " " + widget.order.customerAddress.city + " " + widget.order.customerAddress.state + " " + widget.order.customerAddress.country),
+                title: const Text("Shipping To", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                subtitle: widget.order.customerAddress.shipping_address_id == '#' ? const Text("Opps, the Shipping Address has been removed", style: TextStyle(fontSize: 20)) : Text(widget.order.customerAddress.address + " " + widget.order.customerAddress.city + " " + widget.order.customerAddress.state + " " + widget.order.customerAddress.country, style: const TextStyle(fontSize: 20)),
               ),
+              const Padding(padding: EdgeInsets.only(top: 10)),
               ListTile(
                 leading: const Icon(Icons.location_on),
-                title: const Text("Delivery From"),
-                subtitle: widget.order.merchantAddress.shipping_address_id == '#' ? const Text("This Product hasn't been deliveried yet") : Text(widget.order.merchantAddress.address + " " + widget.order.merchantAddress.city + " " + widget.order.merchantAddress.state + " " + widget.order.merchantAddress.country),
+                title: const Text("Delivery From", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                subtitle: widget.order.merchantAddress.shipping_address_id == '#' ? const Text("This Product hasn't been deliveried yet", style: TextStyle(fontSize: 20)) : Text(widget.order.merchantAddress.address + " " + widget.order.merchantAddress.city + " " + widget.order.merchantAddress.state + " " + widget.order.merchantAddress.country, style: const TextStyle(fontSize: 20)),
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Your Product Status is ' + widget.order.salesOrder.status,
-                  style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Your Product Status is ',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    Text(widget.order.salesOrder.status, style: TextStyle(fontSize: 20, color: widget.statusColor, fontWeight: FontWeight.bold)),
+                  ],
                 ),
               ),
               Row(
@@ -95,13 +107,13 @@ class OrderDetailState extends State<OrderDetailPage>
                           selectedAddress = shippingAddressReceived[0].shipping_address_id;
                           buildOrderList(context);
                         } : null,
-                        child: const Text("Ship Product"),
+                        child: const Text("Ship Product", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                       ) :
                       TextButton(
                         onPressed: widget.order.salesOrder.status == 'delivering' ? () {
                           widget.updateOrderStatus(widget.order.salesOrder.order_id, "");
                         } : null,
-                        child: const Text("Receive Confirm"),
+                        child: const Text("Receive Confirm", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),
@@ -110,7 +122,7 @@ class OrderDetailState extends State<OrderDetailPage>
                     children: [
                       TextButton(
                         onPressed: () {showProductDetail(context);},
-                        child: const Text("See Product Detail"),
+                        child: const Text("Product Detail", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),
@@ -144,7 +156,7 @@ class OrderDetailState extends State<OrderDetailPage>
           ),
         ])
         : Material(child: 
-          ProductDescription(product: product, showImage: true),
+          ProductDescription(product: product, showImage: true, showPrice: true,),
         )
       );
     });

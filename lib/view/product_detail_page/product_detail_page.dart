@@ -38,7 +38,7 @@ class DetailPageState extends State<DetailPage>
     return Material(
       child: CardSliverAppBar(
         height: 250, 
-        background: Image(image: Image.network(widget.product.image).image, fit: BoxFit.cover), 
+        background: Image(image: Image.network(widget.product.image).image, fit: BoxFit.cover, filterQuality: FilterQuality.high), 
         title: Text(widget.product.name, style: const TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold)), 
         titleDescription: Text(
             '\$' + widget.product.price.toString(),
@@ -49,39 +49,42 @@ class DetailPageState extends State<DetailPage>
         card: Image.network(widget.product.image).image,
         backButton: true,
         backButtonColors: const [Colors.white, Colors.black],
-        body: ListView(shrinkWrap: true, children: [
-          const Padding(padding: EdgeInsets.only(top: 40)),
-          ProductDescription(product: widget.product, showImage: false),
-          const Padding(padding: EdgeInsets.only(top: 40)),
-          Visibility(
-            visible: !widget.user.isMerchant,
-            maintainState: false,
-            maintainSize: false,
-            maintainSemantics: false,
-            child: SizedBox(
-              height: 40,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 30, right: 30),
-                child: Material(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(5),
-                  elevation: 6,
-                  child: MaterialButton(
-                    child: const Text(
-                      'Add to Cart',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+        body: Container(
+          color: Colors.white,
+          child: ListView(shrinkWrap: true, children: [
+            const Padding(padding: EdgeInsets.only(top: 40)),
+            ProductDescription(product: widget.product, showImage: false, showPrice: false,),
+            const Padding(padding: EdgeInsets.only(top: 40)),
+            Visibility(
+              visible: !widget.user.isMerchant,
+              maintainState: false,
+              maintainSize: false,
+              maintainSemantics: false,
+              child: SizedBox(
+                height: 40,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 30, right: 30),
+                  child: Material(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(5),
+                    elevation: 6,
+                    child: MaterialButton(
+                      child: const Text(
+                        'Add to Cart',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onPressed: () {
+                        addToCart();
+                      },
                     ),
-                    onPressed: () {
-                      addToCart();
-                    },
                   ),
-                ),
-              )
+                )
+              ),
             ),
-          ),
-          const Padding(padding: EdgeInsets.only(top: 50)),
-          QuestionPage(product: widget.product, user: widget.user)
-        ])
+            const Padding(padding: EdgeInsets.only(top: 50)),
+            QuestionPage(product: widget.product, user: widget.user),
+          ]),
+        )
       ),
     );
   }

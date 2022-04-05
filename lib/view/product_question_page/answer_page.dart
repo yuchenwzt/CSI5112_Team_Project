@@ -132,16 +132,16 @@ class AnswerPageState extends State<AnswerPage>
             key: Key(answer.answer_id),
             child: ListTile(
                 leading: const Icon(Icons.person),
-                title: Text(
-                    answer.role_id.substring(0, 4) +
-                        "...(" +
+                subtitle: Text(
+                    "..." + answer.role_id.substring(answer.role_id.length - 4, answer.role_id.length) +
+                        "(" +
                         answer.role +
                         ") answered on " +
                         DateFormat('yyyy-MM-dd').format(answer.date),
                     style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold)),
-                subtitle: Text(answer.answer,
-                    style: const TextStyle(fontSize: 14, color: Colors.black))),
+                        fontSize: 14, color: Colors.black)),
+                title: Text(answer.answer,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
           ),
         )
         .toList();

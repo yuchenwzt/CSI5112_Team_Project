@@ -62,14 +62,16 @@ class QuestionPageState extends State<QuestionPage>
               textAlign: TextAlign.left,
               style: TextStyle(
                 color: Colors.deepOrange,
-                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                fontSize: 28,
               )),
           const Padding(padding: EdgeInsets.only(top: 5)),
           const Text("Frequent Questions from others",
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.blueGrey,
-                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
               )),
           const Padding(padding: EdgeInsets.only(top: 20)),
           SuspendCard(
@@ -116,7 +118,7 @@ class QuestionPageState extends State<QuestionPage>
                 )),
           ),
           const Padding(
-            padding: EdgeInsets.only(top: 25),
+            padding: EdgeInsets.only(top: 130),
           )
         ]));
   }
@@ -160,17 +162,17 @@ class QuestionPageState extends State<QuestionPage>
                     });
               },
               child: ListTile(
-                  leading: const Icon(Icons.person),
-                  title: Text(
-                      "Customer " +
-                          question.customer_id.substring(0, 4) +
-                          "... posted on " +
+                  leading: const Icon(Icons.question_answer),
+                  subtitle: Text(
+                      "Customer " + "..." +
+                          question.customer_id.substring(question.customer_id.length - 4, question.customer_id.length) +
+                          " posted on " +
                           DateFormat('yyyy-MM-dd').format(question.date),
                       style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold)),
-                  subtitle: Text(question.question,
+                          fontSize: 13, color: Colors.black)),
+                  title: Text(question.question,
                       style:
-                          const TextStyle(fontSize: 13, color: Colors.black))),
+                          const TextStyle(fontSize: 15 ,fontWeight: FontWeight.bold))),
             ),
           ),
         )

@@ -5,6 +5,7 @@ import 'package:csi5112_project/view/shopping_cart_page/cart_item_card.dart';
 import 'package:flutter/material.dart';
 import '../../data/http_data.dart';
 import '../../data/user_data.dart';
+import 'package:provider/provider.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({Key? key, required this.user}) : super(key: key);
@@ -47,6 +48,14 @@ class CartPageState extends State<CartPage> implements CartProductsListViewContr
     isClicked = false;
     _presenter.loadCartProducts(HttpRequest('Get',
         'CartItems/by_customer?customer_id=${widget.user.customer_id}', {}));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (Provider.of<bool>(context)) {
+      retry();
+    }
   }
 
   retry() {
