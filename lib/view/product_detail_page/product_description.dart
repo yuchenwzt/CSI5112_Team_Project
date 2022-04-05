@@ -12,20 +12,27 @@ class ProductDescription extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.only(right: 260, top: 20),
+          padding: const EdgeInsets.only(right: 350, top: 20),
           child: Text(
             '\$' + product.price.toString(),
             textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.red, fontSize: 24, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 0, top: 8),
-          child: Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+          padding: const EdgeInsets.only(left: 0, top: 10),
+          child: Text(product.name,
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 0, top: 4),
-          child: Text(product.description, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+          padding: const EdgeInsets.only(left: 0, top: 5),
+          child: Text(product.description,
+              style: const TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20)),
         ),
       ],
     );

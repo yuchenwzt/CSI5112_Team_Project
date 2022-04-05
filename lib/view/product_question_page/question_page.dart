@@ -53,66 +53,72 @@ class QuestionPageState extends State<QuestionPage>
     Question newQuestion = Question();
     var _dialogWidth = MediaQuery.of(context).size.width * 0.8;
     var _dialogHeight = MediaQuery.of(context).size.height * 0.5;
-    
-    return Column(
-      children: [
-        const Text("Chat about this product",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.blue,
-            fontSize: 30,
-          )),
-      const Padding(padding: EdgeInsets.only(top: 10)),
-      const Text("Frequent Questions from others",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Color.fromARGB(255, 6, 189, 143),
-            fontSize: 20,
-          )),
-      const Padding(padding: EdgeInsets.only(top: 20)),
-      SuspendCard(
-          child: Column(
-            children: buildQuestionList(_dialogWidth, _dialogHeight),
-          ),
-          isLoadError: isLoadError,
-          isSearching: isSearching,
-          loadError: loadError,
-          data: questionsReceived,
-          retry: () => retry()),
-      Padding(
-        padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
-        child: TextField(
-          controller: questionController,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Add Question',
-          ),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child: SizedBox(
-            width: 500,
-            height: 40,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
-              child: Material(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(5),
-                elevation: 6,
-                child: MaterialButton(
-                  child: const Text(
-                    'Create Your Question',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    addQuestion(newQuestion);
-                  },
-                ),
+
+    return Card(
+        elevation: 3.0,
+        child: Column(children: [
+          const Padding(padding: EdgeInsets.only(top: 20)),
+          const Text("Chat about this product",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Colors.deepOrange,
+                fontSize: 24,
+              )),
+          const Padding(padding: EdgeInsets.only(top: 5)),
+          const Text("Frequent Questions from others",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.blueGrey,
+                fontSize: 16,
+              )),
+          const Padding(padding: EdgeInsets.only(top: 20)),
+          SuspendCard(
+              child: Column(
+                children: buildQuestionList(_dialogWidth, _dialogHeight),
               ),
-            )),
-      ),
-    ]);
+              isLoadError: isLoadError,
+              isSearching: isSearching,
+              loadError: loadError,
+              data: questionsReceived,
+              retry: () => retry()),
+          Padding(
+            padding: const EdgeInsets.only(top: 25, left: 30, right: 30),
+            child: TextField(
+              controller: questionController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Add Question',
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: SizedBox(
+                width: 500,
+                height: 45,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.only(left: 30, right: 30, bottom: 10),
+                  child: Material(
+                    color: Colors.deepOrange,
+                    borderRadius: BorderRadius.circular(5),
+                    elevation: 6,
+                    child: MaterialButton(
+                      child: const Text(
+                        'Create Your Question',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      onPressed: () {
+                        addQuestion(newQuestion);
+                      },
+                    ),
+                  ),
+                )),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 25),
+          )
+        ]));
   }
 
   void addQuestion(Question newQuestion) {
@@ -126,43 +132,49 @@ class QuestionPageState extends State<QuestionPage>
   }
 
   List<Card> buildQuestionList(var _dialogWidth, var _dialogHeight) {
-    return questionsReceived.map((question) => 
-      Card(
-        key: Key(question.question_id),
-        child: InkWell(
-          onTap: () {
-            showDialog(
-              context: context, 
-              builder: (BuildContext context) {
-                return UnconstrainedBox(
-                  constrainedAxis: Axis.vertical,
-                  child: SizedBox(
-                    width: _dialogWidth,
-                    child: Dialog(
-                      insetPadding: EdgeInsets.zero,
-                      child: SizedBox(
-                        height: _dialogHeight,
-                        child: Center(
-                          child: AnswerPage(user: widget.user, question: question),
+    return questionsReceived
+        .map(
+          (question) => Card(
+            key: Key(question.question_id),
+            child: InkWell(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return UnconstrainedBox(
+                        constrainedAxis: Axis.vertical,
+                        child: SizedBox(
+                          width: _dialogWidth,
+                          child: Dialog(
+                            insetPadding: EdgeInsets.zero,
+                            child: SizedBox(
+                              height: _dialogHeight,
+                              child: Center(
+                                child: AnswerPage(
+                                    user: widget.user, question: question),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                );
-              }
-            );
-          },
-          child: ListTile(
-            leading: const Icon(Icons.person),
-            title: Text("Customer " + question.customer_id.substring(0, 4) + "... posted on " + DateFormat('yyyy-MM-dd').format(question.date),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            subtitle: Text(question.question,
-              style: const TextStyle(fontSize: 14, color: Colors.black)
-            )
+                      );
+                    });
+              },
+              child: ListTile(
+                  leading: const Icon(Icons.person),
+                  title: Text(
+                      "Customer " +
+                          question.customer_id.substring(0, 4) +
+                          "... posted on " +
+                          DateFormat('yyyy-MM-dd').format(question.date),
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold)),
+                  subtitle: Text(question.question,
+                      style:
+                          const TextStyle(fontSize: 13, color: Colors.black))),
+            ),
           ),
-        ),
-      ),
-    ).toList();
+        )
+        .toList();
   }
 
   @override

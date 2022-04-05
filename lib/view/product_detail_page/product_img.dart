@@ -20,11 +20,13 @@ class _ProductImagesState extends State<ProductImg> {
   Widget build(BuildContext context) {
     return Center(
       child: Image(
-          image: widget.product.image_type == "network" ? Image.network(widget.product.image).image : Image.memory(base64Decode(widget.product.image)).image,
-          width: 160,
-          height: 160,
-          fit: BoxFit.fitHeight,
-        ),
+        image: widget.product.image_type == "network"
+            ? Image.network(widget.product.image).image
+            : Image.memory(base64Decode(widget.product.image)).image,
+        width: 350,
+        height: 350,
+        fit: BoxFit.fitHeight,
+      ),
     );
     // SizedBox(height: getProportionateScreenWidth(20)),
   }

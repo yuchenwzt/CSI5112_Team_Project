@@ -26,8 +26,8 @@ class DetailPage extends StatefulWidget {
   DetailPageState createState() => DetailPageState();
 }
 
-class DetailPageState extends State<DetailPage> implements CartItemsListViewContract {
-
+class DetailPageState extends State<DetailPage>
+    implements CartItemsListViewContract {
   late CartItemsListPresenter _presenter;
 
   DetailPageState() {
@@ -38,23 +38,22 @@ class DetailPageState extends State<DetailPage> implements CartItemsListViewCont
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.product.category + " Store")),
-      body: ListView(
-        shrinkWrap: true,
-        children: [
-          const Padding(padding: EdgeInsets.only(top: 10)),
-          ProductImg(product: widget.product),
-          ProductDescription(product: widget.product),
-          const Padding(padding: EdgeInsets.only(top: 30)),
-          Visibility(
-            visible: !widget.user.isMerchant,
-            maintainState: false,
-            maintainSize: false,
-            maintainSemantics: false,
-            child: SizedBox(
+      body: ListView(shrinkWrap: true, children: [
+        const Padding(padding: EdgeInsets.only(top: 45)),
+        ProductImg(product: widget.product),
+        const Padding(padding: EdgeInsets.only(top: 30)),
+        ProductDescription(product: widget.product),
+        const Padding(padding: EdgeInsets.only(top: 40)),
+        Visibility(
+          visible: !widget.user.isMerchant,
+          maintainState: false,
+          maintainSize: false,
+          maintainSemantics: false,
+          child: SizedBox(
               //width: 30,
               height: 40,
               child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
+                padding: const EdgeInsets.only(left: 30, right: 30),
                 child: Material(
                   color: Colors.red,
                   borderRadius: BorderRadius.circular(5),
@@ -62,17 +61,16 @@ class DetailPageState extends State<DetailPage> implements CartItemsListViewCont
                   child: MaterialButton(
                     child: const Text(
                       'Add to Cart',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                     onPressed: () {
                       addToCart();
                     },
                   ),
                 ),
-              )
-            ),
-          ),
-        const Padding(padding: EdgeInsets.only(top: 30)),
+              )),
+        ),
+        const Padding(padding: EdgeInsets.only(top: 50)),
         QuestionPage(product: widget.product, user: widget.user)
       ]),
     );
@@ -84,45 +82,45 @@ class DetailPageState extends State<DetailPage> implements CartItemsListViewCont
     newItem.customer_id = widget.user.customer_id;
     newItem.quantity = 1;
     newItem.price = widget.product.price;
-    newItem.product_id = widget.product.product_id; 
+    newItem.product_id = widget.product.product_id;
     _presenter.loadItems(HttpRequest('Post', filterUrl, jsonEncode(newItem)));
   }
-  
+
   void showAddCartSuccess(BuildContext context) {
-    showDialog(context: context,
-    builder:(context) => AlertDialog(
-      title: const Text('Add Cart Success'),
-      content: const Text('Go to Cart page to check out!'),
-      actions: <Widget> [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('OK'))
-      ]
-    ));
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+                title: const Text('Add Cart Success'),
+                content: const Text('Go to Cart page to check out!'),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('OK'))
+                ]));
   }
 
   void showAddCartFailed(BuildContext context, dynamic e) {
-    showDialog(context: context,
-    builder:(context) => AlertDialog(
-      title: const Text('Add Cart Failed'),
-      content: Text(e.toString()),
-      actions: <Widget> [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('Try Again'))
-      ]
-    ));
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+                title: const Text('Add Cart Failed'),
+                content: Text(e.toString()),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Try Again'))
+                ]));
   }
 
   @override
   void onLoadCartItemsComplete(List<CartItem> items) {
     showAddCartSuccess(context);
   }
-  
+
   @override
   void onLoadCartItemsError(e) {
     showAddCartFailed(context, e);
