@@ -6,7 +6,12 @@ import './order_detail.dart';
 import 'package:intl/intl.dart';
 
 class OrderFilterPanel extends StatelessWidget {
-  const OrderFilterPanel({ Key? key, required this.orders, required this.user, this.updateOrderStatus }) : super(key: key);
+  const OrderFilterPanel(
+      {Key? key,
+      required this.orders,
+      required this.user,
+      this.updateOrderStatus})
+      : super(key: key);
 
   final List<OrderDetail> orders;
   final User user;

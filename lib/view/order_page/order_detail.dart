@@ -9,17 +9,23 @@ import 'package:csi5112_project/data/http_data.dart';
 import 'package:csi5112_project/presenter/product_presenter.dart';
 
 class OrderDetailPage extends StatefulWidget {
-  const OrderDetailPage({ Key? key, required this.order, required this.user, this.updateOrderStatus }) : super(key: key);
+  const OrderDetailPage(
+      {Key? key,
+      required this.order,
+      required this.user,
+      this.updateOrderStatus})
+      : super(key: key);
 
   final OrderDetail order;
   final User user;
   final updateOrderStatus;
-  
+
   @override
   State<StatefulWidget> createState() => OrderDetailState();
 }
 
-class OrderDetailState extends State<OrderDetailPage> implements ShippingAddressViewContract, ProductsListViewContract  {
+class OrderDetailState extends State<OrderDetailPage>
+    implements ShippingAddressViewContract, ProductsListViewContract {
   final deliveryKey = GlobalKey<FormState>();
 
   late ShippingAddressPresenter _presenter;
@@ -145,50 +151,67 @@ class OrderDetailState extends State<OrderDetailPage> implements ShippingAddress
   }
 
   void buildOrderList(BuildContext context) {
-    showDialog(context: context, builder: (BuildContext context) {
-      return AlertDialog(
-        scrollable: true,
-        content: Form(
-          key: deliveryKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: DropdownButtonFormField<dynamic>(
-                    decoration: const InputDecoration(
-                      labelText: 'Shipping Address',
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            scrollable: true,
+            content: Form(
+              key: deliveryKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: DropdownButtonFormField<dynamic>(
+                        decoration: const InputDecoration(
+                          labelText: 'Shipping Address',
+                        ),
+                        value: shippingAddressReceived[0].shipping_address_id,
+                        items: showAllAddress(shippingAddressReceived),
+                        onChanged: (newValue) {
+                          setState(() {
+                            selectedAddress = newValue as String;
+                          });
+                        }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: ElevatedButton(
+                      child: const Text("Submit"),
+                      onPressed: () {
+                        if (deliveryKey.currentState!.validate()) {
+                          deliveryKey.currentState!.save();
+                          widget.updateOrderStatus(
+                              widget.order.salesOrder.order_id,
+                              selectedAddress);
+                          Navigator.pop(context);
+                        }
+                      },
                     ),
-                    value: shippingAddressReceived[0].shipping_address_id,
-                    items: showAllAddress(shippingAddressReceived),
-                    onChanged: (newValue) {
-                      setState(() {
-                        selectedAddress = newValue as String;
-                      });
-                    }),
+                  )
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: ElevatedButton(
-                  child: const Text("Submit"),
-                  onPressed: () {
-                    if (deliveryKey.currentState!.validate()) {
-                      deliveryKey.currentState!.save();
-                      widget.updateOrderStatus(widget.order.salesOrder.order_id, selectedAddress);
-                      Navigator.pop(context);
-                    }
-                  },
-                ),
-              )
-            ],
-          ),
-        ),
-      );
-    });
+            ),
+          );
+        });
   }
 
-  List<DropdownMenuItem> showAllAddress(List<ShippingAddress> shippingAddressReceived) {
-    return shippingAddressReceived.map((s) => DropdownMenuItem(value: s.shipping_address_id, child: Text(s.zipcode + " " + s.address + " " + s.city + " " + s.state + " " + s.country))).toList();
+  List<DropdownMenuItem> showAllAddress(
+      List<ShippingAddress> shippingAddressReceived) {
+    return shippingAddressReceived
+        .map((s) => DropdownMenuItem(
+            value: s.shipping_address_id,
+            child: Text(s.zipcode +
+                " " +
+                s.address +
+                " " +
+                s.city +
+                " " +
+                s.state +
+                " " +
+                s.country)))
+        .toList();
   }
 
   @override
