@@ -81,9 +81,12 @@ class CartPageState extends State<CartPage> implements CartProductsListViewContr
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        ListView(
-          shrinkWrap: true,
-          children: _getListItems(),
+          Container(
+            color: const Color.fromRGBO(245, 247, 255, 0.5),
+            child: ListView(
+            shrinkWrap: true,
+            children: _getListItems(),
+          ),
         ),
         CartBottomBar(
             amountPrice: amountPrice,

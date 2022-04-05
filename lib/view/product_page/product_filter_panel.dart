@@ -60,7 +60,9 @@ class ProductFilterPanelState extends State<ProductFilterPanel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(245, 247, 255, 0.5),
       appBar: AppBar(
+        // backgroundColor: const Color.fromRGBO(160, 160, 160, 0.5),
         elevation: 0,
         toolbarHeight: 55,
         flexibleSpace: Row(children: <Widget>[

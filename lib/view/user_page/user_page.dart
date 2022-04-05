@@ -16,6 +16,7 @@ class _UserRolePageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(245, 247, 255, 0.5),
       body: Center(
         child: Column(
             // ignore: prefer_const_literals_to_create_immutables

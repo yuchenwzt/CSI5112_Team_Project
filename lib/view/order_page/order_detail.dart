@@ -7,6 +7,7 @@ import '../../data/shipping_address_data.dart';
 import 'package:csi5112_project/presenter/shipping_address_presenter.dart';
 import 'package:csi5112_project/data/http_data.dart';
 import 'package:csi5112_project/presenter/product_presenter.dart';
+import 'package:progresso/progresso.dart';
 
 class OrderDetailPage extends StatefulWidget {
   const OrderDetailPage(
@@ -86,7 +87,7 @@ class OrderDetailState extends State<OrderDetailPage>
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Row(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
@@ -94,6 +95,10 @@ class OrderDetailState extends State<OrderDetailPage>
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     Text(widget.order.salesOrder.status, style: TextStyle(fontSize: 20, color: widget.statusColor, fontWeight: FontWeight.bold)),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Progresso(progress: getStatusProgress(widget.order.salesOrder.status), points: const [0.3, 0.6, 1.0], progressColor: widget.statusColor as Color, pointColor: widget.statusColor as Color, backgroundColor: Colors.grey,),
+                    ),
                   ],
                 ),
               ),
@@ -138,6 +143,18 @@ class OrderDetailState extends State<OrderDetailPage>
   OrderDetailState() {
     _presenter = ShippingAddressPresenter(this);
     _presenter2 = ProductsListPresenter(this);
+  }
+
+  double getStatusProgress(String status) {
+    switch (status) {
+      case 'processing':
+        return 0.3;
+      case 'delivering':
+        return 0.6;
+      case 'finish':
+        return 1;
+      default: return 0.3;
+    }
   }
 
   void showProductDetail(BuildContext context) {

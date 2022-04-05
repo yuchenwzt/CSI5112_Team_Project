@@ -70,6 +70,7 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
   Widget build(BuildContext context) {
     String hintText = "Search the " + (widget.user.isMerchant ? "Customer" : "Merchant") + "'s ID"; 
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(245, 247, 255, 0.5),
       appBar: AppBar(
         flexibleSpace: SearchBar(onSearchFinish: (value) => updateItemList(value), hintText: hintText,),
       ),

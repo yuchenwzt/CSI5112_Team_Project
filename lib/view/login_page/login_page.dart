@@ -44,7 +44,7 @@ class _LoginState extends State<Login> implements UserListViewContract {
             children: <Widget>[
               const Padding(
                 padding:
-                    EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 30),
+                    EdgeInsets.only(left: 15, right: 15, top: 40, bottom: 30),
                 child: CircleAvatar(
                   radius: 90,
                   backgroundColor: Colors.white,
