@@ -230,6 +230,6 @@ class _LoginState extends State<Login> implements UserListViewContract {
   }
 
   void navigateToRegistration() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Register()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const Register()));
   }
 }
