@@ -30,7 +30,7 @@ class _LoginState extends State<Login> implements UserListViewContract {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'User',
+          'UO Shopping Market',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
