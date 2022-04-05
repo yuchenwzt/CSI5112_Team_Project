@@ -51,7 +51,7 @@ class DetailPageState extends State<DetailPage>
         backButtonColors: const [Colors.white, Colors.black],
         body: ListView(shrinkWrap: true, children: [
           const Padding(padding: EdgeInsets.only(top: 40)),
-          ProductDescription(product: widget.product),
+          ProductDescription(product: widget.product, showImage: false),
           const Padding(padding: EdgeInsets.only(top: 40)),
           Visibility(
             visible: !widget.user.isMerchant,

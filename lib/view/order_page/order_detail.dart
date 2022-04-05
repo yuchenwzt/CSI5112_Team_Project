@@ -1,3 +1,4 @@
+import 'package:csi5112_project/view/product_detail_page/product_description.dart';
 import 'package:flutter/material.dart';
 import '../../data/order_data.dart';
 import '../../data/user_data.dart';
@@ -5,7 +6,6 @@ import '../../data/product_data.dart';
 import '../../data/shipping_address_data.dart';
 import 'package:csi5112_project/presenter/shipping_address_presenter.dart';
 import 'package:csi5112_project/data/http_data.dart';
-import 'package:intl/intl.dart';
 import 'package:csi5112_project/presenter/product_presenter.dart';
 
 class OrderDetailPage extends StatefulWidget {
@@ -30,25 +30,57 @@ class OrderDetailState extends State<OrderDetailPage> implements ShippingAddress
   Product product = Product();
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.user.isMerchant) {
+      _presenter.loadAddress(HttpRequest('Get', 'ShippingAddress/by_user?user_id=${widget.user.merchant_id}', {}));
+    }
+    _presenter2.loadProducts(HttpRequest('Get', 'Products?product_id=${widget.order.salesOrder.product_id}', {}));
+  }
+  
+  @override
   Widget build(BuildContext context) {
     return Column(
-        children: [
-          Card(
-              clipBehavior: Clip.antiAlias,
-              child: Column(
+      children: [
+        Card(
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.receipt),
+                title: widget.user.isMerchant ? Text("Client ID: " + widget.order.salesOrder.customer_id) 
+                  : 
+                  Text("Merchant ID: " + widget.order.salesOrder.merchant_id),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(padding: EdgeInsets.only(top: 10),),
+                    Text('Product Name: ' + widget.order.salesOrder.name),
+                    Text('Product ID: ' + widget.order.salesOrder.product_id),
+                    Text('Quantity: ' + widget.order.salesOrder.quantity.toString()),
+                    Text('Product Name: ' + widget.order.salesOrder.name)
+                  ],
+                ),
+              ),
+              ListTile(
+                leading: const Icon(Icons.location_on),
+                title: const Text("Customer Address"),
+                subtitle: Text(widget.order.customerAddress.address + " " + widget.order.customerAddress.city + " " + widget.order.customerAddress.state + " " + widget.order.customerAddress.country),
+              ),
+              ListTile(
+                leading: const Icon(Icons.location_on),
+                title: const Text("Delivery From"),
+                subtitle: widget.order.merchantAddress.shipping_address_id == '#' ? const Text("This Product hasn't been deliveried yet") : Text(widget.order.merchantAddress.address + " " + widget.order.merchantAddress.city + " " + widget.order.merchantAddress.state + " " + widget.order.merchantAddress.country),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Your Product Status is ' + widget.order.salesOrder.status,
+                  style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                ),
+              ),
+              Row(
                 children: [
-                  ListTile(
-                    leading: const Icon(Icons.receipt),
-                    title: Text('Order ' + widget.order.salesOrder.order_id.substring(0, 6) + ' ... Details'),
-                    subtitle: Text('Product Name: ' + widget.order.salesOrder.name),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'Your Product Status is ' + widget.order.salesOrder.status,
-                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                    ),
-                  ),
                   ButtonBar(
                     alignment: MainAxisAlignment.start,
                     children: [
@@ -67,25 +99,49 @@ class OrderDetailState extends State<OrderDetailPage> implements ShippingAddress
                       ),
                     ],
                   ),
+                  ButtonBar(
+                    alignment: MainAxisAlignment.start,
+                    children: [
+                      TextButton(
+                        onPressed: () {showProductDetail(context);},
+                        child: const Text("See Product Detail"),
+                      ),
+                    ],
+                  ),
                 ],
               ),
-            ),
-        ],
-      );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.user.isMerchant) {
-      _presenter.loadAddress(HttpRequest('Get', 'ShippingAddress/by_user?user_id=${widget.user.merchant_id}', {}));
-    }
-    _presenter2.loadProducts(HttpRequest('Get', 'Products?product_id=${widget.order.salesOrder.product_id}', {}));
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   OrderDetailState() {
     _presenter = ShippingAddressPresenter(this);
     _presenter2 = ProductsListPresenter(this);
+  }
+
+  void showProductDetail(BuildContext context) {
+    showDialog(context: context, builder: (BuildContext context) {
+      return AlertDialog(
+        scrollable: true,
+        content: product.product_id == "" ? 
+        ListView(shrinkWrap: true, children: const [
+          Padding(padding: EdgeInsets.only(top: 40)),
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              'Opps, this product was removed by the Merchant',
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+        ])
+        : Material(child: 
+          ProductDescription(product: product, showImage: true),
+        )
+      );
+    });
   }
 
   void buildOrderList(BuildContext context) {
