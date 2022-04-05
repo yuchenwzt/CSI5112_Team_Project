@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:accordion/accordion.dart';
 import '../../data/order_data.dart';
 import '../../data/user_data.dart';
 import './order_detail.dart';
@@ -14,33 +15,58 @@ class OrderFilterPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-        children: buildOrderList(context),
-      );
+    return buildOrderList(context);
   }
 
-  List<ListTile> buildOrderList(BuildContext context) {
-    return orders.map((ordersState) => ListTile(
-      leading: user.isMerchant ? const Icon(Icons.shop) : const Icon(Icons.people),
-      title: user.isMerchant ? Text("Client " + ordersState.salesOrder.customer_id.substring(0,6) + "... purchased " + ordersState.salesOrder.product_id.substring(0,6) + "... on " + DateFormat('yyyy-MM-dd').format(ordersState.salesOrder.date),
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)) 
-        : 
-        Text("Product " + ordersState.salesOrder.name + " on " + DateFormat('yyyy-MM-dd').format(ordersState.salesOrder.date),
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-      subtitle: Text("Merchant ID: " + ordersState.salesOrder.merchant_id + " Order Status: " + ordersState.salesOrder.status,
-        style: const TextStyle(fontSize: 14, color: Colors.black)
-      ),
-      trailing: 
-        TextButton(child: const Text('Manage Order >'),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) {
-                return OrderDetailPage(user: user, updateOrderStatus: updateOrderStatus, order: ordersState);
-              }),
-            );
-          }
-      )
-    )).toList();
+  Color? statusColor(String status) {
+    Color? statusColor = Colors.black;
+    switch (status) {
+      case 'processing':
+        statusColor = Colors.red;
+        break;
+      case 'delivering':
+        statusColor = Colors.blue;
+        break;
+      case 'finish':
+        statusColor = Colors.green;
+        break;
+    }
+    return statusColor;
+  }
+
+  Icon statusIcon(String status) {
+    Icon statusIcon = const Icon(Icons.audiotrack, color: Colors.white);
+    switch (status) {
+      case 'processing':
+        statusIcon = const Icon(Icons.access_time, color: Colors.white);
+        break;
+      case 'delivering':
+        statusIcon = const Icon(Icons.delivery_dining, color: Colors.white);
+        break;
+      case 'finish':
+        statusIcon = const Icon(Icons.domain_verification_rounded, color: Colors.white);
+        break;
+    }
+    return statusIcon;
+  }
+
+  Accordion buildOrderList(BuildContext context) {
+    return Accordion(
+      maxOpenSections: 1,
+      children: orders.map((ordersState) => 
+        AccordionSection(
+          isOpen: true,
+          leftIcon: statusIcon(ordersState.salesOrder.status),
+          contentBorderColor: statusColor(ordersState.salesOrder.status),
+          headerBackgroundColor: statusColor(ordersState.salesOrder.status),
+          header: user.isMerchant ? Text("Client " + ordersState.salesOrder.customer_id.substring(0,6) + "... purchased " + ordersState.salesOrder.product_id.substring(0,6) + "... on " + DateFormat('yyyy-MM-dd').format(ordersState.salesOrder.date),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)) 
+            : 
+            Text("Product " + ordersState.salesOrder.name + " on " + DateFormat('yyyy-MM-dd').format(ordersState.salesOrder.date),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+          content: OrderDetailPage(user: user, updateOrderStatus: updateOrderStatus, order: ordersState),
+        )
+      ).toList(),
+    );
   }
 }

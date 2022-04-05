@@ -59,31 +59,33 @@ class _RegisterState extends State<Register> implements UserRegisterListViewCont
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 8),
-                    child: SizedBox(
-                      width: 350,
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'First Name',
-                        ),
-                        autofocus: true,
-                        controller: _firstname,
-                      ),
-                    ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 8),
+                    child: Text('You will register as:'),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 8),
                     child: SizedBox(
                       width: 350,
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Last Name',
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          value: _selected,
+                          hint: const Text('You will register as:'),
+                          items: const [
+                            DropdownMenuItem(
+                                child: Text('Merchant'),
+                                value: 'Merchant'
+                            ),
+                            DropdownMenuItem(
+                                child: Text('Customer'),
+                                value: 'Customer'
+                            )],
+                          onChanged: (String? value) {
+                            setState(() {
+                              _selected = value as String;
+                            });
+                          },
                         ),
-                        autofocus: true,
-                        controller: _lastname,
                       ),
                     ),
                   ),
@@ -117,6 +119,34 @@ class _RegisterState extends State<Register> implements UserRegisterListViewCont
                             child: const Text("This username is valid")
                           )
                         ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 8),
+                    child: SizedBox(
+                      width: 350,
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'First Name',
+                        ),
+                        autofocus: true,
+                        controller: _firstname,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 8),
+                    child: SizedBox(
+                      width: 350,
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Last Name',
+                        ),
+                        autofocus: true,
+                        controller: _lastname,
                       ),
                     ),
                   ),
@@ -195,32 +225,6 @@ class _RegisterState extends State<Register> implements UserRegisterListViewCont
                         ),
                         autofocus: true,
                         controller: _phone,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 8),
-                    child: SizedBox(
-                      width: 350,
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: _selected,
-                          hint: const Text('You will register as:'),
-                          items: const [
-                            DropdownMenuItem(
-                                child: Text('Merchant'),
-                                value: 'Merchant'
-                            ),
-                            DropdownMenuItem(
-                                child: Text('Customer'),
-                                value: 'Customer'
-                            )],
-                          onChanged: (String? value) {
-                            setState(() {
-                              _selected = value as String;
-                            });
-                          },
-                        ),
                       ),
                     ),
                   ),

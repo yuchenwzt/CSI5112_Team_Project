@@ -31,9 +31,7 @@ class OrderDetailState extends State<OrderDetailPage> implements ShippingAddress
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Order Details")),
-      body: Column(
+    return Column(
         children: [
           Card(
               clipBehavior: Clip.antiAlias,
@@ -73,8 +71,7 @@ class OrderDetailState extends State<OrderDetailPage> implements ShippingAddress
               ),
             ),
         ],
-      ),
-    );
+      );
   }
 
   @override

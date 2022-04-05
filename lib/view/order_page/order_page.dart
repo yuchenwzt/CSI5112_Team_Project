@@ -69,20 +69,18 @@ class OrderPageState extends State<OrderPage> implements OrdersListViewContract 
   @override
   Widget build(BuildContext context) {
     String hintText = "Search the " + (widget.user.isMerchant ? "Customer" : "Merchant") + "'s ID"; 
-    return SuspendCard(
-      child: Scaffold(
-        appBar: AppBar(
-          flexibleSpace: SearchBar(onSearchFinish: (value) => updateItemList(value), hintText: hintText,),
-        ),
-        body: Center(
-          child: OrderFilterPanel(orders: ordersReceived, user: widget.user, updateOrderStatus: updateOrderStatus),
-        ),
-      ), 
-      isLoadError: isLoadError, 
-      isSearching: isSearching, 
-      loadError: loadError, 
-      data: ordersReceived,
-      retry: () => retry(),  
+    return Scaffold(
+      appBar: AppBar(
+        flexibleSpace: SearchBar(onSearchFinish: (value) => updateItemList(value), hintText: hintText,),
+      ),
+      body: SuspendCard( 
+        child: OrderFilterPanel(orders: ordersReceived, user: widget.user, updateOrderStatus: updateOrderStatus),
+        isLoadError: isLoadError, 
+        isSearching: isSearching, 
+        loadError: loadError, 
+        data: ordersReceived,
+        retry: () => retry(),  
+      ),
     );
   }
 
