@@ -12,7 +12,7 @@ class ProductDescription extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.only(right: 350, top: 20),
+          padding: const EdgeInsets.only(right: 0, top: 20),
           child: Text(
             '\$' + product.price.toString(),
             textAlign: TextAlign.center,

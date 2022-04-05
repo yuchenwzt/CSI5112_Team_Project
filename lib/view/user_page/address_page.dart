@@ -68,9 +68,9 @@ class UserAddressState extends State<AddressPage>
             data: shippingAddressReceived,
             retry: () => retry,
           ),
-          const Padding(padding: EdgeInsets.only(top: 480)),
+          const Padding(padding: EdgeInsets.only(top: 10)),
           FloatingActionButton(
-            backgroundColor: Colors.blueGrey,
+            backgroundColor: Colors.red,
             onPressed: () {
               showFormDialog(
                   context,
