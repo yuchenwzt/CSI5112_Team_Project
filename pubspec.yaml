@@ -43,6 +43,7 @@ dependencies:
   sliverbar_with_card: ^0.1.5
   loading_animation_widget:
   progresso: ^0.3.0
+  shared_preferences: ^2.0.13
 
 dev_dependencies:
   flutter_test:

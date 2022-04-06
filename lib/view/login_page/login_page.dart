@@ -5,6 +5,7 @@ import 'package:csi5112_project/view/register_page/register_page.dart';
 import 'package:flutter/material.dart';
 import '../main_page.dart';
 import '../../data/http_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum Identity { merchant, client }
 
@@ -21,6 +22,13 @@ class _LoginState extends State<Login> implements UserListViewContract {
   final TextEditingController _passwController = TextEditingController();
   late UserListPresenter _presenter;
 
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  Future<void> _setLoginToken(String token) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setString('current_token', token);
+  }
+
   _LoginState() {
     _presenter = UserListPresenter(this);
   }
@@ -31,7 +39,7 @@ class _LoginState extends State<Login> implements UserListViewContract {
       appBar: AppBar(
         title: const Text(
           'UO Shopping Market',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.red,
@@ -241,7 +249,10 @@ class _LoginState extends State<Login> implements UserListViewContract {
 
   @override
   void onLoadUserComplete(List<User> user) {
+    _setLoginToken(user[0].token);
+
     user[0].isMerchant = _identity == Identity.merchant;
+
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => MainPage(user: user[0])));
   }
@@ -252,6 +263,7 @@ class _LoginState extends State<Login> implements UserListViewContract {
   }
 
   void navigateToRegistration() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const Register()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const Register()));
   }
 }

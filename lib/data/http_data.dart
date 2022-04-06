@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 const String http_header = "http://csiteamwork-1443910782.us-east-1.elb.amazonaws.com/api/";
 // const String http_header = "https://localhost:7027/api/";
@@ -16,12 +17,20 @@ class HttpRequest {
   );
 }
 
+final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  Future<String> _getLoginToken() async {
+    final SharedPreferences prefs = await _prefs;
+    return prefs.getString('current_token') ?? '0';
+  }
+
 Future<http.Response> useRequest(HttpRequest request) async {
   String url = request.httpHeader + request.url;
+  String token = await _getLoginToken();
   Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
-    // 'Authorization': '<Your token>'
+    'Authorization': token
   };
   switch(request.type) {
     case 'Get': 
