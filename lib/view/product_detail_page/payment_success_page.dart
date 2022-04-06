@@ -14,71 +14,24 @@ class PaymentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: ListView(
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(top: 140),
-            child: Icon(Icons.done_outline, size: 120, color: Colors.green),
-          ),
-          const Padding(padding: EdgeInsets.only(top: 100)),
-          const Center(
-            child: Text('Order has been placed successfully!',
-              style:
-                TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
-          const Padding(padding: EdgeInsets.only(top: 80)),
-          SizedBox(
-            width: 30,
-            height: 30,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30),
-              child: Material(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(5),
-                elevation: 6,
-                child: MaterialButton(
-                  child: const Text(
-                    'Back to Main Page',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (context) => ProductPage(user: user)),
-                      (route) => route == null);
-                  },
-                ),
-              ),
-            )
-          ),
-          const Padding(padding: EdgeInsets.only(top: 20)),
-          SizedBox(
-            width: 30,
-            height: 30,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30),
-              child: Material(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(5),
-                elevation: 6,
-                child: MaterialButton(
-                  child: const Text(
-                    'View Orders',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (context) => OrderPage(user: user)),
-                      (route) => route == null);
-                  },
-                ),
-              ),
-            )
-          )
-        ],
-      )
-    );
+        appBar: AppBar(),
+        body: ListView(
+          children: const [
+            Padding(
+              padding: EdgeInsets.only(top: 140),
+              child: Icon(Icons.done_outline, size: 120, color: Colors.green),
+            ),
+            Padding(padding: EdgeInsets.only(top: 100)),
+            Center(
+                child: Text('Order has been placed successfully!',
+                    style:
+                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+            Padding(padding: EdgeInsets.only(top: 20)),
+            Center(
+                child: Text('Go to User Home to view receipts',
+                    style: TextStyle(fontSize: 20, color: Colors.grey)))
+          ],
+        ));
   }
   // SizedBox(height: getProportionateScreenWidth(20)),
 }

@@ -73,10 +73,10 @@ class AnswerPageState extends State<AnswerPage>
         isSearching: isSearching,
         loadError: loadError,
         data: answersReceived,
-        retry: null,
+        retry: () => retry(),
       ),
       Padding(
-        padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
+        padding: const EdgeInsets.only(top: 30, left: 30, right: 40),
         child: TextField(
           controller: answerController,
           decoration: const InputDecoration(
@@ -86,20 +86,22 @@ class AnswerPageState extends State<AnswerPage>
         ),
       ),
       Padding(
-        padding: const EdgeInsets.only(top: 20),
+        padding: const EdgeInsets.only(top: 30),
         child: SizedBox(
             width: 500,
-            height: 40,
+            height: 45,
             child: Padding(
               padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
               child: Material(
-                color: Colors.blue,
+                //color: Colors.blue,
                 borderRadius: BorderRadius.circular(5),
                 elevation: 6,
                 child: MaterialButton(
+                  color: Colors.deepOrange,
+                  elevation: 6,
                   child: const Text(
                     'Create Your Answer',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                   onPressed: () {
                     addAnswer(newAnswer);
@@ -129,16 +131,18 @@ class AnswerPageState extends State<AnswerPage>
             key: Key(answer.answer_id),
             child: ListTile(
                 leading: const Icon(Icons.person),
-                title: Text(
-                    answer.role_id.substring(0, 4) +
-                        "...(" +
+                subtitle: Text(
+                    "..." +
+                        answer.role_id.substring(
+                            answer.role_id.length - 4, answer.role_id.length) +
+                        "(" +
                         answer.role +
                         ") answered on " +
                         DateFormat('yyyy-MM-dd').format(answer.date),
+                    style: const TextStyle(fontSize: 14, color: Colors.black)),
+                title: Text(answer.answer,
                     style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold)),
-                subtitle: Text(answer.answer,
-                    style: const TextStyle(fontSize: 14, color: Colors.black))),
+                        fontSize: 18, fontWeight: FontWeight.bold))),
           ),
         )
         .toList();

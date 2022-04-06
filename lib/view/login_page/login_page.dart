@@ -5,6 +5,7 @@ import 'package:csi5112_project/view/register_page/register_page.dart';
 import 'package:flutter/material.dart';
 import '../main_page.dart';
 import '../../data/http_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum Identity { merchant, client }
 
@@ -21,6 +22,13 @@ class _LoginState extends State<Login> implements UserListViewContract {
   final TextEditingController _passwController = TextEditingController();
   late UserListPresenter _presenter;
 
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  Future<void> _setLoginToken(String token) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setString('current_token', token);
+  }
+
   _LoginState() {
     _presenter = UserListPresenter(this);
   }
@@ -30,7 +38,7 @@ class _LoginState extends State<Login> implements UserListViewContract {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'User',
+          'UO Shopping Market',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -44,12 +52,11 @@ class _LoginState extends State<Login> implements UserListViewContract {
             children: <Widget>[
               const Padding(
                 padding:
-                    EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 30),
+                    EdgeInsets.only(left: 15, right: 15, top: 40, bottom: 30),
                 child: CircleAvatar(
                   radius: 90,
-                  backgroundImage: NetworkImage(
-                    'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E',
-                  ),
+                  backgroundColor: Colors.white,
+                  backgroundImage: AssetImage("images/user2.png"),
                 ),
               ),
               Padding(
@@ -69,7 +76,7 @@ class _LoginState extends State<Login> implements UserListViewContract {
               ),
               Padding(
                   padding: const EdgeInsets.only(
-                      left: 15, right: 15, top: 0, bottom: 15),
+                      left: 15, right: 15, top: 10, bottom: 15),
                   child: SizedBox(
                     width: 350,
                     child: TextField(
@@ -86,6 +93,7 @@ class _LoginState extends State<Login> implements UserListViewContract {
                 width: 420.0,
                 child: Row(
                   children: [
+                    const Padding(padding: EdgeInsets.only(left: 15)),
                     Expanded(
                       child: RadioListTile<Identity>(
                         activeColor: Colors.blue,
@@ -101,11 +109,12 @@ class _LoginState extends State<Login> implements UserListViewContract {
                       ),
                     ),
                     const SizedBox(width: 20),
+                    const Padding(padding: EdgeInsets.only(left: 40)),
                     Expanded(
                       child: RadioListTile<Identity>(
                         activeColor: Colors.blue,
                         controlAffinity: ListTileControlAffinity.leading,
-                        title: const Text("Client"),
+                        title: const Text("Customer"),
                         value: Identity.client,
                         onChanged: (value) {
                           setState(() {
@@ -119,7 +128,7 @@ class _LoginState extends State<Login> implements UserListViewContract {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.only(top: 15),
                 child: SizedBox(
                   width: 350,
                   child: TextButton(
@@ -149,6 +158,7 @@ class _LoginState extends State<Login> implements UserListViewContract {
                   ),
                 ),
               ),
+              const Padding(padding: EdgeInsets.only(top: 15)),
               TextButton(
                 style: TextButton.styleFrom(
                   textStyle: const TextStyle(fontSize: 16),
@@ -211,12 +221,12 @@ class _LoginState extends State<Login> implements UserListViewContract {
                 ]));
   }
 
-  void warningWrongAuthentication(String e) {
+  void warningWrongAuthentication(e) {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
                 title: const Text('Login error'),
-                content: Text(e),
+                content: const Text('UserName or Password might be wrong.'),
                 actions: <Widget>[
                   TextButton(
                       onPressed: () {
@@ -239,6 +249,8 @@ class _LoginState extends State<Login> implements UserListViewContract {
 
   @override
   void onLoadUserComplete(List<User> user) {
+    _setLoginToken(user[0].token);
+
     user[0].isMerchant = _identity == Identity.merchant;
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => MainPage(user: user[0])));
@@ -251,6 +263,6 @@ class _LoginState extends State<Login> implements UserListViewContract {
 
   void navigateToRegistration() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => Register()));
+        context, MaterialPageRoute(builder: (context) => const Register()));
   }
 }

@@ -3,6 +3,7 @@ import './historicalorders_page.dart';
 import 'package:flutter/material.dart';
 import 'package:csi5112_project/data/user_data.dart';
 import '../login_page/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key, required this.user}) : super(key: key);
@@ -13,9 +14,17 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserRolePageState extends State<UserPage> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  Future<void> _deleteLoginToken() async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.remove('current_token');
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(245, 247, 255, 0.5),
       body: Center(
         child: Column(
             // ignore: prefer_const_literals_to_create_immutables
@@ -77,6 +86,7 @@ class _UserRolePageState extends State<UserPage> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
+                        _deleteLoginToken();
                         Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (BuildContext context) {

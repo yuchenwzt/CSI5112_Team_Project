@@ -60,7 +60,9 @@ class ProductFilterPanelState extends State<ProductFilterPanel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(245, 247, 255, 0.5),
       appBar: AppBar(
+        // backgroundColor: const Color.fromRGBO(160, 160, 160, 0.5),
         elevation: 0,
         toolbarHeight: 55,
         flexibleSpace: Row(children: <Widget>[
@@ -171,10 +173,16 @@ class ProductFilterPanelState extends State<ProductFilterPanel> {
         ]),
       ),
       floatingActionButton: Visibility(
-        visible: widget.user.isMerchant,
+        visible: true,
         maintainState: false,
-        child: ProductEdit(
-            product: Product(), onEditFinish: widget.onEditFinish, editRole: "add", filters_dropdown_list: filters_dropdown_list),
+        child: widget.user.isMerchant ? ProductEdit(
+            product: Product(), onEditFinish: widget.onEditFinish, editRole: "add", filters_dropdown_list: filters_dropdown_list)
+            : FloatingActionButton(
+              child: const Icon(Icons.refresh),
+              onPressed: () {
+                widget.retry();
+              },
+            ),
       ),
       body: SuspendCard(
         child: GridView(
