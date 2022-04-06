@@ -4,12 +4,12 @@ import 'package:csi5112_project/data/cart_product.dart';
 import 'package:csi5112_project/data/shipping_address_data.dart';
 import 'package:csi5112_project/presenter/cart_product_presenter.dart';
 import 'package:csi5112_project/presenter/shipping_address_presenter.dart';
-import 'package:csi5112_project/view/product_detail_page/payment_success_page.dart';
 import 'package:csi5112_project/components/suspend_page.dart';
 import 'package:flutter/material.dart';
 import '../../data/http_data.dart';
 import '../../data/user_data.dart';
 import 'package:provider/provider.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:event_bus/event_bus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
