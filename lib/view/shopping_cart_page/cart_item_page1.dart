@@ -106,9 +106,15 @@ class CartPageState1 extends State<CartPage1>
         'CartItems/by_customer?customer_id=${widget.user.customer_id}', {}));
   }
 
-  // retry1() {
-  //   isClicked = !isClicked;
-  // }
+  retry1() async {
+    await Future.delayed(const Duration(seconds: 1));
+    isSearching = true;
+    _presenter.loadCartProducts(HttpRequest('Get',
+        'CartItems/by_customer?customer_id=${widget.user.customer_id}', {}));
+    isClicked = false;
+    amountPrice = 0;
+    eventBus.fire(isClicked);
+  }
 
   void updatePrice(int value) {
     setState(() {
@@ -273,6 +279,7 @@ class CartPageState1 extends State<CartPage1>
                           Navigator.pop(context);
                         }
                         showPlaceOrderSuccess(context);
+                        retry1();
                       },
                     ),
                   )

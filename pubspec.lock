@@ -177,7 +177,7 @@ packages:
     source: hosted
     version: "2.2.1"
   event_bus:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: event_bus
       url: "https://pub.dartlang.org"
@@ -241,7 +241,7 @@ packages:
     source: hosted
     version: "4.6.1"
   getwidget:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: getwidget
       url: "https://pub.dartlang.org"

@@ -44,6 +44,8 @@ dependencies:
   loading_animation_widget:
   progresso: ^0.3.0
   shared_preferences: ^2.0.13
+  event_bus: ^1.1.1
+  getwidget: ^2.0.4
 
 dev_dependencies:
   flutter_test:
@@ -56,8 +58,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
   build_runner: ^1.11.0
-  event_bus: ^1.1.1
-  getwidget: ^2.0.4
+ 
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
