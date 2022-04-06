@@ -6,6 +6,14 @@ abstract class CartProductsListViewContract {
   void onLoadCartProductsComplete(List<CartProduct> items);
 
   void onLoadCartProductsError(onError);
+
+  void onInitCartProductsComplete(List<CartProduct> items);
+
+  void onInitCartProductsError(onError);
+
+  void onPlaceOrderComplete(Message e);
+
+  void onPlaceOrderError(onError);
 }
 
 class CartProductsListPresenter {
@@ -21,5 +29,19 @@ class CartProductsListPresenter {
         .fetch(request)
         .then((items) => view.onLoadCartProductsComplete(items))
         .catchError((onError) => view.onLoadCartProductsError(onError));
+  }
+
+  void initCartProducts(HttpRequest request) {
+    repository
+        .fetch(request)
+        .then((items) => view.onInitCartProductsComplete(items))
+        .catchError((onError) => view.onInitCartProductsError(onError));
+  }
+
+  void placeOrder(HttpRequest request) {
+    repository
+        .fetch2(request)
+        .then((e) => view.onPlaceOrderComplete(e))
+        .catchError((onError) => view.onPlaceOrderError(onError));
   }
 }

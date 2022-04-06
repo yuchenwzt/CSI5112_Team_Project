@@ -66,6 +66,51 @@ class CartProduct {
   }
 }
 
+class CartItemPlaceOrder {
+  String item_id;
+  int quantity;
+  String product_id;
+  String customer_id;
+  String shipping_address_id;
+  // DateTime date;
+
+  CartItemPlaceOrder({
+    this.item_id = "",
+    this.quantity = 0,
+    this.product_id = "",
+    this.customer_id = "",
+    this.shipping_address_id = "",
+  });
+  // DateTime? date})
+  // : date = date ?? DateTime.now();
+
+  Map<String, dynamic> toJson() {
+    return {
+      'item_id': item_id,
+      'quantity': quantity.toString(),
+      'product_id': product_id,
+      'customer_id': customer_id,
+      'shipping_address_id': shipping_address_id,
+      //'date': date.toString()
+    };
+  }
+}
+
+class CartStatus {
+  String item_id;
+  bool isSelected;
+  CartStatus({this.item_id = "", this.isSelected = false});
+}
+
+class Message {
+  String message;
+  Message({this.message = ""});
+
+  Message.fromMap(Map<String, dynamic> map) : message = map['message'];
+}
+
 abstract class CartProductRepository {
   Future<List<CartProduct>> fetch(HttpRequest request);
+
+  Future<Message> fetch2(HttpRequest request);
 }

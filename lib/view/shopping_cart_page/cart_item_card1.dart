@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:csi5112_project/data/cart_item_data.dart';
 import 'package:csi5112_project/data/cart_product.dart';
 import 'package:csi5112_project/data/http_data.dart';
+import 'package:csi5112_project/data/shipping_address_data.dart';
 import 'package:csi5112_project/data/user_data.dart';
 import 'package:csi5112_project/presenter/cart_item_presenter.dart';
+import 'package:csi5112_project/presenter/shipping_address_presenter.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
@@ -12,6 +14,7 @@ class CartItemCard1 extends StatefulWidget {
   const CartItemCard1(
       {Key? key,
       required this.eventBus,
+      required this.updateStatus,
       required this.user,
       required this.refresh,
       required this.cartProduct,
@@ -22,6 +25,7 @@ class CartItemCard1 extends StatefulWidget {
       : super(key: key);
 
   final CartProduct cartProduct;
+  final updateStatus;
   final eventBus;
   final User user;
   final refresh;
@@ -54,18 +58,26 @@ class _CartCardState1 extends State<CartItemCard1>
     value = widget.cartProduct.quantity;
     widget.eventBus.on<bool>().listen((data) {
       setState(() {
-        if (data) {
-          isClicked = isClicked || data;
+        if (data ^ isClicked) {
+          if (data) {
+            isClicked = isClicked || data;
+          } else {
+            isClicked = isClicked && data;
+          }
+          int res = isClicked
+              ? widget.cartProduct.price * value
+              : -(widget.cartProduct.price * value);
+          widget.updatePrice(res);
         } else {
-          isClicked = isClicked && data;
+          if (data) {
+            isClicked = isClicked || data;
+          } else {
+            isClicked = isClicked && data;
+          }
         }
-        int res = isClicked
-            ? widget.cartProduct.price * value
-            : -(widget.cartProduct.price * value);
-        widget.updatePrice(res);
+        widget.updateStatus(widget.cartProduct.item_id, isClicked);
       });
     });
-
     // _presenter.loadProducts(HttpRequest('Get', 'Products?product_id=${widget.cartProduct.product_id}', {}));
   }
 
@@ -104,151 +116,156 @@ class _CartCardState1 extends State<CartItemCard1>
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: SizedBox(
-        height: 100,
-        width: MediaQuery.of(context).size.width,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              alignment: Alignment.center,
-              child: IconButton(
-                color: isClicked
-                    ? Colors.green
-                    : const Color.fromRGBO(200, 200, 200, 1),
-                icon: const Icon(Icons.check_circle_outline),
-                onPressed: () {
-                  setState(() {
-                    isClicked = !isClicked;
-                    int res = isClicked
-                        ? widget.cartProduct.price * value
-                        : -(widget.cartProduct.price * value);
-                    widget.updatePrice(res);
-                  });
-                },
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: SizedBox(
+          height: 100,
+          width: MediaQuery.of(context).size.width,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                alignment: Alignment.center,
+                child: IconButton(
+                  color: isClicked
+                      ? Colors.green
+                      : const Color.fromRGBO(200, 200, 200, 1),
+                  icon: const Icon(Icons.check_circle_outline),
+                  onPressed: () {
+                    setState(() {
+                      isClicked = !isClicked;
+                      int res = isClicked
+                          ? widget.cartProduct.price * value
+                          : -(widget.cartProduct.price * value);
+                      widget.updatePrice(res);
+                      widget.updateStatus(
+                          widget.cartProduct.item_id, isClicked);
+                    });
+                  },
+                ),
               ),
-            ),
-            AspectRatio(
-              aspectRatio: 1.0,
-              child: Image.network(
-                widget.cartProduct.image,
-                // height: 30,
-                // fit: BoxFit.cover,
+              AspectRatio(
+                aspectRatio: 1.0,
+                child: Image.network(
+                  widget.cartProduct.image,
+                  // height: 30,
+                  // fit: BoxFit.cover,
+                ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              Expanded(
+                child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                widget.cartProduct.name,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Padding(
+                                  padding: EdgeInsets.only(bottom: 2.0)),
+                              Text(
+                                widget.cartProduct.description,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Text(
+                                "price: \$" +
+                                    widget.cartProduct.price.toString() +
+                                    "    " +
+                                    "tax: \$" +
+                                    (widget.cartProduct.price * 0.13)
+                                        .toString(),
+                                style: const TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.red,
+                                ),
+                              ),
+                              Text(
+                                "stored in " + widget.cartProduct.manufacturer,
+                                style: const TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )),
+              ),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  padding: const EdgeInsets.all(8.0),
+                  // color: Colors.blue[600],
+                  alignment: Alignment.center,
+                  child: Row(
                     children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              widget.cartProduct.name,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Padding(
-                                padding: EdgeInsets.only(bottom: 2.0)),
-                            Text(
-                              widget.cartProduct.description,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ],
-                        ),
+                      IconButton(
+                        color: const Color.fromRGBO(200, 200, 200, 1),
+                        icon: const Icon(Icons.remove_circle_outline),
+                        onPressed: () {
+                          setState(() {
+                            // isClickedMinus = !isClickedMinus;
+                            value = CompareWithZero(value - 1);
+                            if (isClicked) {
+                              widget.updatePrice(0 - widget.cartProduct.price);
+                            }
+                          });
+                          updateCartItem(value);
+                        },
                       ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              "price: \$" +
-                                  widget.cartProduct.price.toString() +
-                                  "    " +
-                                  "tax: \$" +
-                                  (widget.cartProduct.price * 0.13).toString(),
-                              style: const TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.red,
-                              ),
-                            ),
-                            Text(
-                              "stored in " + widget.cartProduct.manufacturer,
-                              style: const TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ],
-                        ),
+                      Text(widget.cartProduct.quantity.toString()),
+                      IconButton(
+                        color: const Color.fromRGBO(200, 200, 200, 1),
+                        icon: const Icon(Icons.add_circle_outline),
+                        onPressed: () {
+                          setState(() {
+                            // isClickAdd = !isClickAdd;
+                            value = CompareWithZero(value + 1);
+                            if (isClicked) {
+                              widget.updatePrice(widget.cartProduct.price);
+                            }
+                          });
+                          updateCartItem(value);
+                        },
                       ),
                     ],
                   )),
-            ),
-            Container(
-                width: MediaQuery.of(context).size.width * 0.3,
-                padding: const EdgeInsets.all(8.0),
-                // color: Colors.blue[600],
+              Container(
                 alignment: Alignment.center,
-                child: Row(
-                  children: <Widget>[
-                    IconButton(
-                      color: const Color.fromRGBO(200, 200, 200, 1),
-                      icon: const Icon(Icons.remove_circle_outline),
-                      onPressed: () {
-                        setState(() {
-                          // isClickedMinus = !isClickedMinus;
-                          value = CompareWithZero(value - 1);
-                          if (isClicked) {
-                            widget.updatePrice(0 - widget.cartProduct.price);
-                          }
-                        });
-                        updateCartItem(value);
-                      },
-                    ),
-                    Text(value.toString()),
-                    IconButton(
-                      color: const Color.fromRGBO(200, 200, 200, 1),
-                      icon: const Icon(Icons.add_circle_outline),
-                      onPressed: () {
-                        setState(() {
-                          // isClickAdd = !isClickAdd;
-                          value = CompareWithZero(value + 1);
-                          if (isClicked) {
-                            widget.updatePrice(widget.cartProduct.price);
-                          }
-                        });
-                        updateCartItem(value);
-                      },
-                    ),
-                  ],
-                )),
-            Container(
-              alignment: Alignment.center,
-              child: GFButton(
-                onPressed: () {
-                  deleteCartItem(widget.cartProduct.item_id);
-                },
-                text: "delete",
-                icon: Icon(Icons.delete),
-                color: Colors.red,
-              ),
-            )
-          ],
+                child: GFButton(
+                  onPressed: () {
+                    deleteCartItem(widget.cartProduct.item_id);
+                  },
+                  text: "delete",
+                  icon: Icon(Icons.delete),
+                  color: Colors.red,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -257,7 +274,6 @@ class _CartCardState1 extends State<CartItemCard1>
   @override
   void onLoadCartItemsComplete(List<CartItem> items) {
     widget.refresh();
-    print("fresh");
   }
 
   @override

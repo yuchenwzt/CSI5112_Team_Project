@@ -1,5 +1,4 @@
 import 'package:csi5112_project/data/user_data.dart';
-import 'package:csi5112_project/view/shopping_cart_page/cart_item_page.dart';
 import 'package:csi5112_project/view/shopping_cart_page/cart_item_page1.dart';
 import 'package:flutter/material.dart';
 import 'product_page/product_page.dart';
