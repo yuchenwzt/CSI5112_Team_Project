@@ -162,16 +162,20 @@ class OrderDetailState extends State<OrderDetailPage>
       return AlertDialog(
         scrollable: true,
         content: product.product_id == "" ? 
-        ListView(shrinkWrap: true, children: const [
-          Padding(padding: EdgeInsets.only(top: 40)),
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'Opps, this product was removed by the Merchant',
-              style: TextStyle(color: Colors.black),
+        Material(
+          child: Column(children: const [
+            Padding(padding: EdgeInsets.only(top: 40)),
+            Icon(Icons.error_outline, size: 40, color: Colors.red,),
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'Opps, this product was removed by the Merchant',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-        ])
+          ]),
+        )
         : Material(child: 
           ProductDescription(product: product, showImage: true, showPrice: true,),
         )

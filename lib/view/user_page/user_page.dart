@@ -33,10 +33,10 @@ class _UserRolePageState extends State<UserPage> {
                 " ",
                 style: TextStyle(height: 4),
               ),
-              const Image(image: AssetImage("images/user.png"), width: 200.0),
+              const Image(image: AssetImage("images/user2.png"), width: 200.0),
               Text(
                 "Hello, " + widget.user.first_name + " " + widget.user.last_name,
-                style: const TextStyle(fontSize: 20, height: 4),
+                style: const TextStyle(fontSize: 24, height: 4),
               ),
               const Padding(padding: EdgeInsets.only(top: 30)),
               TextButton(

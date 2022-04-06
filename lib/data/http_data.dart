@@ -30,7 +30,7 @@ Future<http.Response> useRequest(HttpRequest request) async {
   Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
-    'Authorization': token
+    'Authorization': 'Bearer ' + token
   };
   switch(request.type) {
     case 'Get': 
