@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../../data/http_data.dart';
 import '../../data/user_data.dart';
 import 'package:provider/provider.dart';
+import 'package:event_bus/event_bus.dart';
 
 import 'cart_item_card1.dart';
 
@@ -23,11 +24,11 @@ class CartPage1 extends StatefulWidget {
 class CartPageState1 extends State<CartPage1>
     implements CartProductsListViewContract {
   late CartProductsListPresenter _presenter;
+  final eventBus = EventBus();
   List<CartProduct> cartProducts = [];
   int amountPrice = 0;
   bool isSearching = false;
   bool isClicked = false;
-  bool isClickedAll = false;
   bool isLoadError = false;
   String loadError = "";
   int amountPriceAdd = 0;
@@ -39,12 +40,13 @@ class CartPageState1 extends State<CartPage1>
   List<Widget> _getListItems() {
     var items = cartProducts.map((value) {
       return CartItemCard1(
+          eventBus: eventBus,
           user: widget.user,
           refresh: () => retry(),
           cartProduct: value,
           updatePrice: updatePrice,
           amountPrice: amountPrice,
-          isClickedAll: isClickedAll,
+          isClickedAll: isClicked,
           amountPriceAdd: amountPriceAdd);
     });
     return items.toList();
@@ -69,23 +71,29 @@ class CartPageState1 extends State<CartPage1>
 
   retry() {
     isSearching = true;
-    isClicked = false;
+    // isClicked = false;
     _presenter.loadCartProducts(HttpRequest('Get',
         'CartItems/by_customer?customer_id=${widget.user.customer_id}', {}));
   }
 
-  reloadPage(bool reload) {}
+  // retry1() {
+  //   isClicked = !isClicked;
+  // }
+
   void updatePrice(int value) {
     setState(() {
       amountPrice = amountPrice + value;
+      if (amountPrice <= 0) {
+        amountPrice = 0;
+      }
     });
   }
 
-  void updateIsClickAll(bool value) {
-    setState(() {
-      isClickedAll = value;
-    });
-  }
+  // void updateIsClickAll(bool value) {
+  //   setState(() {
+  //     isClickedAll = value;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -106,8 +114,10 @@ class CartPageState1 extends State<CartPage1>
                     onPressed: () {
                       setState(() {
                         isClicked = !isClicked;
-                        updateIsClickAll(isClicked);
+                        // updateIsClickAll(isClicked);
                       });
+                      // retry();
+                      eventBus.fire(isClicked);
                     },
                     icon: Icon(
                       Icons.check_circle_outline,

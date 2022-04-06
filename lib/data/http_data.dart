@@ -16,10 +16,10 @@ class HttpRequest {
 
 final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  Future<String> _getLoginToken() async {
-    final SharedPreferences prefs = await _prefs;
-    return prefs.getString('current_token') ?? '0';
-  }
+Future<String> _getLoginToken() async {
+  final SharedPreferences prefs = await _prefs;
+  return prefs.getString('current_token') ?? '0';
+}
 
 Future<http.Response> useRequest(HttpRequest request) async {
   String url = request.httpHeader + request.url;
@@ -27,7 +27,7 @@ Future<http.Response> useRequest(HttpRequest request) async {
   Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
-    'Authorization': token
+    // 'Authorization': token
   };
   switch (request.type) {
     case 'Get':
