@@ -1,10 +1,12 @@
 import 'package:csi5112_project/data/cart_product.dart';
+import 'package:csi5112_project/data/user_data.dart';
 import 'package:csi5112_project/view/shopping_cart_page/cart_box.dart';
 import 'package:flutter/material.dart';
 
 class CartItemCard extends StatefulWidget {
   const CartItemCard(
       {Key? key,
+      required this.user,
       required this.refresh,
       required this.cartProduct,
       this.updatePrice,
@@ -14,6 +16,7 @@ class CartItemCard extends StatefulWidget {
       : super(key: key);
 
   final CartProduct cartProduct;
+  final User user;
   final refresh;
   final updatePrice;
   final int amountPrice;
@@ -48,7 +51,8 @@ class _CartCardState extends State<CartItemCard> {
       child: Column(
         children: <Widget>[
           CardBox(
-              refresh: () => widget.refresh,
+              user: widget.user,
+              refresh: widget.refresh,
               cartProduct: widget.cartProduct,
               selectedValue: selectedValue,
               updateNum: updateNum,

@@ -2,9 +2,11 @@ import 'package:csi5112_project/data/cart_product.dart';
 import 'package:csi5112_project/presenter/cart_product_presenter.dart';
 import 'package:csi5112_project/view/shopping_cart_page/cart_bottom_bar.dart';
 import 'package:csi5112_project/view/shopping_cart_page/cart_item_card.dart';
+import 'package:csi5112_project/components/suspend_page.dart';
 import 'package:flutter/material.dart';
 import '../../data/http_data.dart';
 import '../../data/user_data.dart';
+import 'package:provider/provider.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({Key? key, required this.user}) : super(key: key);
@@ -23,6 +25,8 @@ class CartPageState extends State<CartPage>
   bool isSearching = false;
   bool isClicked = false;
   bool isClickedAll = false;
+  bool isLoadError = false;
+  String loadError = "";
   int amountPriceAdd = 0;
   var reload = false;
   CartPageState() {
@@ -32,6 +36,7 @@ class CartPageState extends State<CartPage>
   List<Widget> _getListItems() {
     var items = cartProducts.map((value) {
       return CartItemCard(
+          user: widget.user,
           refresh: () => retry(),
           cartProduct: value,
           updatePrice: updatePrice,
@@ -47,17 +52,19 @@ class CartPageState extends State<CartPage>
     super.initState();
     isSearching = true;
     isClicked = false;
-    // CartProduct a = CartProduct();
-    // cartProducts.add(a);
-    // setState(() {
-    //   cartProducts = cartProducts;
-    // });
     _presenter.loadCartProducts(HttpRequest('Get',
         'CartItems/by_customer?customer_id=${widget.user.customer_id}', {}));
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (Provider.of<bool>(context)) {
+      retry();
+    }
+  }
+
   retry() {
-    print("object");
     isSearching = true;
     isClicked = false;
     _presenter.loadCartProducts(HttpRequest('Get',
@@ -79,19 +86,25 @@ class CartPageState extends State<CartPage>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        ListView(
-          shrinkWrap: true,
-          children: _getListItems(),
+    return SuspendCard(
+        child: Stack(
+          children: <Widget>[
+            ListView(
+              shrinkWrap: true,
+              children: _getListItems(),
+            ),
+            CartBottomBar(
+                amountPrice: amountPrice,
+                isClickedAll: isClickedAll,
+                user: widget.user,
+                updateIsClickAll: updateIsClickAll),
+          ],
         ),
-        CartBottomBar(
-            amountPrice: amountPrice,
-            isClickedAll: isClickedAll,
-            user: widget.user,
-            updateIsClickAll: updateIsClickAll),
-      ],
-    );
+        isLoadError: isLoadError,
+        isSearching: isSearching,
+        loadError: loadError,
+        data: cartProducts,
+        retry: retry);
   }
 
   @override
@@ -99,9 +112,15 @@ class CartPageState extends State<CartPage>
     setState(() {
       cartProducts = items;
       isSearching = false;
+      isLoadError = false;
     });
   }
 
   @override
-  void onLoadCartProductsError(e) {}
+  void onLoadCartProductsError(e) {
+    setState(() {
+      isLoadError = true;
+      loadError = e.toString();
+    });
+  }
 }

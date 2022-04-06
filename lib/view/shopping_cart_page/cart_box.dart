@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:csi5112_project/data/cart_item_data.dart';
 import 'package:csi5112_project/data/cart_product.dart';
 import 'package:csi5112_project/data/http_data.dart';
+import 'package:csi5112_project/data/user_data.dart';
 import 'package:csi5112_project/presenter/cart_item_presenter.dart';
 import 'package:flutter/material.dart';
 
 class CardBox extends StatefulWidget {
   const CardBox(
       {Key? key,
+      required this.user,
       required this.refresh,
       required this.cartProduct,
       required this.selectedValue,
@@ -19,6 +21,7 @@ class CardBox extends StatefulWidget {
       : super(key: key);
 
   final int selectedValue;
+  final User user;
   final refresh;
   final updateNum;
   final bool isClicked;
@@ -39,7 +42,7 @@ class _CartCardBoxState extends State<CardBox>
     CartItem cartItem = CartItem();
     cartItem.item_id = widget.cartProduct.item_id;
     cartItem.quantity = quantity!;
-    cartItem.customer_id = widget.cartProduct.owner_id;
+    cartItem.customer_id = widget.user.customer_id;
     cartItem.price = widget.cartProduct.price;
     cartItem.product_id = widget.cartProduct.product_id;
     _presenter.loadItems(HttpRequest(
@@ -47,7 +50,7 @@ class _CartCardBoxState extends State<CardBox>
         'CartItems/update?item_id=${widget.cartProduct.item_id}',
         jsonEncode(cartItem)));
     retry = true;
-    print("fuck");
+    // print("fuck");
   }
 
   @override
@@ -113,7 +116,8 @@ class _CartCardBoxState extends State<CardBox>
 
   @override
   void onLoadCartItemsComplete(List<CartItem> items) {
-    widget.refresh;
+    widget.refresh();
+    print("fresh");
   }
 
   @override

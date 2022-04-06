@@ -22,6 +22,7 @@ Future<http.Response> useRequest(HttpRequest request) async {
   };
   switch (request.type) {
     case 'Get':
+      print(url);
       return await http.get(Uri.parse(url), headers: requestHeaders);
     case 'Post':
       return await http.post(Uri.parse(url),
