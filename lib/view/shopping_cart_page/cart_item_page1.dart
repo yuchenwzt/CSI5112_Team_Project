@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:csi5112_project/data/cart_product.dart';
 import 'package:csi5112_project/data/shipping_address_data.dart';
 import 'package:csi5112_project/presenter/cart_product_presenter.dart';
@@ -11,7 +10,6 @@ import '../../data/user_data.dart';
 import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:event_bus/event_bus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'cart_item_card1.dart';
 
@@ -47,13 +45,6 @@ class CartPageState1 extends State<CartPage1>
     _presenter2 = ShippingAddressPresenter(this);
   }
 
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
-  Future<void> _setCartSelected(List<String> selected) async {
-    final SharedPreferences prefs = await _prefs;
-    prefs.setStringList('current_token', selected);
-  }
-
   List<Widget> _getListItems() {
     var items = cartProducts.map((value) {
       return CartItemCard1(
@@ -71,12 +62,12 @@ class CartPageState1 extends State<CartPage1>
     return items.toList();
   }
 
-  void updateStatus(String item_id, bool isSelected) {
-    cartStatusList.forEach((element) {
-      if (element.item_id == item_id) {
+  void updateStatus(String itemId, bool isSelected) {
+    for (var element in cartStatusList) {
+      if (element.item_id == itemId) {
         element.isSelected = isSelected;
       }
-    });
+    }
   }
 
   @override
@@ -125,12 +116,6 @@ class CartPageState1 extends State<CartPage1>
     });
   }
 
-  // void updateIsClickAll(bool value) {
-  //   setState(() {
-  //     isClickedAll = value;
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return SuspendCard(
@@ -150,9 +135,7 @@ class CartPageState1 extends State<CartPage1>
                     onPressed: () {
                       setState(() {
                         isClicked = !isClicked;
-                        // updateIsClickAll(isClicked);
                       });
-                      // retry();
                       eventBus.fire(isClicked);
                     },
                     icon: Icon(
@@ -275,7 +258,6 @@ class CartPageState1 extends State<CartPage1>
                               'Post',
                               'SalesOrders/placeOrder',
                               jsonEncode(buildAllOrderList())));
-
                           Navigator.pop(context);
                         }
                         showPlaceOrderSuccess(context);
@@ -353,9 +335,7 @@ class CartPageState1 extends State<CartPage1>
   void onLoadShippingAddressError(e) {}
 
   @override
-  void onPlaceOrderComplete(e) {
-    print("success");
-  }
+  void onPlaceOrderComplete(Message e) {}
 
   @override
   void onPlaceOrderError(onError) {}

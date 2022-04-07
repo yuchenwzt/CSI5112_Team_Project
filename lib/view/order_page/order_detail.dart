@@ -69,7 +69,6 @@ class OrderDetailState extends State<OrderDetailPage>
                     Text('Product ID: ' + widget.order.salesOrder.product_id, style: const TextStyle(fontSize: 20)),
                     Text('Quantity: ' + widget.order.salesOrder.quantity.toString(), style: const TextStyle(fontSize: 20)),
                     Text('Price: ' + widget.order.salesOrder.price.toString() + ' (Before Tax)', style: const TextStyle(fontSize: 20)),
-                    Text('Product Name: ' + widget.order.salesOrder.name, style: const TextStyle(fontSize: 20))
                   ],
                 ),
               ),
