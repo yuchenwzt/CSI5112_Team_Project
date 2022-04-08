@@ -280,6 +280,7 @@ class ProductEditState extends State<ProductEdit> {
                             onPressed: () {
                               if (productFormKey.currentState!.validate()) {
                                 productFormKey.currentState!.save();
+                                newProduct.category = newProduct.category == '' ? 'null' : newProduct.category;
                                 newProduct.image_type = image_type;
                                 widget.onEditFinish(newProduct, type);
                                 Navigator.pop(context);
