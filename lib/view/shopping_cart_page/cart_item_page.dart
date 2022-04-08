@@ -102,6 +102,7 @@ class CartPageState1 extends State<CartPage1>
     isSearching = true;
     _presenter.loadCartProducts(HttpRequest('Get',
         'CartItems/by_customer?customer_id=${widget.user.customer_id}', {}));
+
     isClicked = false;
     amountPrice = 0;
     eventBus.fire(isClicked);
@@ -111,6 +112,10 @@ class CartPageState1 extends State<CartPage1>
     isSearching = true;
     _presenter.initCartProducts(HttpRequest('Get',
         'CartItems/by_customer?customer_id=${widget.user.customer_id}', {}));
+    if (!widget.user.isMerchant) {
+      _presenter2.loadAddress(HttpRequest('Get',
+          'ShippingAddress/by_user?user_id=${widget.user.customer_id}', {}));
+    }
   }
 
   void updatePrice(int value) {
