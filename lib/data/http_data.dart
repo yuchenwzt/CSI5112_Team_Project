@@ -33,6 +33,8 @@ Future<http.Response> useRequest(HttpRequest request) async {
     case 'Get':
       return await http.get(Uri.parse(url), headers: requestHeaders);
     case 'Post':
+      // print(request.url);
+      print(request.object);
       return await http.post(Uri.parse(url),
           headers: requestHeaders, body: request.object);
     case 'Put':

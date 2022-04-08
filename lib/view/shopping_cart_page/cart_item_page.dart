@@ -51,7 +51,7 @@ class CartPageState1 extends State<CartPage1>
           eventBus: eventBus,
           updateStatus: updateStatus,
           user: widget.user,
-          refresh: () => retry(),
+          refresh: () => reloadCartProductOnly(),
           cartProduct: value,
           updatePrice: updatePrice,
           amountPrice: amountPrice,
@@ -86,17 +86,18 @@ class CartPageState1 extends State<CartPage1>
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (Provider.of<bool>(context)) {
-      retry();
+      reloadCartStautusList();
     }
   }
 
-  retry() {
+  reloadCartProductOnly() {
     isSearching = true;
     _presenter.loadCartProducts(HttpRequest('Get',
         'CartItems/by_customer?customer_id=${widget.user.customer_id}', {}));
   }
 
-  retry1() async {
+  // need to solve as a function in onPlaceOrderComplete
+  reloadAfterPlaceOrder() async {
     await Future.delayed(const Duration(seconds: 1));
     isSearching = true;
     _presenter.loadCartProducts(HttpRequest('Get',
@@ -104,6 +105,12 @@ class CartPageState1 extends State<CartPage1>
     isClicked = false;
     amountPrice = 0;
     eventBus.fire(isClicked);
+  }
+
+  reloadCartStautusList() {
+    isSearching = true;
+    _presenter.initCartProducts(HttpRequest('Get',
+        'CartItems/by_customer?customer_id=${widget.user.customer_id}', {}));
   }
 
   void updatePrice(int value) {
@@ -117,82 +124,89 @@ class CartPageState1 extends State<CartPage1>
 
   @override
   Widget build(BuildContext context) {
-    return SuspendCard(
-        child: Stack(children: <Widget>[
-          ListView(
-            shrinkWrap: true,
-            children: _getListItems(),
-          ),
-          Positioned(
-            child: Container(
-              height: 50,
-              color: Colors.white,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  TextButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        isClicked = !isClicked;
-                      });
-                      eventBus.fire(isClicked);
-                    },
-                    icon: Icon(
-                      Icons.check_circle_outline,
-                      color: isClicked
-                          ? Colors.green
-                          : const Color.fromRGBO(200, 200, 200, 1),
-                    ),
-                    label: const Text(
-                      "Select all",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                    ),
-                  ),
-                  Text(
-                    'Total:  \$' + amountPrice.toString() + '  ',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                  Text(
-                    'Tax:  \$' +
-                        (amountPrice * 0.13).toString() +
-                        '           ',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                  SizedBox(
-                    width: 180,
-                    height: 35,
-                    child: Material(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(5),
-                      elevation: 6,
-                      child: MaterialButton(
-                        child: const Text(
-                          'Place the order',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {
-                          selectedAddress = shippingAddressReceived[0].shipping_address_id;
-                          buildOrderList(context);
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+    return widget.user.isMerchant
+        ? const Center(
+            child: Card(
+              child: Text('Shopping Card is only avaliable for Customers'),
             ),
-            left: 15,
-            right: 15,
-            bottom: 15,
-          ),
-        ]),
-        isLoadError: isLoadError,
-        isSearching: isSearching,
-        loadError: loadError,
-        data: cartProducts,
-        retry: retry);
+          )
+        : SuspendCard(
+            child: Stack(children: <Widget>[
+              ListView(
+                shrinkWrap: true,
+                children: _getListItems(),
+              ),
+              Positioned(
+                child: Container(
+                  height: 50,
+                  color: Colors.white,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      TextButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            isClicked = !isClicked;
+                          });
+                          eventBus.fire(isClicked);
+                        },
+                        icon: Icon(
+                          Icons.check_circle_outline,
+                          color: isClicked
+                              ? Colors.green
+                              : const Color.fromRGBO(200, 200, 200, 1),
+                        ),
+                        label: const Text(
+                          "Select all",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15),
+                        ),
+                      ),
+                      Text(
+                        'Total:  \$' + amountPrice.toString() + '  ',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      Text(
+                        'Tax:  \$' +
+                            (amountPrice * 0.13).toStringAsFixed(2) +
+                            '           ',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      SizedBox(
+                        width: 180,
+                        height: 35,
+                        child: Material(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(5),
+                          elevation: 6,
+                          child: MaterialButton(
+                            child: const Text(
+                              'Place the order',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () {
+                              selectedAddress = shippingAddressReceived[0]
+                                  .shipping_address_id;
+                              buildOrderList(context);
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                left: 15,
+                right: 15,
+                bottom: 15,
+              ),
+            ]),
+            isLoadError: isLoadError,
+            isSearching: isSearching,
+            loadError: loadError,
+            data: cartProducts,
+            retry: reloadCartProductOnly);
   }
 
   List<DropdownMenuItem> showAllAddress(
@@ -261,7 +275,7 @@ class CartPageState1 extends State<CartPage1>
                           Navigator.pop(context);
                         }
                         showPlaceOrderSuccess(context);
-                        retry1();
+                        reloadAfterPlaceOrder();
                       },
                     ),
                   )
@@ -342,10 +356,16 @@ class CartPageState1 extends State<CartPage1>
 
   @override
   void onInitCartProductsComplete(List<CartProduct> items) {
+    cartStatusList.clear();
     for (var element in items) {
       cartStatusList
           .add(CartStatus(item_id: element.item_id, isSelected: false));
     }
+    setState(() {
+      isSearching = false;
+      cartProducts = items;
+      isLoadError = false;
+    });
   }
 
   @override
