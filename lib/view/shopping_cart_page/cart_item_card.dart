@@ -1,12 +1,9 @@
 import 'dart:convert';
-
 import 'package:csi5112_project/data/cart_item_data.dart';
 import 'package:csi5112_project/data/cart_product.dart';
 import 'package:csi5112_project/data/http_data.dart';
-import 'package:csi5112_project/data/shipping_address_data.dart';
 import 'package:csi5112_project/data/user_data.dart';
 import 'package:csi5112_project/presenter/cart_item_presenter.dart';
-import 'package:csi5112_project/presenter/shipping_address_presenter.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
@@ -44,8 +41,6 @@ class _CartCardState1 extends State<CartItemCard1>
   var retry = false;
   final itemFormKey = GlobalKey<FormState>();
   bool isClicked = false;
-  // bool isClickedMinus = false;
-  // bool isClickAdd = false;
   int value = 1;
 
   _CartCardState1() {
@@ -98,12 +93,6 @@ class _CartCardState1 extends State<CartItemCard1>
     _presenter.loadItems(
         HttpRequest('Delete', 'CartItems/delete', jsonEncode([item_id])));
   }
-
-  // void updateNum(int value) {
-  //   setState(() {
-  //     selectedValue = value;
-  //   });
-  // }
 
   int CompareWithZero(int value) {
     if (value > 0) {

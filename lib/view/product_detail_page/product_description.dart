@@ -56,10 +56,11 @@ class ProductDescription extends StatelessWidget {
           child: Text(DateFormat('yyyy-MM-dd').format(product.date),
           style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 20)),
         ),
-        showPrice ? const Padding(
-          padding: EdgeInsets.all(10),
-          child: Text("Product Price: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-        ) : const Padding(padding: EdgeInsets.all(0)),
+        showPrice ? Padding(
+          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05, top: 10),
+          child: const Text("Product Price: ",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+         ) : const Padding(padding: EdgeInsets.all(0)),
         showPrice ? Padding(
           padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, top: 5),
           child: Text(product.price.toString(),
