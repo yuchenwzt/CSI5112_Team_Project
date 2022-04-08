@@ -57,9 +57,9 @@ class ProductDescription extends StatelessWidget {
           style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 20)),
         ),
         showPrice ? Padding(
-          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05, top: 5),
+          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05, top: 10),
           child: const Text("Product Price: ",
-          style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 20)),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
          ) : const Padding(padding: EdgeInsets.all(0)),
         showPrice ? Padding(
           padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.1, top: 5),

@@ -174,6 +174,7 @@ class CartPageState1 extends State<CartPage1>
                           style: TextStyle(color: Colors.white),
                         ),
                         onPressed: () {
+                          selectedAddress = shippingAddressReceived[0].shipping_address_id;
                           buildOrderList(context);
                         },
                       ),

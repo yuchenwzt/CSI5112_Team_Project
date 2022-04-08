@@ -37,6 +37,7 @@ class OrderDetailState extends State<OrderDetailPage>
   late ProductsListPresenter _presenter2;
   List<ShippingAddress> shippingAddressReceived = [];
   late ShippingAddress shippingAddressChoice;
+  bool shippingAddressNull = false;
   String selectedAddress = "";
   Product product = Product();
 
@@ -199,8 +200,15 @@ class OrderDetailState extends State<OrderDetailPage>
                         decoration: const InputDecoration(
                           labelText: 'Shipping Address',
                         ),
-                        value: shippingAddressReceived[0].shipping_address_id,
-                        items: showAllAddress(shippingAddressReceived),
+                        value: shippingAddressNull ? "None Address Yet" : shippingAddressReceived[0].shipping_address_id,
+                        items: shippingAddressNull
+                            ? [
+                                const DropdownMenuItem(
+                                  value: "None Address Yet",
+                                  child: Text("None Address Yet"),
+                                )
+                              ]
+                            : showAllAddress(shippingAddressReceived),
                         onChanged: (newValue) {
                           setState(() {
                             selectedAddress = newValue as String;
@@ -212,7 +220,8 @@ class OrderDetailState extends State<OrderDetailPage>
                     child: ElevatedButton(
                       child: const Text("Submit"),
                       onPressed: () {
-                        if (deliveryKey.currentState!.validate()) {
+                        if (deliveryKey.currentState!.validate() &&
+                            !shippingAddressNull) {
                           deliveryKey.currentState!.save();
                           widget.updateOrderStatus(
                               widget.order.salesOrder.order_id,
@@ -250,6 +259,7 @@ class OrderDetailState extends State<OrderDetailPage>
   void onLoadShippingAddressComplete(List<ShippingAddress> shippingAddress) {
     setState(() {
       shippingAddressReceived = shippingAddress;
+      shippingAddressNull = shippingAddress.isEmpty;
     });
   }
 

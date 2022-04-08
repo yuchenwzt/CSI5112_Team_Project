@@ -41,8 +41,6 @@ class _CartCardState1 extends State<CartItemCard1>
   var retry = false;
   final itemFormKey = GlobalKey<FormState>();
   bool isClicked = false;
-  // bool isClickedMinus = false;
-  // bool isClickAdd = false;
   int value = 1;
 
   _CartCardState1() {
@@ -75,7 +73,6 @@ class _CartCardState1 extends State<CartItemCard1>
         widget.updateStatus(widget.cartProduct.item_id, isClicked);
       });
     });
-    // _presenter.loadProducts(HttpRequest('Get', 'Products?product_id=${widget.cartProduct.product_id}', {}));
   }
 
   updateCartItem(int? quantity) {
@@ -96,12 +93,6 @@ class _CartCardState1 extends State<CartItemCard1>
     _presenter.loadItems(
         HttpRequest('Delete', 'CartItems/delete', jsonEncode([item_id])));
   }
-
-  // void updateNum(int value) {
-  //   setState(() {
-  //     selectedValue = value;
-  //   });
-  // }
 
   int CompareWithZero(int value) {
     if (value > 0) {
