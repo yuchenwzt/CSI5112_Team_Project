@@ -125,11 +125,34 @@ class CartPageState1 extends State<CartPage1>
   @override
   Widget build(BuildContext context) {
     return widget.user.isMerchant
-        ? const Center(
+        ? Center(
             child: Card(
-              child: Text('Shopping Card is only avaliable for Customers'),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: const <Widget>[
+                ListTile(
+                  leading: Icon(Icons.album),
+                  title: Text('Merchant have no cart items'),
+                  subtitle: Text('Please navigate to other pages.'),
+                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: <Widget>[
+                //     TextButton(
+                //       child: const Text('BUY TICKETS'),
+                //       onPressed: () {/* ... */},
+                //     ),
+                //     const SizedBox(width: 8),
+                //     TextButton(
+                //       child: const Text('LISTEN'),
+                //       onPressed: () {/* ... */},
+                //     ),
+                //     const SizedBox(width: 8),
+                //   ],
+                // ),
+              ],
             ),
-          )
+          ))
         : SuspendCard(
             child: Stack(children: <Widget>[
               ListView(
