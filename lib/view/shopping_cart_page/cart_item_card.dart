@@ -60,8 +60,8 @@ class _CartCardState1 extends State<CartItemCard1>
             isClicked = isClicked && data;
           }
           int res = isClicked
-              ? widget.cartProduct.price * value
-              : -(widget.cartProduct.price * value);
+              ? widget.cartProduct.price * widget.cartProduct.quantity
+              : -(widget.cartProduct.price * widget.cartProduct.quantity);
           widget.updatePrice(res);
         } else {
           if (data) {
@@ -124,8 +124,10 @@ class _CartCardState1 extends State<CartItemCard1>
                     setState(() {
                       isClicked = !isClicked;
                       int res = isClicked
-                          ? widget.cartProduct.price * value
-                          : -(widget.cartProduct.price * value);
+                          ? widget.cartProduct.price *
+                              widget.cartProduct.quantity
+                          : -(widget.cartProduct.price *
+                              widget.cartProduct.quantity);
                       widget.updatePrice(res);
                       widget.updateStatus(
                           widget.cartProduct.item_id, isClicked);
@@ -216,7 +218,8 @@ class _CartCardState1 extends State<CartItemCard1>
                         onPressed: () {
                           setState(() {
                             // isClickedMinus = !isClickedMinus;
-                            value = CompareWithZero(value - 1);
+                            value = CompareWithZero(
+                                widget.cartProduct.quantity - 1);
                             if (isClicked) {
                               widget.updatePrice(0 - widget.cartProduct.price);
                             }
@@ -231,7 +234,8 @@ class _CartCardState1 extends State<CartItemCard1>
                         onPressed: () {
                           setState(() {
                             // isClickAdd = !isClickAdd;
-                            value = CompareWithZero(value + 1);
+                            value = CompareWithZero(
+                                widget.cartProduct.quantity + 1);
                             if (isClicked) {
                               widget.updatePrice(widget.cartProduct.price);
                             }
