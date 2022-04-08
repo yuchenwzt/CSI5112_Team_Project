@@ -131,21 +131,33 @@ class CartPageState1 extends State<CartPage1>
   Widget build(BuildContext context) {
     return widget.user.isMerchant
         ? Card(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
-              Padding(
-                padding: EdgeInsets.only(left: 16.0, right: 16.0),
-                child: ListTile(
-                  leading: Icon(Icons.error, size: 48,),
-                  title: Center(child: Text('The Shopping Cart is Only Avaliable for Customer', textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.grey))),
-                  subtitle: Center(child: Text('Please sign in as a customer', style: TextStyle(fontSize: 24, color: Colors.grey)))
-                ),
-              )
-            ],
-          ),
-        )
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                Padding(
+                  padding: EdgeInsets.only(left: 16.0, right: 16.0),
+                  child: ListTile(
+                      leading: Icon(
+                        Icons.error,
+                        size: 48,
+                      ),
+                      title: Center(
+                          child: Text(
+                              'The Shopping Cart is Only Avaliable for Customer',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey))),
+                      subtitle: Center(
+                          child: Text('Please sign in as a customer',
+                              style: TextStyle(
+                                  fontSize: 24, color: Colors.grey)))),
+                )
+              ],
+            ),
+          )
         : SuspendCard(
             child: Stack(children: <Widget>[
               ListView(
