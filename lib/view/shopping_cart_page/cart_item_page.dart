@@ -10,8 +10,7 @@ import '../../data/user_data.dart';
 import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:event_bus/event_bus.dart';
-
-import 'cart_item_card1.dart';
+import 'cart_item_card.dart';
 
 class CartPage1 extends StatefulWidget {
   const CartPage1({Key? key, required this.user}) : super(key: key);

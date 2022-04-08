@@ -1,12 +1,9 @@
 import 'dart:convert';
-
 import 'package:csi5112_project/data/cart_item_data.dart';
 import 'package:csi5112_project/data/cart_product.dart';
 import 'package:csi5112_project/data/http_data.dart';
-import 'package:csi5112_project/data/shipping_address_data.dart';
 import 'package:csi5112_project/data/user_data.dart';
 import 'package:csi5112_project/presenter/cart_item_presenter.dart';
-import 'package:csi5112_project/presenter/shipping_address_presenter.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
