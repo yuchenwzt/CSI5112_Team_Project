@@ -78,7 +78,6 @@ class _CartCardState1 extends State<CartItemCard1>
         widget.updateStatus(widget.cartProduct.item_id, isClicked);
       });
     });
-    // _presenter.loadProducts(HttpRequest('Get', 'Products?product_id=${widget.cartProduct.product_id}', {}));
   }
 
   updateCartItem(int? quantity) {
