@@ -32,14 +32,20 @@ class SuspendCard extends StatelessWidget {
       if (data.isNotEmpty) {
         selectedWidget = child;
       } else {
-        selectedWidget = const Center(
-          child: Padding(
-            padding: EdgeInsets.only(left: 16.0, right: 16.0),
-            child: ListTile(
-              leading: Icon(Icons.album),
-              title: Text('The Data is Empty'),
-              subtitle: Text('Please wait for update'),
-            ),
+        selectedWidget = Card(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              Padding(
+                padding: EdgeInsets.only(left: 16.0, right: 16.0),
+                child: ListTile(
+                  leading: Icon(Icons.album, size: 48,),
+                  title: Center(child: Text('The Data is Empty', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.grey))),
+                  subtitle: Center(child: Text('Please wait for update', style: TextStyle(fontSize: 24, color: Colors.grey)))
+                ),
+              )
+            ],
           ),
         );
       }
