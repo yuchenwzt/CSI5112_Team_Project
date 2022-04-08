@@ -250,6 +250,7 @@ class _CartCardState1 extends State<CartItemCard1>
                 child: GFButton(
                   onPressed: () {
                     deleteCartItem(widget.cartProduct.item_id);
+                    widget.updatePrice(0 - widget.cartProduct.price);
                   },
                   text: "delete",
                   icon: Icon(Icons.delete),
