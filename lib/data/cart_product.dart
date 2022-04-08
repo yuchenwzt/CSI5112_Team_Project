@@ -72,17 +72,16 @@ class CartItemPlaceOrder {
   String product_id;
   String customer_id;
   String shipping_address_id;
-  // DateTime date;
+  DateTime date;
 
-  CartItemPlaceOrder({
-    this.item_id = "",
-    this.quantity = 0,
-    this.product_id = "",
-    this.customer_id = "",
-    this.shipping_address_id = "",
-  });
-  // DateTime? date})
-  // : date = date ?? DateTime.now();
+  CartItemPlaceOrder(
+      {this.item_id = "",
+      this.quantity = 0,
+      this.product_id = "",
+      this.customer_id = "",
+      this.shipping_address_id = "",
+      DateTime? date})
+      : date = date ?? DateTime.now();
 
   Map<String, dynamic> toJson() {
     return {
@@ -91,7 +90,7 @@ class CartItemPlaceOrder {
       'product_id': product_id,
       'customer_id': customer_id,
       'shipping_address_id': shipping_address_id,
-      //'date': date.toString()
+      'date': date.toIso8601String()
     };
   }
 }
